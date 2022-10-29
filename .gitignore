@@ -1,2 +1,4 @@
+# Jetbrains software config directory
+.idea
 # Empty for now, add as needed
 .DS_Store
