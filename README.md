@@ -1,6 +1,4 @@
-
 # SH28-main
-Test Commit
 
 ## Getting started
 
