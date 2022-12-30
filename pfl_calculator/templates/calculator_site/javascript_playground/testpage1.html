@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <script src="../../../static/JS/testscript1.js"></script>
+</head>
+<style>
+    table, th, td {
+        border:1px solid black;
+    }
+</style>
+<body>
+<table>
+    <tr>
+        <td>Heating and other fuel use</td>
+        <td>Applicable</td>
+        <td>Usage</td>
+        <td>Unit</td>
+        <td>Amount</td>
+        <td>Conversion Factor</td>
+    </tr>
+    <tr id="heating">
+        <td>Mains Gas</td>
+        <td><input type="checkbox" id="check" onclick="applicableCheck(this.parentNode.parentNode)"></td>
+        <td><input type="text" id="heatingInput"></td>
+        <td>
+            <select id="heatingSel">
+                <option value="1">kWh</option>
+                <option value="0.001">Wh</option>
+            </select>
+        </td>
+        <td>
+            <output id="heatingOutput"></output>
+        </td>
+        <td>0.22</td>
+    </tr>
+</table>
+
+</body>
+
+</html>
