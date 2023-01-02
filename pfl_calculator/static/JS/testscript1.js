@@ -19,8 +19,8 @@ window.onload = () => {
 
 function applicableCheck(parent){
     const tableRow = this.document.getElementById(parent.id);
-    const input = this.document.getElementById(tableRow.id + "Sel");
-    const sel = this.document.getElementById(tableRow.id + "")
+    const input = this.document.getElementById(tableRow.id + "Input");
+    const sel = this.document.getElementById(tableRow.id + "Sel")
     input.disabled = !input.disabled;
     sel.disabled = !sel.disabled;
 
