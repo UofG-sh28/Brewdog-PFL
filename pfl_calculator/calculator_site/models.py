@@ -150,6 +150,7 @@ class BusinessUsage(models.Model):
     #FIELDS
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
     conversion_factor = models.ForeignKey(ConversionFactor, on_delete=models.RESTRICT)
+    year = models.IntegerField()
     mains_gas = models.IntegerField()
     fuel = models.IntegerField()
     oil = models.IntegerField()
@@ -199,7 +200,7 @@ class BusinessUsage(models.Model):
     def save(self, *args, **kwargs):
         super(BusinessUsage, self).save(*args, **kwargs)
 
-class BusinessMetrics(object):
+class BusinessMetrics(models.Model):
     """ This stores a business' yearly metrics BusinessMetrics.
 
     Primary Key:
