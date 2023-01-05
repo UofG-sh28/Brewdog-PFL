@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
-    'pfl_calculator'
+    'calculator_site'
 ]
 
 MIDDLEWARE = [
