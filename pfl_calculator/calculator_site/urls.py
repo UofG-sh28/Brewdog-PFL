@@ -20,9 +20,9 @@ urlpatterns = [
     #
     # # USER PAGES
     # path('my/dashboard/', views.dash, name='dash'),
-    # path('my/calculate', views.calculate, name='calculate'),
+    path('my/calculator', views.calculator, name='calculator'),
     # path('my/metrics', views.metrics, name='metrics'),
-    # path('my/date-entry', views.data_entry, name='data_entry'),
+    # path('my/calculator/data-entry', views.data_entry, name='data_entry'),
     # path('my/visualise', views.visualise, name='visualise'),
     # path('my/pledges', views.pledges, name='pledges'),
     # path('my/profile', views.profile, name='profile'),

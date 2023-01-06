@@ -1,56 +1,58 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta charset="UTF-8">
-    <title>Calculator</title>
-    <script src="../../static/JS/calculator.js"></script>
-</head>
-<style>
-    table, th, td {
-        border:1px solid black;
-        margin-top: 100px;
-    }
+{% extends 'calculator_site/base.html' %}
 
-    .tooltip {
-        position: relative;
-        display: inline-block;
-        border-bottom: 1px dotted black;
-    }
+{% block title %}Planet First Locals - Carbon Calculator{% endblock %}
 
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 150px;
-        background-color: #555;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px 0;
-        position: absolute;
-        z-index: 1;
-        bottom: 125%;
-        left: 50%;
-        margin-left: -60px;
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
+{% block script %}<script src="../../static/JS/calculator.js"></script> {% endblock %}
 
-    .tooltip .tooltiptext::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #555 transparent transparent transparent;
-    }
+{% block css %}
+  <style>
+      table, th, td {
+          border:1px solid black;
+          margin-top: 100px;
+      }
 
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-        opacity: 1;
-    }
-</style>
-<body>
+      .tooltip {
+          position: relative;
+          display: inline-block;
+          border-bottom: 1px dotted black;
+      }
+
+      .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 150px;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%;
+          left: 50%;
+          margin-left: -60px;
+          opacity: 0;
+          transition: opacity 0.3s;
+      }
+
+      .tooltip .tooltiptext::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: #555 transparent transparent transparent;
+      }
+
+      .tooltip:hover .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+      }
+  </style>
+{% endblock %}
+
+{% block body_block %}
 <table id="table">
     <tr id="headers">
         <td>Food and Drink</td>
@@ -141,6 +143,4 @@
     </tr>
 </table>
 
-</body>
-
-</html>
+{% endblock %}

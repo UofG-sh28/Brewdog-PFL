@@ -9,3 +9,9 @@ def outline(request):
 
 def scope(request):
     return render(request, 'calculator_site/scope.html')
+
+def calculator(request):
+    context = {}
+    context['conversion_factor'] = "" #GET
+
+    return render(request, 'calculator_site/calculator.html', context=context)
