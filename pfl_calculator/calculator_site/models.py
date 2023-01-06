@@ -80,8 +80,9 @@ class ConversionFactor(models.Model):
             year - the year this represents, unique (one ConversionFactor per year)
             All of the calculator fields, all are required.
         """
-    #FIELDS
+    #OTHER FIELDS
     year = models.IntegerField(unique=True)
+    #CALCULATOR FIELDS
     mains_gas = models.FloatField(default=0.0)
     fuel = models.FloatField(default=0.0)
     oil = models.FloatField(default=0.0)
@@ -147,10 +148,11 @@ class BusinessUsage(models.Model):
             business - FK
             conversion_factor _ FK
             All the calculator fields with help text to indicate which unit is specified."""
-    #FIELDS
+    #OTHER FIELDS
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
     conversion_factor = models.ForeignKey(ConversionFactor, on_delete=models.RESTRICT)
     year = models.IntegerField()
+    #CALCULATOR FIELDS
     mains_gas = models.IntegerField()
     fuel = models.IntegerField()
     oil = models.IntegerField()

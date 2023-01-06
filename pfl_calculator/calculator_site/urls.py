@@ -5,8 +5,8 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # INFO. PAGES
-    # path('outline/', views.outline, name="outline"),
-    # path('scope/', views.scope, name="scope"),
+    path('outline/', views.outline, name="outline"),
+    path('scope/', views.scope, name="scope"),
     #
     # # LOGIN PAGE
     # path('login/', views.login, name="login"),

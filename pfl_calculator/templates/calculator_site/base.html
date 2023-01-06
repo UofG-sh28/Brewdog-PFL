@@ -5,17 +5,14 @@
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
         <meta charset="UTF-8" />
         <title>
-            Planet First Locals - 
-            {% block title_block %}
-                Homepage
+            {% block title%}
             {% endblock %}
         </title>
     </head>
     <body>
         <div>
-            {% block body_block %} 
-            <h1>IT'S BLUE <br> THE GOD DAMN TEXT IS BLUE<br> WOO</h1>
-            {% endblock %}
+            <a href="{% url 'index' %}">homepage</a>
+            {% block body_block %}{% endblock %}
         </div>
         <div>
             {% block sidebar_block %}

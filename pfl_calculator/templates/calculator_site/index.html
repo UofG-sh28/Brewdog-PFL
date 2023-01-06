@@ -1,0 +1,13 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Planet First Locals - Homepage
+{% endblock %}
+
+{% block body_block %}
+  <h2>This is the homepage.</h2>
+  <ul>
+    <li><a href="{% url 'outline' %}">Outline</a></li>
+    <li><a href="{% url 'scope' %}">Scope</a></li>
+  </ul>
+{% endblock %}
