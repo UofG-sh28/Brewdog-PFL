@@ -5,7 +5,8 @@ window.onload = () => {
         const input = this.document.getElementById(tableRow.id + 'Input');
         const output = this.document.getElementById(tableRow.id + "Output");
         const conversion = this.document.getElementById(tableRow.id + "Conv");
-        output.value = parseFloat(input.value) * parseFloat(conversion.innerText);
+        const value = parseFloat(input.value) * parseFloat(conversion.innerText);
+        output.value = isNaN(value) ? "" : value;
     }
 
     const table = this.document.getElementById("table");
