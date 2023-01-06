@@ -8,15 +8,17 @@
             {% block title%}
             {% endblock %}
         </title>
+
+        {% block css %}{% endblock %}
+
     </head>
     <body>
         <div>
             <a href="{% url 'index' %}">homepage</a>
             {% block body_block %}{% endblock %}
         </div>
-        <div>
-            {% block sidebar_block %}
-            {% endblock %}
-        </div>
     </body>
+
+    {% block script %}{% endblock %}
+
 </html>
