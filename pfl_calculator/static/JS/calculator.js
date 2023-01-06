@@ -26,5 +26,9 @@ window.onload = () => {
 function applicableCheck(parent){
     const tableRow = this.document.getElementById(parent.parentNode.parentNode.id);
     const input = this.document.getElementById(tableRow.id + "Input");
+    const output = this.document.getElementById(tableRow.id + "Output");
     input.disabled = !input.disabled;
+    input.value = "";
+    output.value = "";
+
 }
