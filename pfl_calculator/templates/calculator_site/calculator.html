@@ -8,6 +8,46 @@
 <style>
     table, th, td {
         border:1px solid black;
+        margin-top: 100px;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 150px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
     }
 </style>
 <body>
@@ -18,6 +58,7 @@
         <td>Usage</td>
         <td>Amount</td>
         <td>Conversion Factor</td>
+        <td>Information</td>
     </tr>
 <!--    ID of table row must match input & output starting id-->
     <tr id="goodDel">
@@ -26,6 +67,12 @@
         <td><input type="text" id="goodDelInput"></td>
         <td><output id="goodDelOutput"></output></td>
         <td id="goodDelConv">0.22</td>
+        <td>
+        <div class="tooltip">
+            Info
+            <span class="tooltiptext">This is more information on Goods Deliveries (Company Owned)</span>
+        </div>
+        </td>
     </tr>
     <tr id="goodDelC">
         <td>Goods Deliveries (Contracted)</td>
@@ -33,6 +80,12 @@
         <td><input type="text" id="goodDelCInput"></td>
         <td><output id="goodDelCOutput"></output></td>
         <td id="goodDelCConv">0.22</td>
+        <td>
+            <div class="tooltip">
+                Info
+                <span class="tooltiptext">This is more information on Goods Deliveries (Contracted)</span>
+            </div>
+        </td>
     </tr>
     <tr id="travel">
         <td>Travel (Company Business)</td>
@@ -40,6 +93,12 @@
         <td><input type="text" id="travelInput"></td>
         <td><output id="travelOutput"></output></td>
         <td id="travelConv">0.22</td>
+        <td>
+            <div class="tooltip">
+                Info
+                <span class="tooltiptext">This is more information on Travel (Company Business)</span>
+            </div>
+        </td>
     </tr>
     <tr id="flightsUK">
         <td>Flights (UK)</td>
@@ -47,20 +106,38 @@
         <td><input type="text" id="flightsUKInput"></td>
         <td><output id="flightsUKOutput"></output></td>
         <td id="flightsUKConv">0.22</td>
+        <td>
+            <div class="tooltip">
+                Info
+                <span class="tooltiptext">This is more information on Flights (UK)</span>
+            </div>
+        </td>
     </tr>
     <tr id="flightsIN">
-        <td>Flights (UK)</td>
+        <td>Flights (International)</td>
         <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
         <td><input type="text" id="flightsINInput"></td>
         <td><output id="flightsINOutput"></output></td>
         <td id="flightsINConv">0.22</td>
+        <td>
+            <div class="tooltip">
+                Info
+                <span class="tooltiptext">This is more information on Flights (International)</span>
+            </div>
+        </td>
     </tr>
     <tr id="staffc">
         <td>Staff commuting</td>
         <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
         <td><input type="text" id="staffcInput"></td>
         <td><output id="staffcOutput"></output></td>
-        <td id="staffcConv">0.22</td>
+        <td id="staffcConv">100</td>
+        <td>
+            <div class="tooltip">
+                Info
+                <span class="tooltiptext">This is more information on Staff commuting</span>
+            </div>
+        </td>
     </tr>
 </table>
 
