@@ -19,14 +19,48 @@
         <td>Amount</td>
         <td>Conversion Factor</td>
     </tr>
+<!--    ID of table row must match input & output starting id-->
     <tr id="goodDel">
-        <td>Goods Deliveries</td>
-        <td><input checked type="checkbox" id="check" onclick="applicableCheck(this)"></td>
+        <td>Goods Deliveries (Company Owned)</td>
+        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
         <td><input type="text" id="goodDelInput"></td>
-        <td>
-            <output id="goodDelOutput"></output>
-        </td>
+        <td><output id="goodDelOutput"></output></td>
         <td id="goodDelConv">0.22</td>
+    </tr>
+    <tr id="goodDelC">
+        <td>Goods Deliveries (Contracted)</td>
+        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+        <td><input type="text" id="goodDelCInput"></td>
+        <td><output id="goodDelCOutput"></output></td>
+        <td id="goodDelCConv">0.22</td>
+    </tr>
+    <tr id="travel">
+        <td>Travel (Company Business)</td>
+        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+        <td><input type="text" id="travelInput"></td>
+        <td><output id="travelOutput"></output></td>
+        <td id="travelConv">0.22</td>
+    </tr>
+    <tr id="flightsUK">
+        <td>Flights (UK)</td>
+        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+        <td><input type="text" id="flightsUKInput"></td>
+        <td><output id="flightsUKOutput"></output></td>
+        <td id="flightsUKConv">0.22</td>
+    </tr>
+    <tr id="flightsIN">
+        <td>Flights (UK)</td>
+        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+        <td><input type="text" id="flightsINInput"></td>
+        <td><output id="flightsINOutput"></output></td>
+        <td id="flightsINConv">0.22</td>
+    </tr>
+    <tr id="staffc">
+        <td>Staff commuting</td>
+        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+        <td><input type="text" id="staffcInput"></td>
+        <td><output id="staffcOutput"></output></td>
+        <td id="staffcConv">0.22</td>
     </tr>
 </table>
 
