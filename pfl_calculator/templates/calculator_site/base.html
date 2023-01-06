@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    Hello world
-  </body>
+{% load static %}
+<html>
+    <head lang="en">
+        <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+        <meta charset="UTF-8" />
+        <title>
+            Planet First Locals - 
+            {% block title_block %}
+                Homepage
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <div>
+            {% block body_block %} 
+            <h1>IT'S BLUE <br> THE GOD DAMN TEXT IS BLUE<br> WOO</h1>
+            {% endblock %}
+        </div>
+        <div>
+            {% block sidebar_block %}
+            {% endblock %}
+        </div>
+    </body>
 </html>

@@ -1,4 +1,3 @@
-
 window.onload = () => {
     const input = document.getElementById('heatingInput');
     const output = document.getElementById("heatingOutput");
