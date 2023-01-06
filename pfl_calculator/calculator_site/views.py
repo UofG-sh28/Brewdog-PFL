@@ -9,3 +9,7 @@ def outline(request):
 
 def scope(request):
     return render(request, 'calculator_site/scope.html')
+
+
+def calculate(request):
+    return render(request, 'calculator_site/calculator.html')
