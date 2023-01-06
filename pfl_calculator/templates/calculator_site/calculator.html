@@ -49,98 +49,106 @@
           visibility: visible;
           opacity: 1;
       }
+
+
+      .output{
+          pointer-events:none;
+      }
   </style>
 {% endblock %}
 
 {% block body_block %}
-<table id="table">
-    <tr id="headers">
-        <td>Food and Drink</td>
-        <td>Applicable</td>
-        <td>Usage</td>
-        <td>Amount</td>
-        <td>Conversion Factor</td>
-        <td>Information</td>
-    </tr>
-<!--    ID of table row must match input & output starting id-->
-    <tr id="goodDel">
-        <td>Goods Deliveries (Company Owned)</td>
-        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
-        <td><input type="text" id="goodDelInput"></td>
-        <td><output id="goodDelOutput"></output></td>
-        <td id="goodDelConv">0.22</td>
-        <td>
-        <div class="tooltip">
-            Info
-            <span class="tooltiptext">This is more information on Goods Deliveries (Company Owned)</span>
-        </div>
-        </td>
-    </tr>
-    <tr id="goodDelC">
-        <td>Goods Deliveries (Contracted)</td>
-        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
-        <td><input type="text" id="goodDelCInput"></td>
-        <td><output id="goodDelCOutput"></output></td>
-        <td id="goodDelCConv">0.22</td>
-        <td>
+<form action="/api/cal-submit/" method="post">
+    {% csrf_token %}
+    <table id="table">
+        <tr id="headers">
+            <td>Food and Drink</td>
+            <td>Applicable</td>
+            <td>Usage</td>
+            <td>Amount</td>
+            <td>Conversion Factor</td>
+            <td>Information</td>
+        </tr>
+    <!--    ID of table row must match input & output starting id-->
+        <tr id="goodDel">
+            <td>Goods Deliveries (Company Owned)</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="goodDelInput"></td>
+            <td><input id="goodDelOutput" class="output"></td>
+            <td id="goodDelConv">0.22</td>
+            <td>
             <div class="tooltip">
                 Info
-                <span class="tooltiptext">This is more information on Goods Deliveries (Contracted)</span>
+                <span class="tooltiptext">This is more information on Goods Deliveries (Company Owned)</span>
             </div>
-        </td>
-    </tr>
-    <tr id="travel">
-        <td>Travel (Company Business)</td>
-        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
-        <td><input type="text" id="travelInput"></td>
-        <td><output id="travelOutput"></output></td>
-        <td id="travelConv">0.22</td>
-        <td>
-            <div class="tooltip">
-                Info
-                <span class="tooltiptext">This is more information on Travel (Company Business)</span>
-            </div>
-        </td>
-    </tr>
-    <tr id="flightsUK">
-        <td>Flights (UK)</td>
-        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
-        <td><input type="text" id="flightsUKInput"></td>
-        <td><output id="flightsUKOutput"></output></td>
-        <td id="flightsUKConv">0.22</td>
-        <td>
-            <div class="tooltip">
-                Info
-                <span class="tooltiptext">This is more information on Flights (UK)</span>
-            </div>
-        </td>
-    </tr>
-    <tr id="flightsIN">
-        <td>Flights (International)</td>
-        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
-        <td><input type="text" id="flightsINInput"></td>
-        <td><output id="flightsINOutput"></output></td>
-        <td id="flightsINConv">0.22</td>
-        <td>
-            <div class="tooltip">
-                Info
-                <span class="tooltiptext">This is more information on Flights (International)</span>
-            </div>
-        </td>
-    </tr>
-    <tr id="staffc">
-        <td>Staff commuting</td>
-        <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
-        <td><input type="text" id="staffcInput"></td>
-        <td><output id="staffcOutput"></output></td>
-        <td id="staffcConv">100</td>
-        <td>
-            <div class="tooltip">
-                Info
-                <span class="tooltiptext">This is more information on Staff commuting</span>
-            </div>
-        </td>
-    </tr>
-</table>
-
+            </td>
+        </tr>
+        <tr id="goodDelC">
+            <td>Goods Deliveries (Contracted)</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="goodDelCInput"></td>
+            <td><input id="goodDelCOutput" class="output"></td>
+            <td id="goodDelCConv">0.22</td>
+            <td>
+                <div class="tooltip">
+                    Info
+                    <span class="tooltiptext">This is more information on Goods Deliveries (Contracted)</span>
+                </div>
+            </td>
+        </tr>
+        <tr id="travel">
+            <td>Travel (Company Business)</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="travelInput"></td>
+            <td><input id="travelOutput" class="output"></td>
+            <td id="travelConv">0.22</td>
+            <td>
+                <div class="tooltip">
+                    Info
+                    <span class="tooltiptext">This is more information on Travel (Company Business)</span>
+                </div>
+            </td>
+        </tr>
+        <tr id="flightsUK">
+            <td>Flights (UK)</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="flightsUKInput"></td>
+            <td><input id="flightsUKOutput" class="output"></td>
+            <td id="flightsUKConv">0.22</td>
+            <td>
+                <div class="tooltip">
+                    Info
+                    <span class="tooltiptext">This is more information on Flights (UK)</span>
+                </div>
+            </td>
+        </tr>
+        <tr id="flightsIN">
+            <td>Flights (International)</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="flightsINInput"></td>
+            <td><input id="flightsINOutput" class="output"></td>
+            <td id="flightsINConv">0.22</td>
+            <td>
+                <div class="tooltip">
+                    Info
+                    <span class="tooltiptext">This is more information on Flights (International)</span>
+                </div>
+            </td>
+        </tr>
+        <tr id="staffc">
+            <td>Staff commuting</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="staffcInput"></td>
+            <td><input id="staffcOutput" class="output"></td>
+            <td id="staffcConv">100</td>
+            <td>
+                <div class="tooltip">
+                    Info
+                    <span class="tooltiptext">This is more information on Staff commuting</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Save & Next">
+</form>
 {% endblock %}
