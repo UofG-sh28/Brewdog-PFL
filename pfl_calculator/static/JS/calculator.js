@@ -8,11 +8,19 @@ window.onload = () => {
         output.value = parseFloat(input.value) * parseFloat(conversion.innerText);
     }
 
-    const input = this.document.getElementById("goodDelInput");
-    input.addEventListener('input', inputHandler);
-    input.addEventListener('propertychange', inputHandler);
-}
+    const table = this.document.getElementById("table");
+    for(let i=0; i < table.rows.length; i++){
+        const row = table.rows[i];
+        if (row.id === "headers") continue;
 
+        const input = this.document.getElementById(row.id + "Input");
+        if (input === undefined) continue;
+
+        input.addEventListener('input', inputHandler);
+        input.addEventListener('propertychange', inputHandler);
+    }
+
+}
 
 function applicableCheck(parent){
     const tableRow = this.document.getElementById(parent.parentNode.parentNode.id);
