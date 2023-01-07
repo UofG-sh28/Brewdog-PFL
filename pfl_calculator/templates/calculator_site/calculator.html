@@ -1,61 +1,10 @@
 {% extends 'calculator_site/base.html' %}
+{% load static %}
 
-{% block title %}Planet First Locals - Carbon Calculator{% endblock %}
+{% block title %}Carbon Calculator{% endblock %}
 
-{% block script %}<script src="../../static/JS/calculator.js"></script> {% endblock %}
-
-{% block css %}
-  <style>
-      table, th, td {
-          border:1px solid black;
-          margin-top: 100px;
-      }
-
-      .tooltip {
-          position: relative;
-          display: inline-block;
-          border-bottom: 1px dotted black;
-      }
-
-      .tooltip .tooltiptext {
-          visibility: hidden;
-          width: 150px;
-          background-color: #555;
-          color: #fff;
-          text-align: center;
-          border-radius: 6px;
-          padding: 5px 0;
-          position: absolute;
-          z-index: 1;
-          bottom: 125%;
-          left: 50%;
-          margin-left: -60px;
-          opacity: 0;
-          transition: opacity 0.3s;
-      }
-
-      .tooltip .tooltiptext::after {
-          content: "";
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          margin-left: -5px;
-          border-width: 5px;
-          border-style: solid;
-          border-color: #555 transparent transparent transparent;
-      }
-
-      .tooltip:hover .tooltiptext {
-          visibility: visible;
-          opacity: 1;
-      }
-
-
-      .output{
-          pointer-events:none;
-      }
-  </style>
-{% endblock %}
+{% block script %}<script src="{% static 'JS/calculator.js' %}"></script> {% endblock %}
+<!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
 <form action="/api/cal-submit/" method="post">
@@ -69,7 +18,7 @@
             <td>Conversion Factor</td>
             <td>Information</td>
         </tr>
-    <!--    ID of table row must match input & output starting id-->
+    <!-- ID of table row must match input & output starting id -->
         <tr id="goodDel">
             <td>Goods Deliveries (Company Owned)</td>
             <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>

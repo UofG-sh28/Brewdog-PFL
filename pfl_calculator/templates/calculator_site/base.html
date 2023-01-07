@@ -2,19 +2,21 @@
 {% load static %}
 <html>
     <head lang="en">
-        <link rel="stylesheet" href="{% static 'styles/base.css' %}">
         <meta charset="UTF-8" />
         <title>
+            Planet First Locals - 
             {% block title%}
             {% endblock %}
         </title>
-
-        {% block css %}{% endblock %}
+        <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+        <!--{% block css %}{% endblock %}-->
 
     </head>
     <body>
+        <div id=header>
+            <a href="{% url 'index' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
+        </div>
         <div>
-            <a href="{% url 'index' %}">homepage</a>
             {% block body_block %}{% endblock %}
         </div>
     </body>
