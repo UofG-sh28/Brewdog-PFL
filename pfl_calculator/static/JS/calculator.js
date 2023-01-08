@@ -28,6 +28,7 @@ function applicableCheck(parent){
     const input = this.document.getElementById(tableRow.id + "Input");
     const output = this.document.getElementById(tableRow.id + "Output");
     input.disabled = !input.disabled;
+    output.required = !output.required;
     input.value = "";
     output.value = "";
 

@@ -15,7 +15,7 @@ def scope(request):
     return render(request, 'calculator_site/scope.html')
 
 def calculator(request):
-    cal_form = CalculatorForm(use_required_attribute=False)
+    cal_form = CalculatorForm()
     context = {}
     context['conversion_factor'] = "" #GET
     bu = BusinessUsage()
