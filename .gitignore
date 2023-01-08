@@ -5,3 +5,6 @@ pfl_calculator/db.sqlite3
 .idea
 # Empty for now, add as needed
 .DS_Store
+
+#Python Cache Files
+*.pyc
