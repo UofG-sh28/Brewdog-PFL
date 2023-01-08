@@ -27,3 +27,11 @@ def calculator(request):
     # Tuple so that can index into cal_form field (maybe custom object better?)
     context["fields"] = [(field, cal_form[field]) for field in calculator_fields[:7]]
     return render(request, 'calculator_site/calculator.html', context=context)
+
+@csrf_exempt
+def api_cal_submit(request):
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        return HttpResponse("<h1>Submitted</h1>")
+    return HttpResponse("<h1>Failed to submit</h1>")
