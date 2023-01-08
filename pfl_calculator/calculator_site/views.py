@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from calculator_site.forms import CalculatorForm
 
 # Create your views here.
 def index(request):
@@ -11,7 +12,7 @@ def scope(request):
     return render(request, 'calculator_site/scope.html')
 
 def calculator(request):
-    context = {}
+    context = {'cal_form': CalculatorForm()}
     context['conversion_factor'] = "" #GET
 
     return render(request, 'calculator_site/calculator.html', context=context)
