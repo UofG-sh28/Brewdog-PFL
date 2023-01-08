@@ -4,6 +4,8 @@ from calculator_site import models
 
 class CalculatorForm(forms.ModelForm):
 
+
+
     class Meta:
         model = models.BusinessUsage
         # Update to not be hard coded? static method?
@@ -45,3 +47,6 @@ class CalculatorForm(forms.ModelForm):
                 'id': 'grid_electricity_LOWCARBONOutput',
                 'placeholder': ' '}),
         }
+
+    def __int__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
