@@ -6,6 +6,7 @@ class CalculatorForm(forms.ModelForm):
 
     class Meta:
         model = models.BusinessUsage
+        # Update to not be hard coded? static method?
         fields = ('mains_gas', 'fuel', 'oil', 'coal', 'wood', 'grid_electricity', 'grid_electricity_LOWCARBON')
         widgets = {
             'mains_gas': TextInput(attrs={

@@ -18,6 +18,13 @@
             <td>Conversion Factor</td>
             <td>Information</td>
         </tr>
+        <tr id="mains_gas">
+            <td>mains_gas</td>
+            <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
+            <td><input type="text" id="mains_gasInput"></td>
+            <td>{{cal_form.mains_gas}}</td>
+            <td id="mains_gasConv">0.22</td>
+        </tr>
     <!-- ID of table row must match input & output starting id -->
         <tr id="goodDel">
             <td>Goods Deliveries (Company Owned)</td>
