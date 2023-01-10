@@ -18,16 +18,24 @@ for fuel_type in parsed["categories"]:
 
 	data["keys"].append(fuel_type)
 	data["parents"].append("Usages")
-	data["values"].append(fuel_total)
+	data["values"].append(round(fuel_total,2))
 	total_usage += fuel_total
 
-data["values"][0] = total_usage
+data["values"][0] = round(total_usage,2)
 fig = px.sunburst(
 	data,
 	names="keys",
 	parents="parents",
 	values="values",
-	branchvalues="total"
+	branchvalues="total",
+	custom_data=["keys", "values"]
 	)
+fig.update_traces(
+    hovertemplate="<br>".join([
+        "Usage: %{customdata[0]}",
+        "Emissions: %{customdata[1]}",
+    ])
+)
 
-fig.show()
+
+fig.write_html("plotly-pie.html")
