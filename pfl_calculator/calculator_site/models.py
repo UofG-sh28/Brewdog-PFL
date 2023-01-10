@@ -212,6 +212,7 @@ class BusinessMetrics(models.Model):
         business - each business has metrics for each year.
 
     Fields:
+        year - Optional
         operating_months - Optional
         weekly_openings - Optional
         annual_meals - Optional
@@ -222,6 +223,7 @@ class BusinessMetrics(models.Model):
     #FK
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
     #FIELDS
+    year = models.IntegerField()
     operating_months = models.IntegerField()
     weekly_openings = models.IntegerField()
     annual_meals = models.IntegerField()

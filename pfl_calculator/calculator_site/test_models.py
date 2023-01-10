@@ -78,6 +78,7 @@ class CreateBusinessMetrics(TestCase):
 
         business_metrics = BusinessMetrics(
             business = business,
+            year = 2023,
             operating_months = 12,
             weekly_openings = 6,
             annual_meals = 12345,
