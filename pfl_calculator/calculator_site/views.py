@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
-from calculator_site.models import BusinessUsage
+from calculator_site.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
@@ -12,7 +12,9 @@ def outline(request):
     return render(request, 'calculator_site/outline.html')
 
 def scope(request):
-    return render(request, 'calculator_site/scope.html')
+    context = {}
+    context["business"] = Business.objects.all()
+    return render(request, 'calculator_site/scope.html',context=context)
 
 def calculator(request):
     cal_form = CalculatorForm()

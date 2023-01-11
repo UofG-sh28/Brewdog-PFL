@@ -10,5 +10,12 @@
     <div class="information">
       <h2>Scope</h2>
       <p>This page scopes a bunch of stuff.</p>
+      {% if business %}
+        {% for bus in business %}
+          <strong>{{ bus.company_name }}</strong>
+        {% endfor %}
+      {% else %}
+        <p> No business </p>
+      {% endif %}
     </div>
   {% endblock %}
