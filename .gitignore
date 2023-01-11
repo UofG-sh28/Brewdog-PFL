@@ -1,6 +1,3 @@
-# Database
-pfl_calculator/db.sqlite3
-
 # Jetbrains software config directory
 .idea
 # Empty for now, add as needed
