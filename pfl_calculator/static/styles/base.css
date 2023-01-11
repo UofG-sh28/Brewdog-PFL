@@ -1,53 +1,53 @@
 /* Base */
 html {
-    width:90%;
+    width: 90%;
     margin: auto;
     height: auto;
 }
 
+/* Header and Logo */
 #header {
     border-bottom: #97DFD4 solid 3px; 
     margin: auto;
     height: 10vw;
     min-height: 75px;
-    display: fle
+    width: 100%;
 }
 
 #logo {
-    height:90%;
+    height: 90%;
     min-height: 70px;
     float: left;
 }
 
+/* Hamburger Menu */
 #menu {
+    min-width: 50px;
+    width: auto;
+    height: 100%;
+    margin: auto;
+    display: block;
+}
+
+.dropdown {
     height:100%;
-    width: inherit;
-    min-height: 50px;
-    margin-left: 80%;
     float: right;
     display: inline;
     vertical-align: bottom;
+    position: relative;
 }
 
-@media only screen and (max-width: 800px) {
-    #menu {
-        margin-left: 70%;
-    }
-}
-
-
-/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
+  top: 100%;
+  right: 5%;
+  width: 100%;
   display: none;
-  position: inherit;
-  float: right;
+  position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: -1;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -55,12 +55,12 @@ html {
   display: block;
 }
 
-#menu:hover + .dropdown-content {display: inline-block;}
+.dropdown:hover .dropdown-content {display: block;}
 
 /* Calculator */
 table, th, td {
     border:1px solid black;
-    margin-top: 100px;
+    margin-top: 25px;
 }
 
 .tooltip {

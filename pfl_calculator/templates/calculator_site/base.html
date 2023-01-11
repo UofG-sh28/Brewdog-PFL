@@ -16,11 +16,13 @@
         <div id=header>
             <a href="{% url 'index' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
             
-            <img id="menu" src="{% static 'images/menu.png' %}">
-            <div class="dropdown-content">
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
+            <div class="dropdown">
+                <img id="menu" src="{% static 'images/menu.png' %}">
+                <div class="dropdown-content">
+                    <a href="{% url 'outline' %}">Outline</a>
+                    <a href="{% url 'scope' %}">Scope</a>
+                    <a href="{% url 'calculator' %}">Calculator</a>
+                </div>
             </div>
         </div>
         <div>
