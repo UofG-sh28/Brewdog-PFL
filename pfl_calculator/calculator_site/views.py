@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
 from django.contrib.auth.models import User
 
-# Create your views here.
+# INFO PAGES AND HOMEPAGE
 def index(request):
     return render(request, 'calculator_site/index.html')
 
@@ -17,6 +17,24 @@ def outline(request):
 def scope(request):
     return render(request, 'calculator_site/scope.html')
 
+# AUTHENTICATED USER PAGES
+def dashboard(request):
+    return render(request, 'calculator_site/dashboard.html')
+
+def metrics(request):
+    return render(request, 'calculator_site/metrics.html')
+
+def report(request):
+    return render(request, 'calculator_site/report.html')
+
+def pledges(request):
+    return render(request, 'calculator_site/pledges.html')
+
+def action_plan(request):
+    return render(request, 'calculator_site/action_plan.html')
+
+def profile(request):
+    return render(request, 'calculator_site/profile.html')
 def calculator(request):
     cal_form = CalculatorForm()
     context = {}
@@ -31,6 +49,15 @@ def calculator(request):
     context["fields"] = [(field, cal_form[field]) for field in calculator_fields[:7]]
     return render(request, 'calculator_site/calculator.html', context=context)
 
+@csrf_exempt
+def api_cal_submit(request):
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        return HttpResponse("<h1>Submitted</h1>")
+    return HttpResponse("<h1>Failed to submit</h1>")
+
+# LOGIN AND REGISTER PAGES
 def login(request):
     if request.method == 'POST':
         username = request.post['username']
@@ -57,11 +84,3 @@ def about(request):
         return render(request, 'register.html')
     else:
         return HttpResponse(request, 'about.html')
-
-@csrf_exempt
-def api_cal_submit(request):
-    if request.method == "POST":
-        data = request.POST
-        print(data)
-        return HttpResponse("<h1>Submitted</h1>")
-    return HttpResponse("<h1>Failed to submit</h1>")
