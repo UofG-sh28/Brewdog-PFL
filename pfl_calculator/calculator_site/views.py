@@ -35,6 +35,7 @@ def action_plan(request):
 
 def profile(request):
     return render(request, 'calculator_site/profile.html')
+    
 def calculator(request):
     cal_form = CalculatorForm()
     context = {}
