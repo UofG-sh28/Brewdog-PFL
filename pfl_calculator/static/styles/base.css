@@ -200,7 +200,7 @@ tr:nth-child(even) {
 
 /*To sort*/
 #inapplicable{
-    color: gray;
+    border-color: gray;
     opacity: 0.5;
 }
 

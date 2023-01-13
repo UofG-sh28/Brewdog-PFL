@@ -43,6 +43,22 @@ function applicableCheck(current){
     const tableRow = this.document.getElementById(current.parentNode.parentNode.id);
     const input = this.document.getElementById(tableRow.id + "Input");
     const output = this.document.getElementById(tableRow.id + "Output");
+    const name = this.document.getElementById(tableRow.id + "Name");
+    const conv = this.document.getElementById(tableRow.id + "Conv");
+    const check = this.document.getElementById(tableRow.id + "Check");
+    const info = this.document.getElementById(tableRow.id + "Info");
+
+
+    input.style.border = "0.15em solid " + (input.disabled ? "black" : "grey");
+    output.style.border = "0.15em solid " + (input.disabled ? "black" : "grey");
+    const value = input.disabled ? "1" : "0.5"
+    name.style.opacity = value;
+    conv.style.opacity = value;
+    check.style.opacity = value;
+    info.style.opacity = value;
+
+
+
     input.disabled = !input.disabled;
     output.required = !output.required;
     input.value = "";
