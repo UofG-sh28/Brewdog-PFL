@@ -22,15 +22,14 @@
         <!-- ID of table row must match input & output starting id -->
                 {% for field_tup in fields %}
                     <tr id="{{field_tup.0}}">
-                        <td>{{field_tup.0}}</td>
+                        <td>{{field_tup.2}}</td>
                         <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
                         <td><input type="text" id="{{field_tup.0}}Input"></td>
                         <td>{{field_tup.1}}</td>
                         <td id="{{field_tup.0}}Conv">0.22</td>
                         <td>
                             <div class="tooltip">
-                                Info
-                                <span class="tooltiptext">This is more information on Flights (International)</span>
+                                Info<span class="tooltiptext">This is more information on {{field_tup.2}}</span>
                             </div>
                         </td>
                     </tr>

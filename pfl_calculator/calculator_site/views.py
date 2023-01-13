@@ -67,16 +67,12 @@ def about(request):
         return HttpResponse(request, 'about.html')
 
 
-
-
-class CalculatorDataWrapper:
+class CalculatorLoaderView:
 
     def __init__(self):
         file = open("static/verbose.json")
         self.verbose = json.load(file)
         file.close()
-
-
 
     def calculator(self, request):
         cal_form = CalculatorForm()
@@ -89,7 +85,6 @@ class CalculatorDataWrapper:
         # List to preserve order
         calculator_fields = [field for field in fields if field not in non_cal_fields]
         # Tuple so that can index into cal_form field (maybe custom object better?)
-        print(self.verbose)
-        context["fields"] = [(field, cal_form[field]) for field in calculator_fields[:7]]
+        context["fields"] = [(field, cal_form[field], self.verbose["fields"][field]) for field in calculator_fields[:7]]
         return render(request, 'calculator_site/calculator.html', context=context)
 
