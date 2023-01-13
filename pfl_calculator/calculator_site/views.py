@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
-from calculator_site.models import BusinessUsage
+from calculator_site.models import BusinessUsage, Business
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
@@ -19,7 +19,9 @@ def outline(request):
 
 
 def scope(request):
-    return render(request, 'calculator_site/scope.html')
+    data = Business.objects.all().values()
+    context = { 'business': data }
+    return render(request, 'calculator_site/scope.html', context)
 
 
 # AUTHENTICATED USER PAGES
