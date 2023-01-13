@@ -18,7 +18,6 @@ window.onload = () => {
         const conversion = this.document.getElementById(tableRow.id + "Conv");
         const value = parseFloat(input.value) * parseFloat(conversion.innerText);
         const decimalLength = getDecimalLength(parseFloat(input.value));
-        console.log(decimalLength);
         output.value = isNaN(value) ? "" : value.toFixed(decimalLength);
     }
 
@@ -28,8 +27,9 @@ window.onload = () => {
         const tableRowId = output.parentNode.parentNode.id;
         const input = this.document.getElementById(tableRowId + "Input");
         input.value = "";
-        input.select();
         input.focus();
+        input.select();
+
     }
 
     const tables = this.document.getElementsByClassName("table");
