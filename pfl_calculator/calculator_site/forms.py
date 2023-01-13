@@ -22,7 +22,7 @@ class CalculatorUtil:
         fields = CalculatorUtil.retrieve_meta_fields()
         widgets = {}
         for field in fields:
-            attrs = {'type': 'text', 'class': 'output', 'id': field + 'Output', 'placeholder': ' '}
+            attrs = {'type': 'text', 'class': 'output input-style', 'id': field + 'Output', 'placeholder': ' ',}
             widgets[field] = TextInput(attrs=attrs)
         return widgets
 

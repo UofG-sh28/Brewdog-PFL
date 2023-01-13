@@ -236,11 +236,34 @@ input[type="checkbox"]::before {
     transform-origin: bottom left;
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1em 1em var(--form-control-color);
-    /* Windows High Contrast Mode */
-    background-color: CanvasText;
+
 }
 
 input[type="checkbox"]:checked::before {
     transform: scale(1);
 }
+
+.input-style{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    margin: auto;
+    width: 100%;
+    max-width: 280px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.15em solid black;
+    font-family: inherit;
+    height: 25px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+}
+
+.input-style:focus {
+    outline: none;
+    border-color: var(--form-control-color);
+}
+
 
