@@ -56,11 +56,11 @@
     "operations_maintenance": "Operations & Maintenance"
   },
   "category_links": {
-    "main_gas" : "heating_fuel",
-    "waste_food_landfill" : "food_waste",
-    "bottles_recycle" : "solid_waste",
-    "goods_delivered_company_owned" : "transport_travel",
-    "beef_lamb" : "food_drink",
-    "kitchen_equipment_assets" : "operations_maintenance"
+    "grid_electricity_LOWCARBON" : "heating_fuel",
+    "waste_food_charity" : "food_waste",
+    "special_waste" : "solid_waste",
+    "staff_commuting" : "transport_travel",
+    "spirits" : "food_drink",
+    "sewage" : "operations_maintenance"
   }
 }

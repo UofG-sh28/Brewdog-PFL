@@ -19,20 +19,21 @@ window.onload = () => {
         input.focus();
     }
 
-    const table = this.document.getElementById("table");
-    for(let i=0; i < table.rows.length; i++){
-        const row = table.rows[i];
-        if (row.id === "headers") continue;
+    const tables = this.document.getElementsByClassName("table");
+    for(let j=0; j < tables.length; j++) {
+        for (let i = 0; i < tables[j].rows.length; i++) {
+            const row = tables[j].rows[i];
+            if (row.id === "headers") continue;
 
-        const input = this.document.getElementById(row.id + "Input");
-        const output = this.document.getElementById(row.id + "Output");
-        if (input === undefined || output === undefined) continue;
+            const input = this.document.getElementById(row.id + "Input");
+            const output = this.document.getElementById(row.id + "Output");
+            if (input === undefined || output === undefined) continue;
 
-        output.addEventListener('invalid', outputValidation);
-        input.addEventListener('input', inputHandler);
-        input.addEventListener('propertychange', inputHandler);
+            output.addEventListener('invalid', outputValidation);
+            input.addEventListener('input', inputHandler);
+            input.addEventListener('propertychange', inputHandler);
+        }
     }
-
 }
 
 

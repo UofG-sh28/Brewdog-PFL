@@ -10,17 +10,18 @@
 <h2>The Table</h2>
 <form action="/api/cal-submit/" enctype="multipart/form-data"  method="post">
     {% csrf_token %}
-    <table id="table">
-        <tr id="headers">
-            <th>Food and Drink</th>
-            <th>Applicable</th>
-            <th>Usage</th>
-            <th>Amount</th>
-            <th>Conversion Factor</th>
-            <th>Information</th>
-        </tr>
+    {% for category in categories %}
+        <table class="table">
+            <tr id="headers">
+                <th>{{category.name}}</th>
+                <th>Applicable</th>
+                <th>Usage</th>
+                <th>Amount</th>
+                <th>Conversion Factor</th>
+                <th>Information</th>
+            </tr>
         <!-- ID of table row must match input & output starting id -->
-                {% for cal_data in fields %}
+                {% for cal_data in category.fields %}
                     <tr id="{{cal_data.id}}">
                         <td>{{cal_data.name}}</td>
                         <td><input checked type="checkbox" onclick="applicableCheck(this)"></td>
@@ -35,6 +36,8 @@
                     </tr>
                 {% endfor %}
     </table>
+    <br><br>
+    {% endfor %}
     <input type="submit" value="Save & Next">
 </form>
 {% endblock %}

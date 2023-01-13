@@ -20,7 +20,7 @@ def outline(request):
 
 def scope(request):
     data = Business.objects.all().values()
-    context = { 'business': data }
+    context = {'business': data}
     return render(request, 'calculator_site/scope.html', context)
 
 
@@ -90,9 +90,32 @@ class CalculatorLoaderView:
     def calculator(self, request):
         cal_form = CalculatorForm()
         proper_names = self.verbose["fields"]
-        context = {"fields": [CalculatorDataWrapper(key, cal_form[key], proper_names[key], 0.22)
-                              for key in list(proper_names.keys())[:7]]}
+        category_links = self.verbose["category_links"]
+        category_names = self.verbose["categories"]
+        fields = [CalculatorDataWrapper(key, cal_form[key], proper_names[key], 0.22)
+                  for key in list(proper_names.keys())]
+
+        category_list = []
+        field_list = []
+        for field in fields:
+            link = category_links.get(field.id)
+            if link is None:
+                field_list.append(field)
+            else:
+                category_list.append(CalculatorCategoryWrapper(link, category_names[link], field_list))
+                field_list = []
+
+        context = {"categories": category_list}
+
         return render(request, 'calculator_site/calculator.html', context=context)
+
+
+class CalculatorCategoryWrapper:
+
+    def __init__(self, id, name, fields):
+        self.id = id
+        self.name = name
+        self.fields = fields
 
 
 class CalculatorDataWrapper:

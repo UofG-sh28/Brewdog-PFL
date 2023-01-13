@@ -14,7 +14,7 @@ class CalculatorUtil:
         del bu
         non_cal_fields = ['_state', 'id', 'business_id', 'conversion_factor_id', 'year']
         # List to preserve order
-        calculator_fields = [field for field in fields if field not in non_cal_fields][:7]
+        calculator_fields = [field for field in fields if field not in non_cal_fields]
         return tuple(calculator_fields)
 
     @staticmethod
