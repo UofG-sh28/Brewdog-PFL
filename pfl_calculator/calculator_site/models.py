@@ -60,6 +60,10 @@ class Business(models.Model):
     contact_email = models.EmailField(max_length=150)
     business_size = models.CharField(max_length=1, choices=BUSINESS_TURNOVERS)
 
+    class Meta:
+        verbose_name = "Business"
+        verbose_name_plural = "Businesses"
+
     def __str__(self):
         return self.company_name
 
@@ -129,6 +133,9 @@ class ConversionFactor(models.Model):
     main_water = models.FloatField(default=0.0)
     sewage = models.FloatField(default=0.0)
 
+    class Meta:
+        verbose_name = "Convertion Factor"
+        verbose_name_plural = "Convertion Factors"
 
     def save(self, *args, **kwargs):
         super(ConversionFactor, self).save(*args, **kwargs)
@@ -199,6 +206,10 @@ class BusinessUsage(models.Model):
     main_water = models.IntegerField()
     sewage = models.DecimalField(max_digits=16, decimal_places=2)
 
+    class Meta:
+        verbose_name = "Business Usage"
+        verbose_name_plural = "Business Usages"
+
     def save(self, *args, **kwargs):
         super(BusinessUsage, self).save(*args, **kwargs)
 
@@ -230,6 +241,10 @@ class BusinessMetrics(models.Model):
     annual_drinks = models.IntegerField()
     annual_customers = models.IntegerField()
     revenue = models.IntegerField()
+
+    class Meta:
+        verbose_name = "Business Metric"
+        verbose_name_plural = "Business Metrics"
 
     def save(self, *args, **kwargs):
         super(BusinessMetrics, self).save(*args, **kwargs)
@@ -304,6 +319,10 @@ class CarbonFootprint(models.Model):
     IT_Marketing = models.FloatField(default=0.0)
     main_water = models.FloatField(default=0.0)
     sewage = models.FloatField(default=0.0)
+
+    class Meta:
+        verbose_name = "Carbon Footprint"
+        verbose_name_plural = "Carbon Footprints"
 
     def __str__(self):
         try:
