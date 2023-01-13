@@ -1,5 +1,4 @@
 import json
-import os
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
