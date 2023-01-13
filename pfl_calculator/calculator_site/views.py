@@ -92,7 +92,8 @@ class CalculatorLoaderView:
         proper_names = self.verbose["fields"]
         category_links = self.verbose["category_links"]
         category_names = self.verbose["categories"]
-        fields = [CalculatorDataWrapper(key, cal_form[key], proper_names[key], 0.22)
+        conversion_factors = self.verbose["conversion_factors"]
+        fields = [CalculatorDataWrapper(key, cal_form[key], proper_names[key], conversion_factors[key])
                   for key in list(proper_names.keys())]
 
         category_list = []
