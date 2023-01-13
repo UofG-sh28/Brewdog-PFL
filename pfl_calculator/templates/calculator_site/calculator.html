@@ -12,12 +12,12 @@
     {% csrf_token %}
     <table id="table">
         <tr id="headers">
-            <td>Food and Drink</td>
-            <td>Applicable</td>
-            <td>Usage</td>
-            <td>Amount</td>
-            <td>Conversion Factor</td>
-            <td>Information</td>
+            <th>Food and Drink</th>
+            <th>Applicable</th>
+            <th>Usage</th>
+            <th>Amount</th>
+            <th>Conversion Factor</th>
+            <th>Information</th>
         </tr>
         <!-- ID of table row must match input & output starting id -->
                 {% for field_tup in fields %}

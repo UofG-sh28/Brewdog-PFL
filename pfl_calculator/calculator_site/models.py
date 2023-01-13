@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 class Business(models.Model):
     """This model represents a user's business,
         stores information about the Business' location, size, details and contacts.

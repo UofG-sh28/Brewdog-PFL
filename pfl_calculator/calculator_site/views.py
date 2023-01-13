@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
-from calculator_site.models import BusinessUsage
+from calculator_site.models import BusinessUsage, Business
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
@@ -16,7 +16,9 @@ def outline(request):
     return render(request, 'calculator_site/outline.html')
 
 def scope(request):
-    return render(request, 'calculator_site/scope.html')
+    data = Business.objects.all().values()
+    context = { 'business': data }
+    return render(request, 'calculator_site/scope.html', context)
 
 # AUTHENTICATED USER PAGES
 def dash(request):
@@ -75,8 +77,6 @@ class CalculatorDataWrapper:
         file = open("static/verbose.json")
         self.verbose = json.load(file)
         file.close()
-
-
 
     def calculator(self, request):
         cal_form = CalculatorForm()
