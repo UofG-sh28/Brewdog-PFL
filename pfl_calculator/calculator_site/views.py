@@ -55,6 +55,10 @@ def api_cal_submit(request):
     if request.method == "POST":
         data = request.POST
         print(data)
+
+        # Create CarbonFootprint object here, should create a BusinessUsage out of submitted dictionarys, get the relevant (or most recent) ConversionFactor from the year field.
+        # Should also pass the get_json() result into the context dictionary.
+
         return HttpResponse("<h1>Submitted</h1>")
     return HttpResponse("<h1>Failed to submit</h1>")
 
