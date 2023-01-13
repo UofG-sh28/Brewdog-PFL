@@ -1,3 +1,14 @@
+
+function getDecimalLength(r){
+    if(Math.floor(r) === r) return 0;
+    try{
+        return r.toString().split(".")[1].length || 0;
+    }catch (TypeError){
+        return 0;
+    }
+}
+
+
 window.onload = () => {
 
     const inputHandler = (e) => {
@@ -6,7 +17,9 @@ window.onload = () => {
         const output = this.document.getElementById(tableRow.id + "Output");
         const conversion = this.document.getElementById(tableRow.id + "Conv");
         const value = parseFloat(input.value) * parseFloat(conversion.innerText);
-        output.value = isNaN(value) ? "" : value;
+        const decimalLength = getDecimalLength(parseFloat(input.value));
+        console.log(decimalLength);
+        output.value = isNaN(value) ? "" : value.toFixed(decimalLength);
     }
 
     const outputValidation = (e) => {
@@ -35,7 +48,6 @@ window.onload = () => {
         }
     }
 }
-
 
 
 
