@@ -1,3 +1,6 @@
+import json
+import os
+
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
 from calculator_site.models import BusinessUsage
@@ -35,20 +38,6 @@ def action_plan(request):
 def profile(request):
     return render(request, 'calculator_site/profile.html')
 
-def calculator(request):
-    cal_form = CalculatorForm()
-    context = {}
-    context['conversion_factor'] = "" #GET
-    bu = BusinessUsage()
-    fields = list(bu.__dict__.keys())
-    del bu
-    non_cal_fields = ['_state', 'id', 'business_id', 'conversion_factor_id', 'year']
-    # List to preserve order
-    calculator_fields = [field for field in fields if field not in non_cal_fields]
-    # Tuple so that can index into cal_form field (maybe custom object better?)
-    context["fields"] = [(field, cal_form[field]) for field in calculator_fields[:7]]
-    return render(request, 'calculator_site/calculator.html', context=context)
-
 
 # LOGIN AND REGISTER PAGES
 def login(request):
@@ -77,3 +66,31 @@ def about(request):
         return render(request, 'register.html')
     else:
         return HttpResponse(request, 'about.html')
+
+
+
+
+class CalculatorDataWrapper:
+
+    def __init__(self):
+        file = open("static/verbose.json")
+        self.verbose = json.load(file)
+        file.close()
+
+
+
+    def calculator(self, request):
+        cal_form = CalculatorForm()
+        context = {}
+        context['conversion_factor'] = "" #GET
+        bu = BusinessUsage()
+        fields = list(bu.__dict__.keys())
+        del bu
+        non_cal_fields = ['_state', 'id', 'business_id', 'conversion_factor_id', 'year']
+        # List to preserve order
+        calculator_fields = [field for field in fields if field not in non_cal_fields]
+        # Tuple so that can index into cal_form field (maybe custom object better?)
+        print(self.verbose)
+        context["fields"] = [(field, cal_form[field]) for field in calculator_fields[:7]]
+        return render(request, 'calculator_site/calculator.html', context=context)
+
