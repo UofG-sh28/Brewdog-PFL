@@ -101,7 +101,6 @@ class CalculatorLoaderView:
 
         # Format data and send to database
         print(data)
-
         return self.__calculator_get_request(request)
 
     def __calculator_get_request(self, request, progress=0):
@@ -117,11 +116,11 @@ class CalculatorLoaderView:
         field_list = []
         for field in fields:
             link = category_links.get(field.id)
-            if link is None:
-                field_list.append(field)
-            else:
+            field_list.append(field)
+            if link is not None:
                 category_list.append(CalculatorCategoryWrapper(link, category_names[link], field_list))
                 field_list = []
+
 
         context = {}
         progress = int(request.GET.get('progress', progress))
