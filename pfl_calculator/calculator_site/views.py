@@ -133,6 +133,7 @@ class CalculatorLoaderView:
         context["progress_total"] = len(category_list)
         context["progress_complete_range"] = range(progress)
         context["progress_incomplete_range"] = range(len(category_list) - progress)
+        context["progress_back"] = max(0, progress - 1)
         return render(request, 'calculator_site/calculator.html', context=context)
 
 
