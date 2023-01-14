@@ -8,10 +8,9 @@
 
 {% block body_block %}
 <h2>The Table</h2>
-<form action="/api/cal-submit/" enctype="multipart/form-data"  method="post">
+<form action="/my/calculator/?progress={{progress}}" enctype="multipart/form-data"  method="post">
     {% csrf_token %}
-    {% for category in categories %}
-        <table class="table">
+        <table id="{{category.id}}Table" class="table">
             <tr id="headers">
                 <th>{{category.name}}</th>
                 <th>Applicable</th>
@@ -35,9 +34,7 @@
                         </td>
                     </tr>
                 {% endfor %}
-    </table>
-    <br><br>
-    {% endfor %}
+        </table>
     <input type="submit" value="Save & Next">
 </form>
 {% endblock %}

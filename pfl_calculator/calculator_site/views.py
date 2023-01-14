@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 
 
 # INFO PAGES AND HOMEPAGE
@@ -88,6 +89,22 @@ class CalculatorLoaderView:
         file.close()
 
     def calculator(self, request):
+        if request.method == "POST":
+            return self.__calculator_post_request(request)
+        elif request.method == "GET":
+            return self.__calculator_get_request(request)
+        else:
+            return HttpResponse("<h1>Error</h1>")
+
+    def __calculator_post_request(self, request):
+        data = request.POST
+
+        # Format data and send to database
+        print(data)
+
+        return self.__calculator_get_request(request)
+
+    def __calculator_get_request(self, request, progress=0):
         cal_form = CalculatorForm()
         proper_names = self.verbose["fields"]
         category_links = self.verbose["category_links"]
@@ -106,9 +123,16 @@ class CalculatorLoaderView:
                 category_list.append(CalculatorCategoryWrapper(link, category_names[link], field_list))
                 field_list = []
 
-        context = {"categories": category_list}
+        context = {}
+        progress = int(request.GET.get('progress', progress))
+        if progress > len(category_list)-1:
+            repsonse = redirect('/my/report')
+            return repsonse
 
+        context["category"] = category_list[progress]
+        context["progress"] = progress + 1
         return render(request, 'calculator_site/calculator.html', context=context)
+
 
 
 class CalculatorCategoryWrapper:

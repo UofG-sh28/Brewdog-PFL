@@ -27,9 +27,8 @@ window.onload = () => {
         const tableRowId = output.parentNode.parentNode.id;
         const input = this.document.getElementById(tableRowId + "Input");
         input.value = "";
-        input.focus();
         input.select();
-
+        input.focus();
     }
 
     const tables = this.document.getElementsByClassName("table");
