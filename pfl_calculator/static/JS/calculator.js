@@ -18,7 +18,7 @@ window.onload = () => {
         const conversion = this.document.getElementById(tableRow.id + "Conv");
         const value = parseFloat(input.value) * parseFloat(conversion.innerText);
         const decimalLength = getDecimalLength(parseFloat(input.value));
-        output.value = isNaN(value) ? "" : value.toFixed(decimalLength);
+        output.value = isNaN(value) ? "" : value.toFixed(Math.max(2, decimalLength));
     }
 
     const outputValidation = (e) => {
