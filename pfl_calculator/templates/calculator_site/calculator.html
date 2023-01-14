@@ -8,6 +8,17 @@
 
 {% block body_block %}
 <h2>The Table</h2>
+<div>
+    <p>Page {{progress}} of {{progress_total}}</p>
+</div>
+<div class="progress-bar-parent">
+    {% for i in progress_complete_range %}
+        <div class="parallelogram child colour"></div>
+    {% endfor %}
+    {% for i in progress_incomplete_range %}
+        <div class="parallelogram child"></div>
+    {% endfor %}
+</div>
 <form action="/my/calculator/?progress={{progress}}" enctype="multipart/form-data"  method="post">
     {% csrf_token %}
         <table id="{{category.id}}Table" class="table">
@@ -36,5 +47,6 @@
                 {% endfor %}
         </table>
     <input type="submit" value="Save & Next">
+
 </form>
 {% endblock %}

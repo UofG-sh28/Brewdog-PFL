@@ -267,3 +267,33 @@ input[type="checkbox"]:checked::before {
 }
 
 
+
+.parallelogram {
+    width: 70px;
+    height: 20px;
+    transform: skew(-20deg);
+    background: #555;
+}
+.progress-bar-parent{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 10px;
+}
+
+.children {
+    display: flex;
+}
+
+.child {
+    margin: 0 5px;
+    padding: 0 5px;
+    font-size: 30px;
+    background: #ccc;
+    color: #000;
+}
+
+.colour{
+    background:#FFFF00
+}
+
