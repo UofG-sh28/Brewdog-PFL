@@ -58,6 +58,7 @@ function applicableCheck(current){
     const conv = this.document.getElementById(tableRow.id + "Conv");
     const check = this.document.getElementById(tableRow.id + "Check");
     const info = this.document.getElementById(tableRow.id + "Info");
+    const span = this.document.getElementById(tableRow.id + "Span");
 
 
     input.style.border = "0.15em solid " + (input.disabled ? "black" : "grey");
@@ -67,6 +68,7 @@ function applicableCheck(current){
     conv.style.opacity = value;
     check.style.opacity = value;
     info.style.opacity = value;
+    span.hidden = !span.hidden;
 
 
 
