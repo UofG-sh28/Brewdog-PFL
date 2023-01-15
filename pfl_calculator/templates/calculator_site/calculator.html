@@ -48,8 +48,10 @@
         </table>
     <input type="submit" value="Save & Next">
 </form>
-<form action="/my/calculator/?progress={{progress_back}}" enctype="multipart/form-data"  method="post">
-    {% csrf_token %}
-    <input type="submit" value="Back">
-</form>
+{% if progress_back|add:1 %}
+    <form action="/my/calculator/?progress={{progress_back}}" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+        <input type="submit" value="Back">
+    </form>
+{% endif %}
 {% endblock %}
