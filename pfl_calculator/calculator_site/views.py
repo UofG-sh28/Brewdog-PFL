@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
-from calculator_site.models import BusinessUsage, Business
+from calculator_site.models import Business
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
