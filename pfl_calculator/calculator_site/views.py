@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
-from calculator_site.models import Business
+from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
@@ -88,6 +88,7 @@ class CalculatorLoaderView:
         self.verbose = json.load(file)
         file.close()
 
+
     def calculator(self, request):
         if request.method == "POST":
             return self.__calculator_post_request(request)
@@ -103,8 +104,13 @@ class CalculatorLoaderView:
         data = dict(data)
         del data["csrfmiddlewaretoken"]
         data = {key:value[0] for key, value in data.items() if value[0] != ""}
+        sh28 = User.objects.get(username="sh28")
+        test_business = Business.objects.get(company_name="test_business")
 
-        print(data)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        for k, v in data.items():
+            setattr(footprint, k, v)
+        footprint.save()
         return self.__calculator_get_request(request)
 
     def __calculator_get_request(self, request, progress=0):
