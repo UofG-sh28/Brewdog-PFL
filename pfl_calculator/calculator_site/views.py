@@ -99,7 +99,11 @@ class CalculatorLoaderView:
     def __calculator_post_request(self, request):
         data = request.POST
 
-        # Format data and send to database
+
+        data = dict(data)
+        del data["csrfmiddlewaretoken"]
+        data = {key:value[0] for key, value in data.items() if value[0] != ""}
+
         print(data)
         return self.__calculator_get_request(request)
 
