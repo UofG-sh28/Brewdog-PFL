@@ -198,7 +198,7 @@ class BusinessUsage(models.Model):
     soft_drinks = models.IntegerField()
     wine = models.IntegerField()
     spirits = models.IntegerField()
-    kitchen_equipment_asssets = models.DecimalField(max_digits=16, decimal_places=2)
+    kitchen_equipment_assets = models.DecimalField(max_digits=16, decimal_places=2)
     building_repair_maintenance = models.DecimalField(max_digits=16, decimal_places=2)
     cleaning = models.DecimalField(max_digits=16, decimal_places=2)
     IT_Marketing = models.DecimalField(max_digits=16, decimal_places=2)

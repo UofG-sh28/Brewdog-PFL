@@ -5,6 +5,12 @@ html {
     height: auto;
 }
 
+:root {
+    --form-control-color: rebeccapurple;
+    --form-control-disabled: #959495;
+}
+
+
 /* Header and Logo */
 #header {
   display: flex;
@@ -68,6 +74,17 @@ html {
 table {
   border-collapse: collapse;
   width: 100%;
+  box-shadow: 0 12px 24px 0 rgba(0,0,0,0.15);
+}
+
+.checkboxtd{
+    text-align: center;
+    align-content: center;
+    vertical-align: middle;
+}
+.checkboxtd input {
+    margin: 0;
+    padding: 0;
 }
 
 th, td {
@@ -128,3 +145,103 @@ tr:nth-child(even) {
 .output{
     pointer-events:none;
 }
+
+/*To sort*/
+#inapplicable{
+    border-color: gray;
+    opacity: 0.5;
+}
+
+
+input[type="checkbox"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--form-background);
+    /* Not removed via appearance */
+    margin: 0;
+
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+
+    display: grid;
+    place-content: center;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+
+}
+
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.input-style{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    margin: auto;
+    width: 100%;
+    max-width: 280px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.15em solid black;
+    font-family: inherit;
+    height: 25px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+}
+
+.input-style:focus {
+    outline: none;
+    border-color: var(--form-control-color);
+}
+
+
+
+.parallelogram {
+    width: 70px;
+    height: 20px;
+    transform: skew(-20deg);
+    background: #555;
+}
+.progress-bar-parent{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 10px;
+}
+
+.children {
+    display: flex;
+}
+
+.child {
+    margin: 0 5px;
+    padding: 0 5px;
+    font-size: 30px;
+    background: #ccc;
+    color: #000;
+}
+
+.colour{
+    background:#FFFF00
+}
+
