@@ -7,11 +7,52 @@
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <h2>This is the report page that will contain the visualisations and information about users carbon footprints.</h2>
-  <h2>Users should be able to select previous years reports from here aswell.</h2>
-
-
-    <div style="height: 100%">                         <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+  <h2>Report Page</h2>
+    <div class="results-summary" style="float: left; display: inline; width: 40%">
+      <table>
+        <tr>
+          <th>Results Summary</th>
+          <th>kg CO2e</th>
+          <th>%</th>
+        </tr>
+        <tr>
+          <td>Heating and Fuel</td>
+          <td>8,327.2</td>
+          <td>27.4%</td>
+        </tr>
+        <tr>
+          <td>Electricity</td>
+          <td>1,585.6</td>
+          <td>5.2%</td>
+        </tr>
+        <tr>
+          <td>Food Waste</td>
+          <td>315.5</td>
+          <td>1.0%</td>
+        </tr>
+        <tr>
+          <td>Other Waste</td>
+          <td>490.2</td>
+          <td>1.6%</td>
+        </tr>
+        <tr>
+          <td>Transport and Travel</td>
+          <td>5,344.6</td>
+          <td>17.6%</td>
+        </tr>
+        <tr>
+          <td>Food and Drink</td>
+          <td>12,918.3</td>
+          <td>42.6%</td>
+        </tr>
+        <tr>
+          <td>Operations and Maintenance</td>
+          <td>1,371.5</td>
+          <td>4.5%</td>
+        </tr>
+      </table>
+    </div>
+    <div style="height: 100%; float: right">                         <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
         <script type="text/javascript">/**
 * plotly.js v2.14.0
 * Copyright 2012-2022, Plotly, Inc.
