@@ -3,6 +3,7 @@ html {
     width: 90%;
     margin: auto;
     height: auto;
+    background-color: #f5f5f5;
 }
 
 :root {
@@ -42,10 +43,9 @@ html {
   background-color: #F5F5F5;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 16px;
-  z-index: 1;
   right:0;
-  top:100%;
+  /*top:100%;*/
+  text-align: center;
 }
 
 #header .dropdown:hover .dropdown-content {
@@ -60,8 +60,8 @@ html {
 }
 
 #header .dropdown a:hover {
-  background-color: #F5F5F5;
-  color: white;
+  background-color: lightgray;
+  color: black;
 }
 
 #header .dropdown a:active {
