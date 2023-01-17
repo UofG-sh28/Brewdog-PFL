@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
-from calculator_site.models import BusinessUsage, Business
+from calculator_site.models import Business
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
@@ -99,7 +99,11 @@ class CalculatorLoaderView:
     def __calculator_post_request(self, request):
         data = request.POST
 
-        # Format data and send to database
+
+        data = dict(data)
+        del data["csrfmiddlewaretoken"]
+        data = {key:value[0] for key, value in data.items() if value[0] != ""}
+
         print(data)
         return self.__calculator_get_request(request)
 
