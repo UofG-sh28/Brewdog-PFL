@@ -22,13 +22,13 @@ class CalculatorUtil:
         fields = CalculatorUtil.retrieve_meta_fields()
         widgets = {}
         for field in fields:
-            attrs = {'type': 'text', 'class': 'output input-style', 'id': field + 'Output', 'placeholder': ' ',}
+            attrs = {'type': 'text', 'class': 'output input-style', 'id': field + 'Output', 'placeholder': ' ',
+                     "value": " "}
             widgets[field] = TextInput(attrs=attrs)
         return widgets
 
 
 class CalculatorForm(forms.ModelForm):
-
 
 
     class Meta:

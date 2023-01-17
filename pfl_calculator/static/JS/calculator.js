@@ -41,6 +41,8 @@ window.onload = () => {
             const output = this.document.getElementById(row.id + "Output");
             if (input === undefined || output === undefined) continue;
 
+            console.log(output.value);
+            output.value = null;
             output.addEventListener('invalid', outputValidation);
             input.addEventListener('input', inputHandler);
             input.addEventListener('propertychange', inputHandler);
