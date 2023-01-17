@@ -2,7 +2,13 @@
 html {
     width: 90%;
     margin: auto;
-    height: auto;
+    height: 100%;
+    overflow: hidden;
+}
+
+body{
+    height: 80%;
+    width: 100%;
 }
 
 :root {
