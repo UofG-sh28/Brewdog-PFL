@@ -1,10 +1,17 @@
 /* Base */
+
+@font-face {
+  font-family: NewGroteskSquareTWO;
+  src: url("https://sh28.lukeog.com/static/fonts/NewGroteskSquareTWO-2022.otf") format("opentype"),
+}
+
 html {
     width: 90%;
     margin: auto;
     height: 100%;
     overflow: hidden;
     background-color: #f5f5f5;
+    font-family: NewGroteskSquareTWO;
 }
 
 body{
