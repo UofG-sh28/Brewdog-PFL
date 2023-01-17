@@ -69,7 +69,6 @@ html {
   color: black;
 }
 
-
 /* Calculator */
 table {
   border-collapse: collapse;
@@ -142,8 +141,42 @@ tr:nth-child(even) {
 }
 
 
-.output{
+.output {
     pointer-events:none;
+}
+
+.shine-button {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  background-color: #e3d5b1;
+  font-weight: bold;
+  border-radius: 4px;
+  position: relative;
+}
+
+.shine-button::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(green, green);
+  border-radius: 4px;
+  z-index: -1;
+  filter: blur(5px);
+  transform: scale(1.3);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.shine-button:hover::before {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /*To sort*/
