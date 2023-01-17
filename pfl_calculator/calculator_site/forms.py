@@ -9,7 +9,7 @@ class CalculatorUtil:
 
     @staticmethod
     def retrieve_meta_fields():
-        bu = models.BusinessUsage()
+        bu = models.CarbonFootprint()
         fields = list(bu.__dict__.keys())
         del bu
         non_cal_fields = ['_state', 'id', 'business_id', 'conversion_factor_id', 'year']
@@ -32,14 +32,9 @@ class CalculatorForm(forms.ModelForm):
 
 
     class Meta:
-        model = models.BusinessUsage
+        model = models.CarbonFootprint
         fields = CalculatorUtil.retrieve_meta_fields()
         widgets = CalculatorUtil.retrieve_meta_widgets()
 
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-
-
-
-
