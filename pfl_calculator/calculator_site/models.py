@@ -166,7 +166,7 @@ class CarbonFootprint(models.Model):
     soft_drinks = models.FloatField(default=0.0)
     wine = models.FloatField(default=0.0)
     spirits = models.FloatField(default=0.0)
-    kitchen_equipment_asssets = models.FloatField(default=0.0)
+    kitchen_equipment_assets = models.FloatField(default=0.0)
     building_repair_maintenance = models.FloatField(default=0.0)
     cleaning = models.FloatField(default=0.0)
     IT_Marketing = models.FloatField(default=0.0)
