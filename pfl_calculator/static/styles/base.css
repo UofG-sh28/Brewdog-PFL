@@ -45,6 +45,10 @@ body{
   height: 100px;
 }
 
+#header #logo {
+    float:left;
+}
+
 #header .dropdown {
   position: relative;
   display: inline-block;
@@ -82,14 +86,52 @@ body{
 }
 
 /* Homepage */
-
 .container {
-  height: 100%;
+  width: 100%;
+  display: flex;
+    
 }
 
-.col-12 {
-  width: 33.33%;
-  float: left;
+.box {
+  flex: 1;
+  height: 300px;
+}
+
+.container img {
+    width: 80%;
+    min-width: 200px;
+    min-height: 200px;
+    margin: auto;
+    display: block;
+    margin-top: 10%;
+    border-radius: 10%;
+}
+
+.container h2, p {
+    text-align: center;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.container p {
+    font-size: 25px;
+}
+
+.container button {
+    display: inline-block;
+    padding: 12px 24px;
+    width: 80%;
+    font-size: 32px;
+    text-align: center;
+    color: white;
+    background-color: #F9A825;
+    margin: auto;
+    display: block;
+}
+
+.container button:hover {
+    background-color: #e09316;
+    color: black;
 }
 
 /* Calculator */
