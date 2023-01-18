@@ -8,8 +8,8 @@ urlpatterns = [
     path('outline/', views.outline, name="outline"),
     path('scope/', views.scope, name="scope"),
     #
-    # # LOGIN PAGE
-    # path('login/', views.login, name="login"),
+    # LOGIN PAGE
+    path('login/', views.login, name="login"),
     #
     # # ADMIN PAGES
     # path('admin/dashboard', views.admin_dash, name='admin_dash'),

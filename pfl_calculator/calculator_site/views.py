@@ -58,10 +58,10 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             lg(request, user)
-            return HttpResponse(request, 'index.html')
+            return HttpResponse(request, 'calculator_site/index.html')
         else:
-            return HttpResponse(request, 'login.html')
-    return render(request, 'login.html')
+            return HttpResponse(request, 'calculator_site/login.html')
+    return render(request, 'calculator_site/login.html')
 
 
 def register(request):
