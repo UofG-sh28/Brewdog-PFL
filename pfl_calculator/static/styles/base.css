@@ -136,22 +136,18 @@ h2 {
     }
 }
 
-.container button {
+.container #find-more-button {
     display: inline-block;
     padding: 12px 24px;
     width: 80%;
     font-size: min(2vw, 36px);
     text-align: center;
     color: white;
-    background-color: #F9A825;
+    /*background-color: #F9A825;*/
     margin: auto;
     display: block;
 }
 
-.container button:hover {
-    background-color: #e09316;
-    color: black;
-}
 
 /* Calculator */
 table {
@@ -249,7 +245,7 @@ tr:nth-child(even) {
   left: -5px;
   right: -5px;
   bottom: -5px;
-  background: linear-gradient(green, green);
+  /*background: linear-gradient(green, green);*/
   border-radius: 4px;
   z-index: -1;
   filter: blur(5px);
@@ -262,6 +258,12 @@ tr:nth-child(even) {
   opacity: 1;
   transform: scale(1);
 }
+
+.shine-button a{
+    text-decoration: none;
+    color: white;
+}
+
 
 /*To sort*/
 #inapplicable{

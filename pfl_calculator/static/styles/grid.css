@@ -35,16 +35,6 @@
   grid-row: 1;
 }
 
-.grid-container button {
-  margin-top: 5%;
-  background-color: #93ba73;
-  border-radius: 10px;
-  border: 0px;
-  width: 50%;
-  height: 100%;
-  color: white;
-}
-
 #find-out-more {
   grid-column: 1;
   grid-row: 3;
