@@ -3,7 +3,7 @@
 
   grid-template-columns: [line1] 33% [line2] 33% [line3] 33% [line4] ;
 
-  grid-template-rows: [top-start] 75% [top-end] 15% [mid-end] 20% [bottom];
+  grid-template-rows: [top-start] 65% [top-end] 15% [mid-end] 20% [bottom];
 
 }
 
