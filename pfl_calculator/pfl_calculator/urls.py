@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from calculator_site import api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('calculator_site/', include('calculator_site.urls'))
+    path('', include('calculator_site.urls')),
+    path('api/cal-submit/', api_views.api_cal_submit, name='api_cal_submit'),
 ]

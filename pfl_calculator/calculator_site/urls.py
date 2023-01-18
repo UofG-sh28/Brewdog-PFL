@@ -5,11 +5,12 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # INFO. PAGES
-    # path('outline/', views.outline, name="outline"),
-    # path('scope/', views.scope, name="scope"),
+    path('outline/', views.outline, name="outline"),
+    path('scope/', views.scope, name="scope"),
+    path("how-it-works", views.how_it_works, name="how-it-works"),
     #
-    # # LOGIN PAGE
-    # path('login/', views.login, name="login"),
+    # LOGIN PAGE
+    path('login/', views.login, name="login"),
     #
     # # ADMIN PAGES
     # path('admin/dashboard', views.admin_dash, name='admin_dash'),
@@ -19,12 +20,12 @@ urlpatterns = [
     # path('register/about', views.about, name='about'),
     #
     # # USER PAGES
-    # path('my/dashboard/', views.dash, name='dash'),
-    # path('my/calculate', views.calculate, name='calculate'),
-    # path('my/metrics', views.metrics, name='metrics'),
-    # path('my/date-entry', views.data_entry, name='data_entry'),
-    # path('my/visualise', views.visualise, name='visualise'),
-    # path('my/pledges', views.pledges, name='pledges'),
-    # path('my/profile', views.profile, name='profile'),
+    path('my/dashboard/', views.dash, name='dash'),
+    path('my/calculator/', views.CalculatorLoaderView().calculator, name='calculator'),
+    path('my/metrics', views.metrics, name='metrics'),
+    path('my/report', views.report, name='report'),
+    path('my/pledges', views.pledges, name='pledges'),
+    path('my/action_plan', views.action_plan, name='action_plan'),
+    path('my/profile', views.profile, name='profile'),
 
 ]

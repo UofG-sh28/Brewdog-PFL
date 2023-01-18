@@ -1,0 +1,36 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+Planet First Locals - Outline
+{% endblock %}
+
+
+{% block body_block %}
+{% load static %}
+<div class="information" style="text-align: center">
+    <h2>How it works</h2>
+    <div class="grid-container">
+        <div class="class item item-1">
+            <img src="{% static 'images/pfl_img1.png' %}">
+            <h3>Carbon Footprint Calculator</h3>
+            <p>With support from Small World Consulting, we will estimate your Scope 1, 2 and 3 footprint (to learn more about Scope 1,2 and 3 see the Scope page.)</p>
+            <button class="shine-button" id="find-out-more" style="float:right;"><a href="{% url 'outline'%}">Outline</a></button>
+        </div>
+        <div class="class item item-2">
+            <img src="{% static 'images/pfl_img2.png' %}">
+            <h3>Carbon Reduction Roadmap</h3>
+            <p>Take the planet first locals PLEDGE TO REDUCE emissions by at least 15% of the next 12 months (in line with the 1.5&#8451 Paris target)</p>
+        </div>
+        <div class="class item item-3">
+            <img src="{% static 'images/pfl_img3.png' %}">
+            <h3>BrewDog removes Carbon Footprint</h3>
+            <p>The entire carbon footprint remaining is then removed by Brewdog through our LOST FOREST and DARK FOREST projects</p>
+            <button class="shine-button" style="float:left;" id="sign-up"><a href="{% url 'calculator'%}">Go To Calculator</a></button>
+        </div>
+
+       
+        
+    </div>
+</div>
+
+{% endblock %}

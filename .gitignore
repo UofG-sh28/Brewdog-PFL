@@ -1,4 +1,11 @@
+# Database
+pfl_calculator/testdb.sqlite3
+pfl_calculator/db.sqlite3
+
 # Jetbrains software config directory
 .idea
 # Empty for now, add as needed
 .DS_Store
+
+#Python Cache Files
+*.pyc

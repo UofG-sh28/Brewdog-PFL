@@ -14,13 +14,15 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+#BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = Path(__file__).resolve().parent.parent
 SETTINGS_DIR = os.path.dirname(__file__)
 PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
 PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
-STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
-
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [STATIC_DIR, ]
+CSRF_TRUSTED_ORIGINS = ['https://sh28.lukeog.com']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -43,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
-    'pfl_calculator'
+    'calculator_site'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +86,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'testdb.sqlite3',
+    },
 }
 
 
