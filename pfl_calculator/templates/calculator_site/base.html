@@ -15,7 +15,6 @@
     <body>
         <div id=header>
             <a href="{% url 'index' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
-            <a href="{% url 'login' %}"><h1>Log-in</h1></a>
             
             <div class="dropdown">
                 <img id="menu" src="{% static 'images/menu.png' %}">
@@ -24,6 +23,7 @@
                     <a href="{% url 'scope' %}">Scope</a>
                     <a href="{% url 'calculator' %}">Calculator</a>
                     <a href="{% url 'report' %}">Reports</a>
+                    <a href="{% url 'login' %}">Log-in</a>
                 </div>
             </div>
         </div>
