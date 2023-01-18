@@ -4,18 +4,19 @@
     <head lang="en">
         <meta charset="UTF-8" />
         <title>
-            Planet First Locals - 
+            Planet First Locals -
             {% block title%}
             {% endblock %}
         </title>
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/grid.css' %}">
         <!--{% block css %}{% endblock %}-->
 
     </head>
     <body>
         <div id=header>
             <a href="{% url 'index' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
-            
+
             <div class="dropdown">
                 <img id="menu" src="{% static 'images/menu.png' %}">
                 <div class="dropdown-content">
