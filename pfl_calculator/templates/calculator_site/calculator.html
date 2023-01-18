@@ -46,7 +46,11 @@
                     </tr>
                 {% endfor %}
         </table>
-    <input class="shine-button" type="submit" value="Save & Next">
+    {%if progress == 6%}
+        <input class="shine-button" type="submit" value="Finish">
+    {% else %}
+        <input class="shine-button" type="submit" value="Save & Next">
+    {% endif %}
 </form>
 {% if progress_back|add:1 %}
     <form action="/my/calculator/?progress={{progress_back}}" enctype="multipart/form-data"  method="post">
