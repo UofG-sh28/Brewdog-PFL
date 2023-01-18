@@ -1,4 +1,5 @@
 {% extends 'calculator_site/base.html' %}
+{% load static %}
 
 {% block title %}
   Planet First Locals - Scope
@@ -7,13 +8,40 @@
 {% block body_block %}
     <div class="information">
       <h2>Scope</h2>
-      <p>This page scopes a bunch of stuff.</p>
-      {% if business %}
-        {% for bus in business %}
-          <strong>{{ bus.company_name }}</strong>
-        {% endfor %}
-      {% else %}
-        <p> No business </p>
-      {% endif %}
+      <div class="scope-box">
+        <div class="container">
+            <img src="{% static 'images/stage1.png' %}" alt="Stage 1">
+            <p>
+              Make a commitment with your management and staff to go for it.
+              Gaining the support of your staff team is the most important part of building a culture of change.
+              Ensure there is sufficient time allocated to complete the tool.
+            </p>
+        </div>
+        <div class="container">
+          <img src="{% static 'images/stage2.png' %}" alt="Stage 2">
+          <p>
+            Work through the How it Works section and gather the relevant data.
+            The Footprint Calculator requires annual data on amounts of utilities, resources and food - either in kg, litres etc. or by cost (£).
+          </p>
+        </div>
+        <div class="container">
+          <img src="{% static 'images/stage3.png' %}" alt="Stage 3">
+          <p>
+            Complete the Footprint Calculator, working through the guidance in the supporting notes and i cells.
+          </p>
+        </div>
+        <div class="container">
+          <img src="{% static 'images/stage4.png' %}" alt="Stage 4">
+          <p>
+            The Your Pledges tool then allows you to try lots of carbon cutting options and see how they impact your emissions. With knowledge of where your footprint comes from, make Pledges that are both specific and measurable, and identify what you should do first, and what might be more challenging.
+          </p>
+        </div>
+        <div class="container">
+          <img src="{% static 'images/stage5.png' %}" alt="Stage 5">
+          <p>
+            The Action Plan sets out a simple template for delivering the pledges, deciding who is responsible for delivering the Action, likely start and finish dates, a summary of what needs to get done, and importantly what is going to change and by how much. The action plan can help engage with staff and customers.
+          </p>
+        </div>
+      </div>
     </div>
   {% endblock %}

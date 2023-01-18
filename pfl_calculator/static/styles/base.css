@@ -343,3 +343,39 @@ input[type="checkbox"]:checked::before {
     background:#FFFF00
 }
 
+
+
+.information{
+    width: 100%;
+    height: 100%;
+}
+
+.scope-box{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    width: 100%;
+}
+
+.scope-box .container{
+    /*border: black 1px solid;*/
+    width: 318px;
+    height: auto;
+    margin: 10px;
+    box-shadow: 0 6px 12px 0 rgba(0,0,0,0.20);
+    transition: 0.15s;
+}
+
+.scope-box .container:hover{
+    transform: scale(1.03);
+}
+
+.scope-box .container p {
+    padding: 10px;
+    font-size: 22px;
+
+}
+
+
+
+
