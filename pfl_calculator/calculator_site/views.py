@@ -50,6 +50,9 @@ def profile(request):
     return render(request, 'calculator_site/profile.html')
 
 
+def how_it_works(request):
+    return render(request, 'calculator_site/how_it_works.html')
+
 # LOGIN AND REGISTER PAGES
 def login(request):
     if request.method == 'POST':

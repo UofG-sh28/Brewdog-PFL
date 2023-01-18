@@ -7,6 +7,7 @@ urlpatterns = [
     # INFO. PAGES
     path('outline/', views.outline, name="outline"),
     path('scope/', views.scope, name="scope"),
+    path("how-it-works", views.how_it_works, name="how-it-works"),
     #
     # LOGIN PAGE
     path('login/', views.login, name="login"),
