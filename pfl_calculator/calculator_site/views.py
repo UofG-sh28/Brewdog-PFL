@@ -91,6 +91,11 @@ class CalculatorLoaderView:
         self.verbose = json.load(file)
         file.close()
 
+        test_business = Business.objects.get(company_name="test_business")
+        footprint = CarbonFootprint.objects.get(business=test_business, year=2022)
+        self.footprint = footprint
+
+
 
     def calculator(self, request):
         if request.method == "POST":
@@ -114,6 +119,8 @@ class CalculatorLoaderView:
         for k, v in data.items():
             setattr(footprint, k, v)
         footprint.save()
+
+        self.footprint = footprint
         return self.__calculator_get_request(request)
 
     def __calculator_get_request(self, request, progress=0):
@@ -143,6 +150,13 @@ class CalculatorLoaderView:
 
         progress = max(0, progress)
         context["category"] = category_list[progress]
+
+        for cal_data_wrapper in context["category"].fields:
+            database_value = getattr(self.footprint, cal_data_wrapper.id)
+            if database_value == 0.0:
+                database_value = " "
+            cal_data_wrapper.form.field.initial = database_value
+
         context["progress"] = progress+1
         context["progress_total"] = len(category_list)
         context["progress_complete_range"] = range(progress)
