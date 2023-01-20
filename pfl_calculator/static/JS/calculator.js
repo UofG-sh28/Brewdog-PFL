@@ -78,6 +78,7 @@ function applicableCheck(current){
 
 
     input.disabled = !input.disabled;
+    output.disabled = !output.disabled;
     output.required = !output.required;
     input.value = "";
     output.value = "";
