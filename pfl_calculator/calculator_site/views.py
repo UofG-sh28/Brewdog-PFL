@@ -106,7 +106,7 @@ class CalculatorLoaderView:
 
         data = dict(data)
         del data["csrfmiddlewaretoken"]
-        data = {key:value[0] for key, value in data.items() if value[0] != ""}
+        data = {key: 0.0 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
         sh28 = User.objects.get(username="sh28")
         test_business = Business.objects.get(company_name="test_business")
 
