@@ -92,8 +92,11 @@ class CalculatorLoaderView:
         file.close()
 
         test_business = Business.objects.get(company_name="test_business")
-        footprint = CarbonFootprint.objects.get(business=test_business, year=2022)
-        self.footprint = footprint
+        try:
+            footprint = CarbonFootprint.objects.get(business=test_business, year=2022)
+            self.footprint = footprint
+        except CarbonFootprint.DoesNotExist:
+            self.footprint = None
 
 
 
