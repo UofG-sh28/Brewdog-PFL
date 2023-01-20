@@ -16,8 +16,9 @@ window.onload = () => {
         const input = this.document.getElementById(tableRow.id + 'Input');
         const output = this.document.getElementById(tableRow.id + "Output");
         const conversion = this.document.getElementById(tableRow.id + "Conv");
-        const value = parseFloat(input.value) * parseFloat(conversion.innerText);
+        let value = parseFloat(input.value) * parseFloat(conversion.innerText);
         const decimalLength = getDecimalLength(parseFloat(input.value));
+        if(value <= 0) value = "";
         output.value = isNaN(value) ? "" : value.toFixed(Math.max(2, decimalLength));
     }
 
@@ -39,7 +40,11 @@ window.onload = () => {
 
             const input = this.document.getElementById(row.id + "Input");
             const output = this.document.getElementById(row.id + "Output");
-            if (input === undefined || output === undefined) continue;
+            const check = this.document.getElementById(row.id + "Checkbox")
+            if (input === undefined || output === undefined
+                || check===undefined) continue;
+
+            if(!check.checked) applicableCheck(check);
 
             output.addEventListener('invalid', outputValidation);
             input.addEventListener('input', inputHandler);

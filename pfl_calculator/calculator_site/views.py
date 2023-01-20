@@ -111,7 +111,7 @@ class CalculatorLoaderView:
 
         data = dict(data)
         del data["csrfmiddlewaretoken"]
-        data = {key: 0.0 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
+        data = {key: -1 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
         sh28 = User.objects.get(username="sh28")
         test_business = Business.objects.get(company_name="test_business")
 
@@ -155,6 +155,8 @@ class CalculatorLoaderView:
             database_value = getattr(self.footprint, cal_data_wrapper.id)
             if database_value == 0.0:
                 database_value = " "
+            elif database_value < 0:
+                cal_data_wrapper.checked = "unchecked"
             else:
                 cal_data_wrapper.input_value = f"{database_value / cal_data_wrapper.conversion}"
             cal_data_wrapper.form.field.initial = database_value
