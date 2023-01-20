@@ -92,11 +92,8 @@ class CalculatorLoaderView:
         file.close()
 
         test_business = Business.objects.get(company_name="test_business")
-        try:
-            footprint = CarbonFootprint.objects.get(business=test_business, year=2022)
-            self.footprint = footprint
-        except CarbonFootprint.DoesNotExist:
-            self.footprint = None
+        self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+
 
 
 
@@ -153,7 +150,6 @@ class CalculatorLoaderView:
 
         progress = max(0, progress)
         context["category"] = category_list[progress]
-
         for cal_data_wrapper in context["category"].fields:
             database_value = getattr(self.footprint, cal_data_wrapper.id)
             if database_value == 0.0:
