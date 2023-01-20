@@ -155,7 +155,10 @@ class CalculatorLoaderView:
             database_value = getattr(self.footprint, cal_data_wrapper.id)
             if database_value == 0.0:
                 database_value = " "
+            else:
+                cal_data_wrapper.input_value = f"{database_value / cal_data_wrapper.conversion}"
             cal_data_wrapper.form.field.initial = database_value
+
 
         context["progress"] = progress+1
         context["progress_total"] = len(category_list)
@@ -181,3 +184,5 @@ class CalculatorDataWrapper:
         self.form = form
         self.name = name
         self.conversion = conversion
+        self.input_value = ""
+        self.checked = "checked"
