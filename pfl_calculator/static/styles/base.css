@@ -19,9 +19,24 @@ html {
     transition: all 0.3s ease-in-out;
 }
 
-body{
+body {
     height: 80%;
     width: 100%;
+}
+
+#fadein {
+    animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
 }
 
 h2 {
