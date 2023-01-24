@@ -27,6 +27,4 @@ test:
 deploy:
   stage: deploy
   script: 
-    - cd pfl_calculator
-    - python manage.py runserver --noreload
-    - exit
+    - echo "Disabled"
