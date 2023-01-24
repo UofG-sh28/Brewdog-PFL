@@ -26,9 +26,11 @@ before_script:
 
 test:
   script:
+    - cd pfl_calculator
     - python manage.py behave
 
 deploy:
   stage: deploy
   script: 
+    - cd pfl_calculator
     - python manage.py runserver
