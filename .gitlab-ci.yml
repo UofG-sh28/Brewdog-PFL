@@ -28,4 +28,4 @@ deploy:
   stage: deploy
   script: 
     - cd pfl_calculator
-    - python manage.py runserver
+    - python manage.py runserver --noreload
