@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
-    'calculator_site'
+    'calculator_site',
+    'behave_django'
 ]
 
 MIDDLEWARE = [
