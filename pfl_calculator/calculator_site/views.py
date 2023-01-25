@@ -89,11 +89,10 @@ def register(request):
             user = form.save()
             lg(request, user)
             print("Registration Completed")
-            return redirect('dash')
+            return render(request, 'calculator_site/register_success.html')
         print("Registration Failed")
     form = RegistrationForm()
     return render(request, 'calculator_site/register.html', context={"reg_form":form})
-
 
 
 def about(request):
