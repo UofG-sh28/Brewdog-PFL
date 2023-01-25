@@ -15,6 +15,10 @@
       <button type="submit" name="login">Login</button>
     </form>
 
+    {% if error != "" %}
+      <small style="color:red">{{ error }}</small> <br>
+    {% endif %}
+
     <small><i><a href="{% url 'register' %}">Don't Have an account? Create one here.</a></i></small>
   </div>
 {% endblock %}

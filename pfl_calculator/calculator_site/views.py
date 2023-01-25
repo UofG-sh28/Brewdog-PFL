@@ -58,6 +58,8 @@ def how_it_works(request):
 
 # LOGIN AND REGISTER PAGES
 def login(request):
+    context = {}
+    context["error"] = ""
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -66,14 +68,15 @@ def login(request):
             user = authenticate(username=user, password=password)
             if user is not None:
                 lg(request, user)
-                return render(request, 'calculator_site/dashboard.html')
+                return redirect('dash')
             else:
-                return render(request, 'calculator_site/login.html')
+                context["error"] = "Incorrect Username or Password"
         else:
-            return render(request, 'calculator_site/login.html')
+            context["error"] = "Incorrect Username or Password"
 
     form = AuthenticationForm()
-    return render(request, 'calculator_site/login.html', context={"log_form": form})
+    context["log_form"] = form
+    return render(request, 'calculator_site/login.html', context=context)
 
 def logout(request):
     lo(request)
@@ -86,7 +89,7 @@ def register(request):
             user = form.save()
             lg(request, user)
             print("Registration Completed")
-            return render(request, 'calculator_site/dashboard.html')
+            return redirect('dash')
         print("Registration Failed")
     form = RegistrationForm()
     return render(request, 'calculator_site/register.html', context={"reg_form":form})
