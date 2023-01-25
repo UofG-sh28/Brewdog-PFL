@@ -11,12 +11,13 @@ urlpatterns = [
     #
     # LOGIN PAGE
     path('login/', views.login, name="login"),
+    path('logout/', views.logout, name='logout'),
     #
     # # ADMIN PAGES
     # path('admin/dashboard', views.admin_dash, name='admin_dash'),
     #
     # # REGISTER PAGE
-    # path('register/', views.register, name='register'),
+    path('register/', views.register, name='register'),
     # path('register/about', views.about, name='about'),
     #
     # # USER PAGES

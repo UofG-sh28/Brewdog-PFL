@@ -6,8 +6,11 @@ from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
+from django.contrib.auth import logout as lo
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
+from .forms import RegistrationForm
 
 
 # INFO PAGES AND HOMEPAGE
@@ -56,25 +59,38 @@ def how_it_works(request):
 # LOGIN AND REGISTER PAGES
 def login(request):
     if request.method == 'POST':
-        username = request.post['username']
-        password = request.post['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            lg(request, user)
-            return HttpResponse(request, 'calculator_site/index.html')
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=user, password=password)
+            if user is not None:
+                lg(request, user)
+                return render(request, 'calculator_site/dashboard.html')
+            else:
+                return render(request, 'calculator_site/login.html')
         else:
-            return HttpResponse(request, 'calculator_site/login.html')
-    return render(request, 'calculator_site/login.html')
+            return render(request, 'calculator_site/login.html')
 
+    form = AuthenticationForm()
+    return render(request, 'calculator_site/login.html', context={"log_form": form})
+
+def logout(request):
+    lo(request)
+    return render(request, 'calculator_site/index.html')
 
 def register(request):
-    if request.method == 'GET':
-        return render(request, 'register.html')
-    else:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        User.objects.create_user(username=username, password=password)
-        return HttpResponse(request, 'login.html')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            lg(request, user)
+            print("Registration Completed")
+            return render(request, 'calculator_site/dashboard.html')
+        print("Registration Failed")
+    form = RegistrationForm()
+    return render(request, 'calculator_site/register.html', context={"reg_form":form})
+
 
 
 def about(request):
