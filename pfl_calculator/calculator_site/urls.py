@@ -18,7 +18,7 @@ urlpatterns = [
     #
     # # REGISTER PAGE
     path('register/', views.register, name='register'),
-    # path('register/about', views.about, name='about'),
+    path('register/about', views.register2, name='register2'),
     #
     # # USER PAGES
     path('my/dashboard/', views.dash, name='dash'),
