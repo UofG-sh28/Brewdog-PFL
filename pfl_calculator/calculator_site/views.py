@@ -222,9 +222,9 @@ class CalculatorLoaderView:
         context["category"] = category_list[progress]
         for cal_data_wrapper in context["category"].fields:
             database_value = getattr(self.footprint, cal_data_wrapper.id)
-            if database_value == 0.0:
-                database_value = " "
-            elif database_value < 0:
+            if database_value == -1:
+                database_value = ""
+            elif database_value == 0:
                 cal_data_wrapper.checked = "unchecked"
             else:
                 cal_data_wrapper.input_value = f"{database_value / cal_data_wrapper.conversion}"
