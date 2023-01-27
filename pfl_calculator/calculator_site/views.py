@@ -170,7 +170,7 @@ class CalculatorLoaderView:
         data = dict(data)
         del data["csrfmiddlewaretoken"]
         # Replacing blanks with default values
-        data = {key: -1 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
+        data = {key: 0 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
 
         # TODO
         #  Parse cookie data here to query database
@@ -227,7 +227,7 @@ class CalculatorLoaderView:
         for cal_data_wrapper in context["category"].fields:
             database_value = getattr(self.footprint, cal_data_wrapper.id)
             if database_value == -1:
-                database_value = ""
+                database_value = " "
             elif database_value == 0:
                 cal_data_wrapper.checked = "unchecked"
             else:
@@ -259,5 +259,5 @@ class CalculatorDataWrapper:
         self.form = form
         self.name = name
         self.conversion = conversion
-        self.input_value = ""
+        self.input_value = " "
         self.checked = "checked"

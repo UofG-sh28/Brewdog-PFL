@@ -23,7 +23,6 @@ window.onload = () => {
     }
 
     const outputValidation = (e) => {
-        e.preventDefault();
         const output = this.document.querySelector('input:invalid')
         const tableRowId = output.parentNode.parentNode.id;
         const input = this.document.getElementById(tableRowId + "Input");
@@ -46,7 +45,8 @@ window.onload = () => {
 
             if(!check.checked) applicableCheck(check);
 
-            output.addEventListener('invalid', outputValidation);
+            input.addEventListener('invalid', outputValidation);
+            output.addEventListener('invalid', (e) => e.preventDefault());
             input.addEventListener('input', inputHandler);
             input.addEventListener('propertychange', inputHandler);
         }
@@ -78,9 +78,8 @@ function applicableCheck(current){
 
 
     input.disabled = !input.disabled;
-    output.disabled = !output.disabled;
-    output.required = !output.required;
+    input.required = !input.required;
     input.value = "";
-    output.value = "";
+    output.value = " ";
 
 }
