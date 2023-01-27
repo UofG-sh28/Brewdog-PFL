@@ -7,6 +7,12 @@
 <!--{% block css %}{% endblock %}-->
 {% block script %}
   <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
+  <script>
+    var data = {{json_data}};
+    data = data.replace(/'/g, '"');
+    console.log(data);
+    var json_data = JSON.parse(data);
+  </script>
   <script src = "{% static 'JS/report-sunburst-plot.js' %}"></script>
 {% endblock %}
 {% block body_block %}
@@ -54,8 +60,7 @@
           <td>4.5%</td>
         </tr>
       </table>
-    </div>
-
+      {{json_data}}
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;">
     
 {% endblock %}

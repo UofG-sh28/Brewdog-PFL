@@ -1,4 +1,6 @@
-console.log("tests");
+console.log(typeof json_data);
+console.log(json_data);
+
 const element = document.getElementById('plot');
 
 var data = [{

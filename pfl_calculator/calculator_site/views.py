@@ -4,14 +4,16 @@ from django.shortcuts import render
 from calculator_site.forms import CalculatorForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
+from django.core import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
 from django.contrib.auth import logout as lo
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
+from  django.utils.safestring import mark_safe
 from .forms import RegistrationForm
-
+from .models import CarbonFootprint
 
 # CHECK COOKIE
 def check_login(func):
@@ -58,7 +60,9 @@ def metrics(request):
 
 
 def report(request):
-    return render(request, 'calculator_site/report.html')
+    data = list(CarbonFootprint.objects.all().values())
+    context = {"json_data": mark_safe(json.dumps(str(data[0])))}
+    return render(request, 'calculator_site/report.html', context)
 
 
 def pledges(request):
