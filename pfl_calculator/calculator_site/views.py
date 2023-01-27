@@ -116,12 +116,23 @@ def register(request):
         if form.is_valid():
             user = form.save()
             lg(request, user)
+            return redirect('register2')
+        print("Registration Failed")
+    form = RegistrationForm()
+    return render(request, 'calculator_site/register.html', context={"reg_form":form})
+
+def register2(request):
+    if request.method == 'POST':
+        form = RegistrationFormStage2(request.POST)
+        if form.is_valid():
+            form.user = request.user
+            form.save()
             print("Registration Completed")
             return render(request, 'calculator_site/register_success.html')
         print("Registration Failed")
-    form = RegistrationForm()
-    return render(request, 'calculator_site/register.html', context={"reg_form": form})
-
+    form = RegistrationFormStage2(user=request.user)
+    print(request.user.username)
+    return render(request, 'calculator_site/register2.html', context={"reg_form":form})
 
 def about(request):
     if request.method == 'GET':
