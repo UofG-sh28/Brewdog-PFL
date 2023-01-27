@@ -166,29 +166,44 @@ class CalculatorLoaderView:
     def __calculator_post_request(self, request):
         data = request.POST
 
+        # Parse post data into python dictionary
         data = dict(data)
         del data["csrfmiddlewaretoken"]
+        # Replacing blanks with default values
         data = {key: -1 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
+
+        # TODO
+        #  Parse cookie data here to query database
+
         sh28 = User.objects.get(username="sh28")
         test_business = Business.objects.get(company_name="test_business")
-
         footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+
+        # Save data to database
         for k, v in data.items():
             setattr(footprint, k, v)
         footprint.save()
+
+        # Updates current footprint
+        # TODO
+        #   Only update fields that are required, compare this to dictionary
 
         self.footprint = footprint
         return self.__calculator_get_request(request)
 
     def __calculator_get_request(self, request, progress=0):
+        # Initialise data fields
         cal_form = CalculatorForm()
         proper_names = self.verbose["fields"]
         category_links = self.verbose["category_links"]
         category_names = self.verbose["categories"]
         conversion_factors = self.verbose["conversion_factors"]
+
+        # Wrap specific fields in object
         fields = [CalculatorDataWrapper(key, cal_form[key], proper_names[key], conversion_factors[key])
                   for key in list(proper_names.keys())]
 
+        # Sort fields into categories wrapping into objects
         category_list = []
         field_list = []
         for field in fields:
@@ -198,29 +213,34 @@ class CalculatorLoaderView:
                 category_list.append(CalculatorCategoryWrapper(link, category_names[link], field_list))
                 field_list = []
 
+        # Determine what category to show
         context = {}
         progress = int(request.GET.get('progress', progress))
+        # If more than categories redirect to report
         if progress > len(category_list) - 1:
             repsonse = redirect('/my/report')
             return repsonse
 
+        # Handle loading data back into calculator and whether to check applicable
         progress = max(0, progress)
         context["category"] = category_list[progress]
         for cal_data_wrapper in context["category"].fields:
             database_value = getattr(self.footprint, cal_data_wrapper.id)
-            if database_value == 0.0:
-                database_value = " "
-            elif database_value < 0:
+            if database_value == -1:
+                database_value = ""
+            elif database_value == 0:
                 cal_data_wrapper.checked = "unchecked"
             else:
                 cal_data_wrapper.input_value = f"{database_value / cal_data_wrapper.conversion}"
             cal_data_wrapper.form.field.initial = database_value
 
+        # Setting all data fields
         context["progress"] = progress + 1
         context["progress_total"] = len(category_list)
         context["progress_complete_range"] = range(progress)
         context["progress_incomplete_range"] = range(len(category_list) - progress)
         context["progress_back"] = progress - 1
+
         return render(request, 'calculator_site/calculator.html', context=context)
 
 
