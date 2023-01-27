@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import api_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -28,5 +29,10 @@ urlpatterns = [
     path('my/pledges', views.pledges, name='pledges'),
     path('my/action_plan', views.action_plan, name='action_plan'),
     path('my/profile', views.profile, name='profile'),
+
+
+    #API TEST PAGES
+    path('test', api_views.test_page, name="test"),
+    path('database_api', api_views.database_api, name="database_api")
 
 ]
