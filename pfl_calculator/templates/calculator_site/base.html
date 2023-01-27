@@ -25,6 +25,10 @@
                     <a href="{% url 'how-it-works' %}">How it works</a>
                     <a href="{% url 'calculator' %}">Calculator</a>
                     <a href="{% url 'report' %}">Reports</a>
+                    {% block logout %}
+                    {% endblock %}
+
+
                 </div>
             </div>
         </div>

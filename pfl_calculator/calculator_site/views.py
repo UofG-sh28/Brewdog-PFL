@@ -1,7 +1,7 @@
 import json
 
 from django.shortcuts import render
-from calculator_site.forms import CalculatorForm, RegistrationFormStage2
+from calculator_site.forms import CalculatorForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
@@ -13,9 +13,26 @@ from django.shortcuts import redirect
 from .forms import RegistrationForm
 
 
+# CHECK COOKIE
+def check_login(func):
+    def inner(request, *args, **kwargs):
+        next_url = request.get_full_path()
+        # check cookie value
+        if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
+            # if logged in
+            return func(request, *args, **kwargs)
+        else:
+            return redirect('/login/')
+
+    return inner
+
+
 # INFO PAGES AND HOMEPAGE
 def index(request):
-    return render(request, 'calculator_site/index.html')
+    context = {}
+    if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
+        context = {'login': 'yes'}
+    return render(request, 'calculator_site/index.html', context)
 
 
 def outline(request):
@@ -28,9 +45,12 @@ def scope(request):
     return render(request, 'calculator_site/scope.html', context)
 
 
+@check_login
 # AUTHENTICATED USER PAGES
 def dash(request):
-    return render(request, 'calculator_site/dashboard.html')
+    context = {}
+    context['login'] = 'yes'
+    return render(request, 'calculator_site/dashboard.html', context)
 
 
 def metrics(request):
@@ -56,6 +76,7 @@ def profile(request):
 def how_it_works(request):
     return render(request, 'calculator_site/how_it_works.html')
 
+
 # LOGIN AND REGISTER PAGES
 def login(request):
     context = {}
@@ -68,7 +89,10 @@ def login(request):
             user = authenticate(username=user, password=password)
             if user is not None:
                 lg(request, user)
-                return redirect('dash')
+                # set cookie, expire interval 12 hours
+                response = redirect('dash')
+                response.set_signed_cookie('login', 'yes', salt="sh28", max_age=60 * 60 * 12)
+                return response
             else:
                 context["error"] = "Incorrect Username or Password"
         else:
@@ -78,9 +102,13 @@ def login(request):
     context["log_form"] = form
     return render(request, 'calculator_site/login.html', context=context)
 
+@check_login
 def logout(request):
     lo(request)
-    return render(request, 'calculator_site/index.html')
+    response = render(request, 'calculator_site/index.html')
+    response.delete_cookie('login')
+    return response
+
 
 def register(request):
     if request.method == 'POST':
@@ -88,23 +116,11 @@ def register(request):
         if form.is_valid():
             user = form.save()
             lg(request, user)
-            return redirect('register2')
-        print("Registration Failed")
-    form = RegistrationForm()
-    return render(request, 'calculator_site/register.html', context={"reg_form":form})
-
-def register2(request):
-    if request.method == 'POST':
-        form = RegistrationFormStage2(request.POST)
-        if form.is_valid():
-            form.user = request.user
-            form.save()
             print("Registration Completed")
             return render(request, 'calculator_site/register_success.html')
         print("Registration Failed")
-    form = RegistrationFormStage2(user=request.user)
-    print(request.user.username)
-    return render(request, 'calculator_site/register2.html', context={"reg_form":form})
+    form = RegistrationForm()
+    return render(request, 'calculator_site/register.html', context={"reg_form": form})
 
 
 def about(request):
@@ -124,9 +140,6 @@ class CalculatorLoaderView:
         test_business = Business.objects.get(company_name="test_business")
         self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
-
-
-
     def calculator(self, request):
         if request.method == "POST":
             return self.__calculator_post_request(request)
@@ -137,7 +150,6 @@ class CalculatorLoaderView:
 
     def __calculator_post_request(self, request):
         data = request.POST
-
 
         data = dict(data)
         del data["csrfmiddlewaretoken"]
@@ -171,10 +183,9 @@ class CalculatorLoaderView:
                 category_list.append(CalculatorCategoryWrapper(link, category_names[link], field_list))
                 field_list = []
 
-
         context = {}
         progress = int(request.GET.get('progress', progress))
-        if progress > len(category_list)-1:
+        if progress > len(category_list) - 1:
             repsonse = redirect('/my/report')
             return repsonse
 
@@ -190,14 +201,12 @@ class CalculatorLoaderView:
                 cal_data_wrapper.input_value = f"{database_value / cal_data_wrapper.conversion}"
             cal_data_wrapper.form.field.initial = database_value
 
-
-        context["progress"] = progress+1
+        context["progress"] = progress + 1
         context["progress_total"] = len(category_list)
         context["progress_complete_range"] = range(progress)
         context["progress_incomplete_range"] = range(len(category_list) - progress)
         context["progress_back"] = progress - 1
         return render(request, 'calculator_site/calculator.html', context=context)
-
 
 
 class CalculatorCategoryWrapper:
