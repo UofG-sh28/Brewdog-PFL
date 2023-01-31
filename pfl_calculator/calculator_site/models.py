@@ -217,7 +217,7 @@ class Pledge(models.Model):
     category = models.CharField(max_length=1, choices=CATEGORY_CHOICE)
     text = models.CharField(max_length=150)
     boolean =  models.BooleanField()
-    fields = models.CharField(max_length=150)
+    formula = models.CharField(max_length=150)
 
     def __str__(self):
         try:
