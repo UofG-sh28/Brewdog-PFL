@@ -35,7 +35,7 @@
                     <tr id="{{cal_data.id}}">
                         <td id="{{cal_data.id}}Name">{{cal_data.name}}</td>
                         <td id="{{cal_data.id}}Check" class="checkboxtd"><input id="{{cal_data.id}}Checkbox"{{cal_data.checked}} type="checkbox" onclick="applicableCheck(this)"></td>
-                        <td><input class="input-style" required type="text" id="{{cal_data.id}}Input" value={{cal_data.input_value}}></td>
+                        <td><input class="input-style" tabindex="2" required type="text" id="{{cal_data.id}}Input" value={{cal_data.input_value}}></td>
                         <td>{{cal_data.form}}</td>
                         <td id="{{cal_data.id}}Conv">{{cal_data.conversion}}</td>
                         <td>
