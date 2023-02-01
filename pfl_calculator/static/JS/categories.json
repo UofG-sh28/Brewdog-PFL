@@ -4,23 +4,23 @@
 		"fuel",
 		"oil",
 		"coal",
-		"wood",
+		"wood"
 	],
     "electricity": [
     	"grid_electricity",
-		"grid_electricity_LOWCARBON",
+		"grid_electricity_LOWCARBON"
     ],
     "food_waste": [
     	"waste_food_landfill",
 		"waste_food_compost",
-		"waste_food_charity",
+		"waste_food_charity"
     ],
     "solid_waste": [
     	"bottles_recycle",
 		"aluminum_can_recycle",
 		"general_waste_landfill",
 		"general_waste_recycle",
-		"special_waste",
+		"special_waste"
     ],
     "transport_travel": [
     	"goods_delivered_company_owned",
@@ -28,7 +28,7 @@
 		"travel_company_business",
 		"flights_domestic",
 		"flights_international",
-		"staff_commuting",
+		"staff_commuting"
     ],
     "food_drink": [
 		"beef_lamb",
@@ -48,7 +48,7 @@
 		"beer_bottles_LOWCARBON",
 		"soft_drinks",
 		"wine",
-		"spirits",
+		"spirits"
 	],
     "operations_maintenance":[
     	"kitchen_equipment_assets",
@@ -56,6 +56,6 @@
 		"cleaning",
 		"IT_Marketing",
 		"main_water",
-		"sewage",
+		"sewage"
     ]
 }

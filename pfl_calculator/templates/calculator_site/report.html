@@ -52,6 +52,7 @@
         </tr>
       </table>
     </div>
+    {{category_json}}
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
     
 {% endblock %}
@@ -62,6 +63,12 @@
     var data = {{json_data}};
     data = data.replace(/'/g, '"');
     var json_data = JSON.parse(data);
+    data = {{category_json}};
+    const category_json = JSON.parse(data);
+    console.log(category_json);
+    data = {{scope_json}};
+    const scope_json = JSON.parse(data);
+    console.log(scope_json);
     plot_sunburst();
   </script>
 {% endblock %}

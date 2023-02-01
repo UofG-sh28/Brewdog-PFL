@@ -1,6 +1,12 @@
 
 //error check json data
+function categorise(){
+  if(cat){
 
+  }else{
+
+  }
+}
 function plot_sunburst(){
   try{
     const element = document.getElementById('plot');

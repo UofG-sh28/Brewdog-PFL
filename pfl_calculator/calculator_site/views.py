@@ -64,6 +64,12 @@ def metrics(request):
 def report(request):
     data = list(CarbonFootprint.objects.all().values())
     context = {"json_data": mark_safe(json.dumps(str(data[0])))}
+    with open('static/JS/categories.json') as cd:
+        test = json.load(cd)
+        context["category_json"] = mark_safe(json.dumps(json.dumps(test)))
+    with open('static/JS/scope.json') as sd:
+        test = json.load(sd)
+        context["scope_json"] = mark_safe(json.dumps(json.dumps(test)))
     return render(request, 'calculator_site/report.html', context)
 
 
