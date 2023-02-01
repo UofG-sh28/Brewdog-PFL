@@ -102,3 +102,39 @@ class CalculatorForm(forms.ModelForm):
 
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+
+class ActionPlanUtil:
+
+    @staticmethod
+    def retrieve_meta_fields():
+        bu = models.ActionPlan()
+        fields = list(bu.__dict__.keys())
+        del bu
+        non_act_fields = ['_state', 'id', 'business_id', 'year']
+        # List to preserve order
+        action_plan_fields = [field for field in fields if field not in non_act_fields]
+        return tuple(action_plan_fields)
+
+    @staticmethod
+    def retrieve_meta_widgets():
+        fields = ActionPlanUtil.retrieve_meta_fields()
+        widgets = {}
+        for field in fields:
+            attrs = {'type': 'text', 'class': 'output input-style', 'id': field + 'Output', 'placeholder': ' ',
+                     "value": " ", "required": "false"}
+            widgets[field] = TextInput(attrs=attrs)
+        return widgets
+
+
+
+class ActionPlanForm(forms.ModelForm):
+
+    class Meta:
+        model = models.ActionPlan
+        fields = ActionPlanUtil.retrieve_meta_fields()
+        widgets = ActionPlanUtil.retrieve_meta_widgets()
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
