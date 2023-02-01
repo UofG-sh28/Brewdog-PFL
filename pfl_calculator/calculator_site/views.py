@@ -14,6 +14,8 @@ from django.shortcuts import redirect
 from  django.utils.safestring import mark_safe
 from .forms import RegistrationForm
 from .models import CarbonFootprint
+from pledge_functions import PledgeFunctions
+
 
 # CHECK COOKIE
 def check_login(func):
@@ -65,8 +67,7 @@ def report(request):
     return render(request, 'calculator_site/report.html', context)
 
 
-def pledges(request):
-    return render(request, 'calculator_site/pledges.html')
+
 
 
 def action_plan(request):
@@ -145,6 +146,46 @@ def about(request):
         return HttpResponse(request, 'about.html')
 
 
+class PledgeLoaderView:
+
+    def pledges(self, request):
+        if request.method == "POST":
+            return self.__pledges_post_request(request)
+        elif request.method == "GET":
+            return self.__pledges_post_request(request)
+        else:
+            return HttpResponse("<h1>Error</h1>")
+
+    def __pledges_post_request(self, request):
+
+        # Parse post data and handle functions
+
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        # Handle footprint error
+
+        pledge_functions = PledgeFunctions(footprint)
+        func_map = pledge_functions.get_func_map()
+
+        data = request.POST
+
+        # Parse post data into python dictionary
+        data = dict(data)
+        del data["csrfmiddlewaretoken"]
+
+        pledge_functions_results = {key: func_map[key](value) for key, value in data.items()}
+
+        # save pledge_functions_results to database
+        #
+        #
+
+        # redirect to remove pledge page
+        repsonse = redirect('/my/pledge_report')
+        return repsonse
+
+
+    def  __pledges_get_request(self, request):
+        return render(request, 'calculator_site/pledges.html')
+
 class CalculatorLoaderView:
 
     def __init__(self):
@@ -152,6 +193,8 @@ class CalculatorLoaderView:
         self.verbose = json.load(file)
         file.close()
 
+        # TODO
+        #  Should be called every request with login data
         test_business = Business.objects.get(company_name="test_business")
         self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 

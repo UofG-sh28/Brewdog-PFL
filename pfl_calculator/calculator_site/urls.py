@@ -25,7 +25,7 @@ urlpatterns = [
     path('my/calculator/', views.CalculatorLoaderView().calculator, name='calculator'),
     path('my/metrics', views.metrics, name='metrics'),
     path('my/report', views.report, name='report'),
-    path('my/pledges', views.pledges, name='pledges'),
+    path('my/pledges', views.PledgeLoaderView().pledges, name='pledges'),
     path('my/action_plan', views.action_plan, name='action_plan'),
     path('my/profile', views.profile, name='profile'),
 
