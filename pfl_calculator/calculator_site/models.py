@@ -216,8 +216,6 @@ class Pledge(models.Model):
 
     category = models.CharField(max_length=1, choices=CATEGORY_CHOICE)
     text = models.CharField(max_length=150)
-    boolean =  models.BooleanField()
-    formula = models.CharField(max_length=150)
 
     def __str__(self):
         try:
@@ -254,45 +252,14 @@ class ActionPlan(models.Model):
 
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
     year = models.IntegerField()
-    selected_pledges = models.ManyToManyField("SelectedPledge", blank=True)
+
+    # fields:
+
+
+
 
     def __str__(self):
         return f"{self.business.company_name}'s Action Plan for {self.year}"
 
     def save(self, *args, **kwargs):
         super(ActionPlan, self).save(*args, **kwargs)
-
-
-
-
-class SelectedPledge(models.Model):
-    """
-        Selected Pledge relationship defines the amount a user has pledged
-        Is part of the M2N relationship with ActionPlan
-
-        Primary Key:
-            id - uses auto id
-
-        Dependencies:
-            ActionPlan - each pledge must belong to an ActionPlan
-            Pledge - each pledge is a pledge
-            Amount - amount of percentage selected.
-    """
-
-    #Fields
-    action_plan = models.ForeignKey(ActionPlan, on_delete=models.CASCADE)
-    pledge = models.ForeignKey(Pledge, on_delete=models.CASCADE)
-    amount = models.IntegerField(default=0, validators=[
-        MaxValueValidator(100),
-        MinValueValidator(0)
-    ])
-
-    def __str__(self):
-        return f"{self.pledge.text}: {self.amount}"
-
-    class Meta:
-        verbose_name = "Selected Pledge"
-        verbose_name_plural = "Selected Pledges"
-
-    def save(self, *args, **kwargs):
-        super(SelectedPledge, self).save(*args, **kwargs)
