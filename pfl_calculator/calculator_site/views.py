@@ -65,8 +65,7 @@ def report(request):
     return render(request, 'calculator_site/report.html', context)
 
 
-def pledges(request):
-    return render(request, 'calculator_site/pledges.html')
+
 
 
 def action_plan(request):
@@ -144,6 +143,27 @@ def about(request):
     else:
         return HttpResponse(request, 'about.html')
 
+
+class PledgeLoaderView:
+
+    def pledges(self, request):
+        if request.method == "POST":
+            return self.__pledges_post_request(request)
+        elif request.method == "GET":
+            return self.__pledges_post_request(request)
+        else:
+            return HttpResponse("<h1>Error</h1>")
+
+    def __pledges_post_request(self, request):
+        repsonse = redirect('/my/pledge_report')
+
+        # Parse post data and handle functions
+
+        return repsonse
+
+
+    def  __pledges_get_request(self, request):
+        return render(request, 'calculator_site/pledges.html')
 
 class CalculatorLoaderView:
 
