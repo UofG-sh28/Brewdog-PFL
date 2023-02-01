@@ -254,6 +254,30 @@ class ActionPlan(models.Model):
     year = models.IntegerField()
 
     # fields:
+    reduce_electricity = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_electricity = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_gas = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_oil = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_coal = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_wood = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    energy_audit = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_beef_lamb_for_non_meat = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_beef_lamb_for_other_meat = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_other_meat_for_non_meat = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    replace_fruit_veg = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    detailed_menu = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_food_waste = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    waste_audit = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_hc_beer_for_lc_beer = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_bottle_beer_for_kegs = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_bottle_beer_for_cans = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_general_waste = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_vehicle_travel_miles = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_commuting_miles = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_staff_flights = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_emissions = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    adopt_sustainable_diposable_items = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    sustainable_procuremed_equipment = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
 
 
