@@ -14,7 +14,7 @@ from django.shortcuts import redirect
 from  django.utils.safestring import mark_safe
 from .forms import RegistrationForm
 from .models import CarbonFootprint
-from pledge_functions import PledgeFunctions
+from .pledge_functions import PledgeFunctions
 
 
 # CHECK COOKIE
@@ -189,7 +189,7 @@ class PledgeLoaderView:
 class CalculatorLoaderView:
 
     def __init__(self):
-        file = open("static/verbose.json")
+        file = open("static/JS/verbose.json")
         self.verbose = json.load(file)
         file.close()
 
