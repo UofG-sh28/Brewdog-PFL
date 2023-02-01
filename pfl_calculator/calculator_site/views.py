@@ -1,7 +1,7 @@
 import json
 
 from django.shortcuts import render
-from calculator_site.forms import CalculatorForm
+from calculator_site.forms import CalculatorForm, ActionPlanForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.core import serializers
@@ -176,6 +176,7 @@ class PledgeLoaderView:
 
         # Parse post data into python dictionary
         data = dict(data)
+        print(data)
         del data["csrfmiddlewaretoken"]
 
         pledge_functions_results = {key: func_map[key](value) for key, value in data.items()}
@@ -189,8 +190,19 @@ class PledgeLoaderView:
         return repsonse
 
 
-    def  __pledges_get_request(self, request):
-        return render(request, 'calculator_site/pledges.html')
+    def __pledges_get_request(self, request):
+
+        action_plan_form = ActionPlanForm()
+
+        context = {"act_plan": PledgeDataWrapper(action_plan_form["reduce_electricity"])}
+
+        return render(request, 'calculator_site/pledges.html', context=context)
+
+
+class PledgeDataWrapper:
+    def __init__(self, form):
+        self.form = form
+
 
 class CalculatorLoaderView:
 

@@ -122,7 +122,7 @@ class ActionPlanUtil:
         fields = ActionPlanUtil.retrieve_meta_fields()
         widgets = {}
         for field in fields:
-            attrs = {'type': 'text', 'class': 'output input-style', 'id': field + 'Output', 'placeholder': ' ',
+            attrs = {'type': 'text', 'class': 'pledge-input', 'id': field + '-pledge-input', 'placeholder': ' ',
                      "value": " ", "required": "false"}
             widgets[field] = TextInput(attrs=attrs)
         return widgets
