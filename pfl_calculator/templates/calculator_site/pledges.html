@@ -1,11 +1,31 @@
 {% extends 'calculator_site/base.html' %}
+{% load static %}
 
-{% block title %}
-  Homepage
-{% endblock %}
 
+{% block title %} Pledges {% endblock %}
+{% block script %}<script src="{% static 'JS/pledge.js' %}"></script> {% endblock %}
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <h2>This is the pledge page where users will be able to view and select pledges in order to create their action plan.</h2>
+<h2>Pledges</h2>
+
+
+<form action="/my/pledges" enctype="application/x-www-form-urlencoded" method="post">
+  {% csrf_token %}
+  <table id="{{category.id}}Table" class="table">
+    <tr id="headers">
+      <th>Type</th>
+      <th>Cutting actions</th>
+      <th>Options Target</th>
+      <th>Kg CO2e Savings</th>
+    </tr>
+    <tr>
+      <th>Energy</th>
+      <th>Reduce energy consumption</th>
+      <th>0%</th>
+      <th>-</th>
+    </tr>
+  </table>
+</form>
+
 {% endblock %}

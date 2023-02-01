@@ -158,14 +158,14 @@ class PledgeLoaderView:
         if request.method == "POST":
             return self.__pledges_post_request(request)
         elif request.method == "GET":
-            return self.__pledges_post_request(request)
+            return self.__pledges_get_request(request)
         else:
             return HttpResponse("<h1>Error</h1>")
 
     def __pledges_post_request(self, request):
 
         # Parse post data and handle functions
-
+        test_business = Business.objects.get(company_name="test_business")
         footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
         # Handle footprint error
 
