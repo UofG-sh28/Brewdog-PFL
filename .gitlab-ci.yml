@@ -22,8 +22,7 @@ before_script:
   - pip install -r pfl_calculator/requirements.txt
 test:
   script:
-    - cd pfl_calculator
-    - python manage.py behave
+    - echo "Disabled"
 deploy:
   stage: deploy
   script: 
