@@ -1,4 +1,5 @@
 import json
+import math
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm, ActionPlanForm
@@ -206,6 +207,15 @@ class PledgeDataWrapper:
 
 class CalculatorLoaderView:
 
+    # Matching implementation as found in calcualtor.js
+    @staticmethod
+    def get_decimal_length(r:int) -> int:
+        if math.floor(r) == r: return 0
+        try:
+            return len(str(r).split(".")[1]) or 0
+        except Exception:
+            return 0
+
     def __init__(self):
         file = open("static/JS/verbose.json")
         self.verbose = json.load(file)
@@ -292,7 +302,7 @@ class CalculatorLoaderView:
             elif database_value == 0:
                 cal_data_wrapper.checked = "unchecked"
             else:
-                cal_data_wrapper.input_value = f"{database_value / cal_data_wrapper.conversion}"
+                cal_data_wrapper.input_value = f"{round(database_value / cal_data_wrapper.conversion, max(2, self.get_decimal_length(database_value)))}"
             cal_data_wrapper.form.field.initial = database_value
 
         # Setting all data fields
@@ -303,6 +313,10 @@ class CalculatorLoaderView:
         context["progress_back"] = progress - 1
 
         return render(request, 'calculator_site/calculator.html', context=context)
+
+
+
+
 
 
 class CalculatorCategoryWrapper:
