@@ -168,9 +168,12 @@ class PledgeLoaderView:
         # Parse post data and handle functions
         test_business = Business.objects.get(company_name="test_business")
         footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        file = open("static/JS/verbose.json")
+        verbose = json.load(file)
+        conversion_factor = self.verbose["conversion_factors"]
         # Handle footprint error
 
-        pledge_functions = PledgeFunctions(footprint)
+        pledge_functions = PledgeFunctions(footprint, conversion_factor)
         func_map = pledge_functions.get_func_map()
 
         data = request.POST
@@ -223,7 +226,8 @@ class CalculatorLoaderView:
 
         # TODO
         #  Should be called every request with login data
-        test_business = Business.objects.get(company_name="test_business")
+        test_user, _ = User.objects.get_or_create(username="test", password="testing")
+        test_business, _ = Business.objects.get_or_create(user=test_user,company_name="test_business")
         self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
     def calculator(self, request):

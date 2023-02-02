@@ -3,11 +3,17 @@
 from .models import *
 from django.contrib.auth.models import User
 
+def indirect_saving(amount):
+    if amount != 0:
+        return "Indirect Savings"
+    else:
+        return ""
 
 class PledgeFunctions:
 
-    def __init__(self, cf):
+    def __init__(self, cf, conversion_factor):
         self.cf = cf
+        self.conversion_factor = conversion_factor
         self.func_map = {
             "reduce_electricity": self.reduce_electricity,
             "switch_electricity": self.switch_electricity,
@@ -91,16 +97,26 @@ class PledgeFunctions:
         pass
 
     def replace_fruit_veg(self, amount):
-        pass
+        """ Replace high carbon fruit and veg (air freight, hot house) for low carbon fruit and veg (local) """
+        hcfv_baseline_kg = getattr(self.cf, "fruit_veg_other") / self.conversion_factor["fruit_veg_other"]
+        replaced_kg = (hcfv_baseline_kg) * (amount / 100)
+        hcfv_carbon = (replaced_kg) * (self.conversion_factor["fruit_veg_other"])
+        lcfv_carbon = (replaced_kg) * (self.conversion_factors["fruit_veg_local"])
+        carbon_saved = (hcfv_carbon) - (lcfv_carbon)
+        return carbon_saved
+
 
     def detailed_menu(self, amount):
-        pass
+        return indirect_saving(amount)
 
     def reduce_food_waste(self, amount):
-        pass
+        """ Reduce Food Waste """
+        total_food_waste = (getattr(self.cf,"waste_food_landfill") + getattr(self.cf,"waste_food_compost") + getattr(self.cf,"waste_food_charity"))
+        carbon_saved = (total_food_waste) * (amount / 100)
+        return carbon_saved
 
     def waste_audit(self, amount):
-        pass
+        return indirect_saving(amount)
 
     def switch_hc_beer_for_lc_beer(self, amount):
         pass
@@ -112,22 +128,39 @@ class PledgeFunctions:
         pass
 
     def reduce_general_waste(self, amount):
-        pass
+        """ Reduce general waste """
+        total_general_waste = (getattr(self.cf,"general_waste_landfill") + getattr(self.cf,"general_waste_recycle") + getattr(self.cf,"special_waste"))
+        carbon_saved = (total_general_waste) * (amount / 100)
+        return carbon_saved
 
     def reduce_vehicle_travel_miles(self, amount):
-        pass
+        """ Reduce vehicle road miles (companny travel and deliveries) """
+        total_vehicle_travel_miles = (getattr(self.cf,"goods_delivered_company_owned") + getattr(self.cf,"goods_delivered_contracted") + getattr(self.cf,"travel_company_business"))
+        carbon_saved = (total_vehicle_travel_miles * (amount / 100))
+        return carbon_saved
 
     def reduce_commuting_miles(self, amount):
-        pass
+        """ Reduce commuting vehicle road miles """
+        staff_commuting = getattr(self.cf, "staff_commuting")
+        carbon_saved = (staff_commuting) * (amount / 100)
+        return carbon_saved
 
     def reduce_staff_flights(self, amount):
-        pass
+        """ Reduce staff flights """
+        total_staff_flights = (getattr(self.cf, "flights_domestic") + getattr(self.cf, "flights_international"))
+        carbon_saved = (total_staff_flights) * (amount / 100)
+        return carbon_saved
 
     def reduce_emissions(self, amount):
-        pass
+        """ Reduce emissions from Operations and Maintenance """
+        total_emissions = (getattr(self.cf,"kitchen_equipment_assets") + getattr(self.cf,"building_repair_maintenance") + getattr(self.cf,"cleaning") + getattr(self.cf, "IT_Marketing") + getattr(self.cf, "main_water"))
+        carbon_saved = (total_emissions) * (amount / 100)
+        return carbon_saved
 
     def adopt_sustainable_diposable_items(self, amount):
-        pass
+        """ Adopt sustainable purchasing of non-food disposable items """
+        return indirect_saving(amount)
 
     def sustainably_procure_equipment(self, amount):
-        pass
+        """ Sustainable procurement of equipment and furniture: where possbile, buy pre-loved """
+        return indirect_saving(amount)
