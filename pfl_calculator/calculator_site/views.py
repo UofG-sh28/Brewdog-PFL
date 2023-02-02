@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from  django.utils.safestring import mark_safe
-from .forms import RegistrationForm
+from .forms import RegistrationForm, RegistrationFormStage2
 from .models import CarbonFootprint
 from .pledge_functions import PledgeFunctions
 
