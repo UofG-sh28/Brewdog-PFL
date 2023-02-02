@@ -49,12 +49,13 @@ def scope(request):
     context = {'business': data}
     return render(request, 'calculator_site/scope.html', context)
 
-
 @check_login
 # AUTHENTICATED USER PAGES
 def dash(request):
     context = {}
     context['login'] = 'yes'
+    data = Business.objects.all().values()
+    context['business'] = data
     return render(request, 'calculator_site/dashboard.html', context)
 
 
