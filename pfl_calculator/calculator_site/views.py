@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from  django.utils.safestring import mark_safe
-from .forms import RegistrationForm
+from .forms import RegistrationForm, RegistrationFormStage2
 from .models import CarbonFootprint
 from .pledge_functions import PledgeFunctions
 
@@ -227,8 +227,8 @@ class CalculatorLoaderView:
 
         # TODO
         #  Should be called every request with login data
-        test_user, _ = User.objects.get_or_create(username="test", password="testing")
-        test_business, _ = Business.objects.get_or_create(user=test_user,company_name="test_business")
+        test_user, _ = User.objects.get_or_create(username="views_test", password="testing")
+        test_business, _ = Business.objects.get_or_create(user=test_user,company_name="views_test")
         self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
     def calculator(self, request):
@@ -252,7 +252,7 @@ class CalculatorLoaderView:
         #  Parse cookie data here to query database
 
         sh28 = User.objects.get(username="sh28")
-        test_business = Business.objects.get(company_name="test_business")
+        test_business = Business.objects.get(company_name="views_test")
         footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
         # Save data to database
