@@ -271,6 +271,7 @@ class ActionPlan(models.Model):
     switch_hc_beer_for_lc_beer = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     switch_bottle_beer_for_kegs = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     switch_bottle_beer_for_cans = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_canned_beer_for_kegs = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     reduce_general_waste = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     reduce_vehicle_travel_miles = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     reduce_commuting_miles = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
