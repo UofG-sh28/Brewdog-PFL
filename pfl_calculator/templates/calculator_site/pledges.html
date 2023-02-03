@@ -21,8 +21,8 @@
     </tr>
       {% for pled_data in act_plan %}
         <tr>
-          <td>{{pled_data.id}}</td>
-          <td>{{pled_data.id}}</td>
+          <td style="background-color: {{ pled_data.colour }}" >{{pled_data.plan_type}}</td>
+          <td style="color: {{ pled_data.colour }}">{{pled_data.name}}</td>
           <td>{{pled_data.form}}</td>
           <td>-</td>
         </tr>

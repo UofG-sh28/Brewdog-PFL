@@ -2,9 +2,7 @@
 
 
 
-window.onload = ()=>{
-
-
+window.onload = ()=> {
 
 
 }

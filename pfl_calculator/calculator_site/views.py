@@ -161,6 +161,9 @@ class PledgeLoaderView:
         file = open("static/JS/verbose.json")
         self.verbose = json.load(file)
         file.close()
+        file = open("static/action_plan_verbose.json")
+        self.action_plan_verbose = json.load(file)
+        file.close()
 
     def pledges(self, request):
         if request.method == "POST":
@@ -204,16 +207,22 @@ class PledgeLoaderView:
 
         fields = ActionPlanUtil.retrieve_meta_fields()
 
-        context = {"act_plan": [PledgeDataWrapper(field, action_plan_form[field]) for field in fields]}
+        colours = self.action_plan_verbose["type-colours"]
+        context = {"act_plan": [PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
+                                                  self.action_plan_verbose[field]["type"],
+                                                  colours[self.action_plan_verbose[field]["type"]]) for field in fields]}
 
 
         return render(request, 'calculator_site/pledges.html', context=context)
 
 
 class PledgeDataWrapper:
-    def __init__(self, id, form):
+    def __init__(self, id, form, name, plan_type, colour):
         self.id = id
         self.form = form
+        self.name = name
+        self.plan_type = plan_type
+        self.colour = colour
 
 
 class CalculatorLoaderView:
