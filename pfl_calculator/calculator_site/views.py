@@ -2,7 +2,7 @@ import json
 import math
 
 from django.shortcuts import render
-from calculator_site.forms import CalculatorForm, ActionPlanForm
+from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.core import serializers
@@ -202,13 +202,17 @@ class PledgeLoaderView:
 
         action_plan_form = ActionPlanForm()
 
-        context = {"act_plan": PledgeDataWrapper(action_plan_form["reduce_electricity"])}
+        fields = ActionPlanUtil.retrieve_meta_fields()
+
+        context = {"act_plan": [PledgeDataWrapper(field, action_plan_form[field]) for field in fields]}
+
 
         return render(request, 'calculator_site/pledges.html', context=context)
 
 
 class PledgeDataWrapper:
-    def __init__(self, form):
+    def __init__(self, id, form):
+        self.id = id
         self.form = form
 
 
@@ -310,7 +314,7 @@ class CalculatorLoaderView:
             elif database_value == 0:
                 cal_data_wrapper.checked = "unchecked"
             else:
-                cal_data_wrapper.input_value = f"{round(database_value / cal_data_wrapper.conversion, max(2, self.get_decimal_length(database_value)))}"
+                cal_data_wrapper.input_value = f"{round(database_value / cal_data_wrapper.conversion, max(2, self.get_decimal_length(database_value)))} "
             cal_data_wrapper.form.field.initial = database_value
 
         # Setting all data fields

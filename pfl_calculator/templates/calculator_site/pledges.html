@@ -12,19 +12,21 @@
 
 <form action="/my/pledges" enctype="application/x-www-form-urlencoded" method="post">
   {% csrf_token %}
-  <table id="{{category.id}}Table" class="table">
+  <table id="PledgeTable" class="table">
     <tr id="headers">
       <th>Type</th>
       <th>Cutting actions</th>
       <th>Options Target</th>
       <th>Kg CO2e Savings</th>
     </tr>
-    <tr>
-      <td>Energy</td>
-      <td>Reduce energy consumption</td>
-      <td>{{act_plan.form}}</td>
-      <td>-</td>
-    </tr>
+      {% for pled_data in act_plan %}
+        <tr>
+          <td>{{pled_data.id}}</td>
+          <td>{{pled_data.id}}</td>
+          <td>{{pled_data.form}}</td>
+          <td>-</td>
+        </tr>
+      {% endfor %}
   </table>
 
   <input class="shine-button" type="submit" value="Commit">
