@@ -46,7 +46,7 @@
                     </tr>
                 {% endfor %}
         </table>
-    {%if progress == 6%}
+    {%if progress == progress_total%}
         <input class="shine-button" type="submit" value="Finish">
     {% else %}
         <input class="shine-button" type="submit" value="Save & Next">

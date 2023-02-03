@@ -52,16 +52,9 @@
     "food_waste": "Food Waste",
     "solid_waste": "Solid Waste",
     "transport_travel": "Transport & Travel",
-    "food_drink": "Food & Drink",
+    "food_drink": "Food & Drink 1",
+    "food_drink2": "Food & Drink 2",
     "operations_maintenance": "Operations & Maintenance"
-  },
-  "category_links": {
-    "grid_electricity_LOWCARBON" : "heating_fuel",
-    "waste_food_charity" : "food_waste",
-    "special_waste" : "solid_waste",
-    "staff_commuting" : "transport_travel",
-    "spirits" : "food_drink",
-    "sewage" : "operations_maintenance"
   },
   "conversion_factors": {
     "mains_gas":0.22,

@@ -39,7 +39,9 @@
 		"cheeses",
 		"fruit_veg_local",
 		"fruit_veg_other",
-		"dried_food",
+		"dried_food"
+	],
+	"food_drink2": [
 		"beer_kegs",
 		"beer_cans",
 		"beer_bottles",
@@ -50,6 +52,7 @@
 		"wine",
 		"spirits"
 	],
+
     "operations_maintenance":[
     	"kitchen_equipment_assets",
 		"building_repair_maintenance",
