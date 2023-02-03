@@ -156,6 +156,11 @@ def about(request):
 
 class PledgeLoaderView:
 
+    def __init__(self):
+        file = open("static/JS/verbose.json")
+        self.verbose = json.load(file)
+        file.close()
+
     def pledges(self, request):
         if request.method == "POST":
             return self.__pledges_post_request(request)
@@ -169,8 +174,6 @@ class PledgeLoaderView:
         # Parse post data and handle functions
         test_business = Business.objects.get(company_name="test_business")
         footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
-        file = open("static/JS/verbose.json")
-        verbose = json.load(file)
         conversion_factor = self.verbose["conversion_factors"]
         # Handle footprint error
 
@@ -198,6 +201,7 @@ class PledgeLoaderView:
     def __pledges_get_request(self, request):
 
         action_plan_form = ActionPlanForm()
+
 
         context = {"act_plan": PledgeDataWrapper(action_plan_form["reduce_electricity"])}
 
