@@ -12,7 +12,7 @@ from django.contrib.auth import logout as lo
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
-from  django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe
 from .forms import RegistrationForm, RegistrationFormStage2
 from .models import CarbonFootprint
 from .pledge_functions import PledgeFunctions
@@ -49,6 +49,7 @@ def scope(request):
     context = {'business': data}
     return render(request, 'calculator_site/scope.html', context)
 
+
 @check_login
 # AUTHENTICATED USER PAGES
 def dash(request):
@@ -73,9 +74,6 @@ def report(request):
         test = json.load(sd)
         context["scope_json"] = mark_safe(json.dumps(json.dumps(test)))
     return render(request, 'calculator_site/report.html', context)
-
-
-
 
 
 def action_plan(request):
@@ -115,6 +113,7 @@ def login(request):
     context["log_form"] = form
     return render(request, 'calculator_site/login.html', context=context)
 
+
 @check_login
 def logout(request):
     lo(request)
@@ -132,7 +131,8 @@ def register(request):
             return redirect('register2')
         print("Registration Failed")
     form = RegistrationForm()
-    return render(request, 'calculator_site/register.html', context={"reg_form":form})
+    return render(request, 'calculator_site/register.html', context={"reg_form": form})
+
 
 def register2(request):
     if request.method == 'POST':
@@ -145,7 +145,8 @@ def register2(request):
         print("Registration Failed")
     form = RegistrationFormStage2(user=request.user)
     print(request.user.username)
-    return render(request, 'calculator_site/register2.html', context={"reg_form":form})
+    return render(request, 'calculator_site/register2.html', context={"reg_form": form})
+
 
 def about(request):
     if request.method == 'GET':
@@ -197,11 +198,9 @@ class PledgeLoaderView:
         repsonse = redirect('/my/pledge_report')
         return repsonse
 
-
     def __pledges_get_request(self, request):
 
         action_plan_form = ActionPlanForm()
-
 
         context = {"act_plan": PledgeDataWrapper(action_plan_form["reduce_electricity"])}
 
@@ -217,7 +216,7 @@ class CalculatorLoaderView:
 
     # Matching implementation as found in calcualtor.js
     @staticmethod
-    def get_decimal_length(r:int) -> int:
+    def get_decimal_length(r: int) -> int:
         if math.floor(r) == r: return 0
         try:
             return len(str(r).split(".")[1]) or 0
@@ -229,10 +228,14 @@ class CalculatorLoaderView:
         self.verbose = json.load(file)
         file.close()
 
+        file = open("static/JS/categories.json")
+        self.categories = json.load(file)
+        file.close()
+
         # TODO
         #  Should be called every request with login data
         test_user, _ = User.objects.get_or_create(username="views_test", password="testing")
-        test_business, _ = Business.objects.get_or_create(user=test_user,company_name="views_test")
+        test_business, _ = Business.objects.get_or_create(user=test_user, company_name="views_test")
         self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
     def calculator(self, request):
@@ -275,23 +278,19 @@ class CalculatorLoaderView:
         # Initialise data fields
         cal_form = CalculatorForm()
         proper_names = self.verbose["fields"]
-        category_links = self.verbose["category_links"]
+        categories = self.categories
         category_names = self.verbose["categories"]
         conversion_factors = self.verbose["conversion_factors"]
 
-        # Wrap specific fields in object
-        fields = [CalculatorDataWrapper(key, cal_form[key], proper_names[key], conversion_factors[key])
-                  for key in list(proper_names.keys())]
-
-        # Sort fields into categories wrapping into objects
         category_list = []
-        field_list = []
-        for field in fields:
-            link = category_links.get(field.id)
-            field_list.append(field)
-            if link is not None:
-                category_list.append(CalculatorCategoryWrapper(link, category_names[link], field_list))
-                field_list = []
+        for key, value in categories.items():
+            field_list = []
+            for field_id in value:
+                field_list.append(CalculatorDataWrapper(field_id,
+                                                        cal_form[field_id], proper_names[field_id],
+                                                        conversion_factors[field_id]))
+            category_list.append(CalculatorCategoryWrapper(key, category_names[key], field_list))
+
 
         # Determine what category to show
         context = {}
@@ -322,10 +321,6 @@ class CalculatorLoaderView:
         context["progress_back"] = progress - 1
 
         return render(request, 'calculator_site/calculator.html', context=context)
-
-
-
-
 
 
 class CalculatorCategoryWrapper:
