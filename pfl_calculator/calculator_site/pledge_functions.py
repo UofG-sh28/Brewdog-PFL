@@ -86,6 +86,7 @@ class PledgeFunctions:
         """ Reduce wood consumption """
         wood = getattr(self.cf, "wood")
         carbon_saved = (wood) * (amount / 100)
+        return carbon_saved
 
     def energy_audit(self, amount):
         if amount != 0:
