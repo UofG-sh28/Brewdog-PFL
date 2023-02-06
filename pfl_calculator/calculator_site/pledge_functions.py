@@ -143,7 +143,7 @@ class PledgeFunctions:
         hcfv_baseline_kg = getattr(self.cf, "fruit_veg_other") / self.conversion_factor["fruit_veg_other"]
         replaced_kg = (hcfv_baseline_kg) * (amount / 100)
         hcfv_carbon = (replaced_kg) * (self.conversion_factor["fruit_veg_other"])
-        lcfv_carbon = (replaced_kg) * (self.conversion_factors["fruit_veg_local"])
+        lcfv_carbon = (replaced_kg) * (self.conversion_factor["fruit_veg_local"])
         carbon_saved = (hcfv_carbon) - (lcfv_carbon)
         return carbon_saved
 

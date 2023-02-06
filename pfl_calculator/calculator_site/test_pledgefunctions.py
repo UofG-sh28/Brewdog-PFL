@@ -153,6 +153,15 @@ class SimpleSwitchTests(TestCase):
 
         self.assertEqual(amount_hc_beer_carbon - amount_lc_beer_carbon, self.pf.switch_hc_beer_for_lc_beer(96))
 
+    def test_replace_fruit_veg(self):
+        highcarbon_fruit_veg = getattr(self.cf, "fruit_veg_other") / self.pf.conversion_factor["fruit_veg_other"]
+        replaced_fruit_veg = highcarbon_fruit_veg * (50/100)
+
+        highcarbon_fruit_veg_carbon = replaced_fruit_veg * self.pf.conversion_factor["fruit_veg_other"]
+        lowcarbon_fruit_veg_carbon = replaced_fruit_veg * self.pf.conversion_factor["fruit_veg_local"]
+
+        self.assertEqual(highcarbon_fruit_veg_carbon - lowcarbon_fruit_veg_carbon, self.pf.replace_fruit_veg(50))
+
 
 
 
@@ -255,7 +264,10 @@ class ComplexMeatSwitchTests(TestCase):
     def setUp(self):
         self.cf, self.pf = test_setup()
 
-    def test_switch_all_meat_for_veg(self):
+    def test_switch_all_meat_for_veg_then_none_for_other(self):
+        self.assertEqual(1,1)
+
+    def test_beef_lamb_for_other_then_other_for_veg(self):
         self.assertEqual(1,1)
 
 class CornerCaseTests(TestCase):
