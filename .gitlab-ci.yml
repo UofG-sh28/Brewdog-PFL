@@ -24,6 +24,7 @@ test:
   script:
     - cd pfl_calculator
     - python manage.py behave
+    - python manage.py test
 deploy:
   stage: deploy
   script: 
