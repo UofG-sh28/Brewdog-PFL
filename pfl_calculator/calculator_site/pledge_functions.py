@@ -41,6 +41,14 @@ class PledgeFunctions:
             "adopt_sustainable_diposable_items": self.adopt_sustainable_diposable_items,
             "sustainably_procure_equipment": self.sustainably_procure_equipment,
         }
+        # Counters for complex pledges
+        self.beer_bottles_counter = 0
+        self.beef_lamb_counter = 0
+        self.other_meat_counter = 0
+        self.beer_cans_counter = 0
+
+
+
 
     def get_func_map(self) -> dict:
         return self.func_map
@@ -94,13 +102,12 @@ class PledgeFunctions:
         else:
             return ""
 
-    beef_lamb_counter = 0
 
     def swap_beef_lamb_for_non_meat(self, amount):
         """ Swap beef and lamb for non-animal alternatives """
         beef_lamb_kg = getattr(self.cf, "beef_lamb") / self.conversion_factor["beef_lamb"]
         replaced_kg = (beef_lamb_kg) * (amount / 100)
-        beef_lamb_counter += replaced_kg
+        self.beef_lamb_counter += replaced_kg
 
         beef_lamb_carbon = replaced_kg * self.conversion_factor["beef_lamb"]
         veg_carbon = replaced_kg * self.conversion_factor["fruit_veg_other"]
@@ -108,13 +115,11 @@ class PledgeFunctions:
         carbon_saved = beef_lamb_carbon - veg_carbon
         return carbon_saved
 
-    other_meat_counter = 0
-
     def swap_beef_lamb_for_other_meat(self, amount):
         """ Swap beef and lamb for other meat products """
-        beef_lamb_kg = (getattr(self.cf, "beef_lamb") / self.conversion_factor["beef_lamb"]) - beef_lamb_counter
+        beef_lamb_kg = (getattr(self.cf, "beef_lamb") / self.conversion_factor["beef_lamb"]) - self.beef_lamb_counter
         replaced_kg = (beef_lamb_kg) * (amount / 100)
-        other_meat_counter += replaced_kg
+        self.other_meat_counter += replaced_kg
 
         beef_lamb_carbon = replaced_kg * self.conversion_factor["beef_lamb"]
         other_meat_carbon = replaced_kg * self.conversion_factor["other_meat"]
@@ -124,7 +129,7 @@ class PledgeFunctions:
 
     def swap_other_meat_for_non_meat(self, amount):
         """ Swap other meats for non-animal alternatives """
-        other_meat_kg = (getattr(self.cf, "other_meat") / self.conversion_factor["other_meat"]) + other_meat_counter
+        other_meat_kg = (getattr(self.cf, "other_meat") / self.conversion_factor["other_meat"]) +self.other_meat_counter
         replaced_kg = (other_meat_kg) * (amount / 100)
 
         other_meat_carbon = replaced_kg * self.conversion_factor["other_meat"]
@@ -174,7 +179,7 @@ class PledgeFunctions:
         carbon_saved = HC_beer_carbon - LC_beer_carbon
         return carbon_saved
 
-    beer_bottle_counter = 0
+
 
     def switch_bottle_beer_for_kegs(self, amount):
         """ Switch bottled beer to beer from reusable kegs """
@@ -186,7 +191,7 @@ class PledgeFunctions:
         beer_kegs_conversion_factor = (self.conversion_factor["beer_kegs"] + self.conversion_factor["beer_kegs_LOWCARBON"]) / 2
         replaced_ltrs = (total_ltrs) * (amount / 100)
 
-        beer_bottle_counter += replaced_ltrs
+        self.beer_bottles_counter += replaced_ltrs
 
         bottle_carbon = replaced_ltrs * beer_bottles_conversion_factor
         keg_carbon = replaced_ltrs * beer_kegs_conversion_factor
@@ -194,19 +199,17 @@ class PledgeFunctions:
         carbon_saved = bottle_carbon - keg_carbon
         return carbon_saved
 
-    beer_cans_counter = 0
-
     def switch_bottle_beer_for_cans(self, amount):
         """ Switch bottled beer to canned beer """
         beer_bottles_ltrs = getattr(self.cf, "beer_bottles") / self.conversion_factor["beer_bottles"]
         beer_bottles_LOWCARBON_ltrs = getattr(self.cf, "beer_bottles_LOWCARBON") / self.conversion_factor["beer_bottles_LOWCARBON"]
-        total_ltrs = (beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs) - beer_bottles_counter
+        total_ltrs = (beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs) - self.beer_bottles_counter
 
         beer_bottles_conversion_factor = (self.conversion_factor["beer_bottles"] + self.conversion_factor["beer_bottles_LOWCARBON"]) / 2
         beer_cans_conversion_factor = (self.conversion_factor["beer_cans"] + self.conversion_factor["beer_cans_LOWCARBON"]) / 2
         replaced_ltrs = (total_ltrs) * (amount / 100)
 
-        beer_cans_counter += replaced_ltrs
+        self.beer_cans_counter += replaced_ltrs
 
         bottle_carbon = replaced_ltrs * beer_bottles_conversion_factor
         cans_carbon = replaced_ltrs * beer_cans_conversion_factor
@@ -218,13 +221,11 @@ class PledgeFunctions:
         """ Switch our canned beer to beer from reusable kegs """
         beer_cans_ltrs = getattr(self.cf, "beer_cans") / self.conversion_factor["beer_cans"]
         beer_cans_LOWCARBON_ltrs = getattr(self.cf, "beer_cans_LOWCARBON") / self.conversion_factor["beer_cans_LOWCARBON"]
-        total_ltrs = beer_cans_ltrs + beer_cans_LOWCARBON_ltrs + beer_cans_counter
+        total_ltrs = beer_cans_ltrs + beer_cans_LOWCARBON_ltrs + self.beer_cans_counter
 
-        beer_cans_conversion_factor = (self.conversion_factor["beer_cans"] + self.conversion_factor["beer_bottles_LOWCARBON"]) / 2
+        beer_cans_conversion_factor = (self.conversion_factor["beer_cans"] + self.conversion_factor["beer_cans_LOWCARBON"]) / 2
         beer_kegs_conversion_factor = (self.conversion_factor["beer_kegs"] + self.conversion_factor["beer_kegs_LOWCARBON"]) / 2
         replaced_ltrs = (total_ltrs) * (amount / 100)
-
-        beer_bottle_counter += replaced_ltrs
 
         cans_carbon = replaced_ltrs * beer_cans_conversion_factor
         keg_carbon = replaced_ltrs * beer_kegs_conversion_factor

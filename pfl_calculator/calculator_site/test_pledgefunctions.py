@@ -130,23 +130,125 @@ class SimpleSwitchTests(TestCase):
         self.cf, self.pf = test_setup()
 
     def test_switch_electricity(self):
-        self.assertEqual(1,1)
+        amount_electricity = getattr(self.cf, "grid_electricity") / self.pf.conversion_factor["grid_electricity"]
+        replaced_electricity = (amount_electricity) * (50/100)
+
+        replaced_carbon = replaced_electricity * self.pf.conversion_factor["grid_electricity"]
+        renewable_carbon = replaced_electricity * self.pf.conversion_factor["grid_electricity_LOWCARBON"]
+
+        carbon_saved = replaced_carbon - renewable_carbon
+        self.assertEqual(carbon_saved, self.pf.switch_electricity(50))
 
     def test_switch_hc_beer_for_lc_beer(self):
-        self.assertEqual(1,1)
+        kegs, cans, bottles = getattr(self.cf, "beer_kegs") / self.pf.conversion_factor["beer_kegs"], getattr(self.cf, "beer_cans") / self.pf.conversion_factor["beer_cans"], getattr(self.cf, "beer_bottles") / self.pf.conversion_factor["beer_bottles"]
+        total = kegs+cans+bottles
+
+        replaced_litres = total * (96/100)
+
+        avg_hc_conversion_factor = (self.pf.conversion_factor["beer_kegs"] + self.pf.conversion_factor["beer_cans"] + self.pf.conversion_factor["beer_bottles"]) / 3
+        avg_lc_conversion_factor = (self.pf.conversion_factor["beer_kegs_LOWCARBON"] + self.pf.conversion_factor["beer_cans_LOWCARBON"] + self.pf.conversion_factor["beer_bottles_LOWCARBON"]) / 3
+
+        amount_hc_beer_carbon = replaced_litres * avg_hc_conversion_factor
+        amount_lc_beer_carbon = replaced_litres * avg_lc_conversion_factor
+
+        self.assertEqual(amount_hc_beer_carbon - amount_lc_beer_carbon, self.pf.switch_hc_beer_for_lc_beer(96))
+
+
+
 
 class ComplexBeerSwitchTests(TestCase):
+    # These tests are a lot more complex so some of the inputs are rounded to account for irrelevant floating point errors
     def setUp(self):
         self.cf, self.pf = test_setup()
 
     def test_bottles_for_kegs_then_bottles_for_cans(self):
-        pass
+        beer_bottles_ltrs = getattr(self.cf, "beer_bottles") / self.pf.conversion_factor["beer_bottles"]
+        beer_bottles_LOWCARBON_ltrs = getattr(self.cf, "beer_bottles_LOWCARBON") / self.pf.conversion_factor["beer_bottles_LOWCARBON"]
+        total_ltrs = beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs
+
+        beer_bottles_conversion_factor = (self.pf.conversion_factor["beer_bottles"] + self.pf.conversion_factor["beer_bottles_LOWCARBON"]) / 2
+        beer_kegs_conversion_factor = (self.pf.conversion_factor["beer_kegs"] + self.pf.conversion_factor["beer_kegs_LOWCARBON"]) / 2
+        initial_replaced_ltrs = (total_ltrs) * (50 / 100)
+
+        bottle_carbon = initial_replaced_ltrs * beer_bottles_conversion_factor
+        keg_carbon = initial_replaced_ltrs * beer_kegs_conversion_factor
+
+        intial_carbon_saved = bottle_carbon - keg_carbon
+
+        secondary_total_ltrs = (beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs) - initial_replaced_ltrs
+
+        beer_cans_conversion_factor = (self.pf.conversion_factor["beer_cans"] + self.pf.conversion_factor["beer_cans_LOWCARBON"]) / 2
+        secondary_replaced_ltrs = (secondary_total_ltrs) * (50 / 100)
+
+        secondary_bottle_carbon = secondary_replaced_ltrs * beer_bottles_conversion_factor
+        cans_carbon = secondary_replaced_ltrs * beer_cans_conversion_factor
+
+        expeccted_carbon_saved = int((bottle_carbon - keg_carbon) + (secondary_bottle_carbon - cans_carbon))
+        calculated_saved = int(self.pf.switch_bottle_beer_for_kegs(50) + self.pf.switch_bottle_beer_for_cans(50))
+
+        self.assertEqual(expeccted_carbon_saved, calculated_saved)
 
     def test_ALL_bottles_switched_for_kegs_then_none_for_cans(self):
-        pass
+        beer_bottles_ltrs = getattr(self.cf, "beer_bottles") / self.pf.conversion_factor["beer_bottles"]
+        beer_bottles_LOWCARBON_ltrs = getattr(self.cf, "beer_bottles_LOWCARBON") / self.pf.conversion_factor["beer_bottles_LOWCARBON"]
+        total_ltrs = beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs
+
+        beer_bottles_conversion_factor = (self.pf.conversion_factor["beer_bottles"] + self.pf.conversion_factor["beer_bottles_LOWCARBON"]) / 2
+        beer_kegs_conversion_factor = (self.pf.conversion_factor["beer_kegs"] + self.pf.conversion_factor["beer_kegs_LOWCARBON"]) / 2
+        initial_replaced_ltrs = (total_ltrs) * (100 / 100)
+
+        bottle_carbon = initial_replaced_ltrs * beer_bottles_conversion_factor
+        keg_carbon = initial_replaced_ltrs * beer_kegs_conversion_factor
+
+        intial_carbon_saved = bottle_carbon - keg_carbon
+
+        secondary_total_ltrs = (beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs) - initial_replaced_ltrs
+
+        beer_cans_conversion_factor = (self.pf.conversion_factor["beer_cans"] + self.pf.conversion_factor["beer_cans_LOWCARBON"]) / 2
+        secondary_replaced_ltrs = (secondary_total_ltrs) * (50 / 100)
+
+        secondary_bottle_carbon = secondary_replaced_ltrs * beer_bottles_conversion_factor
+        cans_carbon = secondary_replaced_ltrs * beer_cans_conversion_factor
+
+        expected_carbon_saved = int((bottle_carbon - keg_carbon))
+
+        calculated_save_1 = self.pf.switch_bottle_beer_for_kegs(100)
+        calculated_save_2 = self.pf.switch_bottle_beer_for_cans(100)
+        calculated_saved = int(calculated_save_1 + calculated_save_2)
+
+        self.assertEqual(calculated_save_2, 0)
+        self.assertEqual(expected_carbon_saved, calculated_saved)
 
     def test_switch_bottles_for_cans_then_switch_cans_for_kegs(self):
-        pass
+        beer_bottles_ltrs = getattr(self.cf, "beer_bottles") / self.pf.conversion_factor["beer_bottles"]
+        beer_bottles_LOWCARBON_ltrs = getattr(self.cf, "beer_bottles_LOWCARBON") / self.pf.conversion_factor["beer_bottles_LOWCARBON"]
+        total_ltrs = beer_bottles_ltrs + beer_bottles_LOWCARBON_ltrs + self.pf.beer_bottles_counter
+
+        beer_bottles_conversion_factor = (self.pf.conversion_factor["beer_bottles"] + self.pf.conversion_factor["beer_bottles_LOWCARBON"]) / 2
+        beer_cans_conversion_factor = (self.pf.conversion_factor["beer_cans"] + self.pf.conversion_factor["beer_cans_LOWCARBON"]) / 2
+        initial_replaced_ltrs = (total_ltrs) * 50/ 100
+
+        bottle_carbon = initial_replaced_ltrs * beer_bottles_conversion_factor
+        can_carbon = initial_replaced_ltrs * beer_cans_conversion_factor
+
+        beer_cans_ltrs = getattr(self.cf, "beer_cans") / self.pf.conversion_factor["beer_cans"]
+        beer_cans_LOWCARBON_ltrs = getattr(self.cf, "beer_cans_LOWCARBON") / self.pf.conversion_factor["beer_cans_LOWCARBON"]
+        initial_plus_bonus_ltrs = beer_cans_ltrs + beer_cans_LOWCARBON_ltrs + initial_replaced_ltrs
+
+        beer_kegs_conversion_factor = (self.pf.conversion_factor["beer_kegs"] + self.pf.conversion_factor["beer_kegs_LOWCARBON"]) / 2
+        final_replaced_ltrs = (initial_plus_bonus_ltrs) * (50 / 100)
+
+        bonus_cans_carbon = final_replaced_ltrs * beer_cans_conversion_factor
+        keg_carbon = final_replaced_ltrs * beer_kegs_conversion_factor
+
+        expected_carbon_saved = int((bottle_carbon - can_carbon) + (bonus_cans_carbon - keg_carbon))
+
+        calculated_save_1 = self.pf.switch_bottle_beer_for_cans(50)
+        calculated_save_2 = self.pf.switch_canned_beer_for_kegs(50)
+        calculated_saved = int(calculated_save_1 + calculated_save_2)
+
+        self.assertEqual(expected_carbon_saved, calculated_saved)
+
 
 
 class ComplexMeatSwitchTests(TestCase):
@@ -160,12 +262,12 @@ class CornerCaseTests(TestCase):
     def setUp(self):
         self.cf, self.pf = test_setup()
 
-    def switch_all_electricity(self):
+    def test_switch_all_electricity(self):
         carbon_saved = self.pf.switch_electricity(100)
         original_carbon = (getattr(self.cf, "grid_electricity"))
         expected_save = (original_carbon / self.pf.conversion_factor["grid_electricity"]) * self.pf.conversion_factor["grid_electricity_LOWCARBON"]
 
-        self.assertEqual(original_carbon - expected_save, carbon_saved)
+        self.assertEqual(int(original_carbon - expected_save), int(carbon_saved))
 
     def test_no_reduction(self):
         carbon_saved = self.pf.reduce_oil(0)
