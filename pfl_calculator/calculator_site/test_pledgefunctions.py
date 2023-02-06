@@ -265,10 +265,50 @@ class ComplexMeatSwitchTests(TestCase):
         self.cf, self.pf = test_setup()
 
     def test_switch_all_meat_for_veg_then_none_for_other(self):
-        self.assertEqual(1,1)
+        beef_lamb_kg = getattr(self.cf, "beef_lamb") / self.pf.conversion_factor["beef_lamb"]
+        replaced_kg = (beef_lamb_kg) * (100 / 100)
+
+        beef_lamb_carbon = replaced_kg * self.pf.conversion_factor["beef_lamb"]
+        veg_carbon = replaced_kg * self.pf.conversion_factor["fruit_veg_other"]
+
+        expected_carbon_saved = beef_lamb_carbon - veg_carbon
+        actual_carbon_saved = self.pf.swap_beef_lamb_for_non_meat(100) + self.pf.swap_beef_lamb_for_other_meat(50)
+
+        self.assertEqual(expected_carbon_saved, actual_carbon_saved)
+
+    def test_switch_beef_lamb_for_other(self):
+        beef_lamb_kg = getattr(self.cf, "beef_lamb") / self.pf.conversion_factor["beef_lamb"]
+        replaced_kg = (beef_lamb_kg) * (50 / 100)
+
+        beef_lamb_carbon = replaced_kg * self.pf.conversion_factor["beef_lamb"]
+        other_meat_carbon = replaced_kg * self.pf.conversion_factor["other_meat"]
+
+        expected_carbon_saved = beef_lamb_carbon - other_meat_carbon
+        actual_carbon_saved = self.pf.swap_beef_lamb_for_other_meat(50)
+
+        self.assertEqual(expected_carbon_saved, actual_carbon_saved)
 
     def test_beef_lamb_for_other_then_other_for_veg(self):
-        self.assertEqual(1,1)
+        beef_lamb_kg = getattr(self.cf, "beef_lamb") / self.pf.conversion_factor["beef_lamb"]
+        initial_replaced_kg = (beef_lamb_kg) * (50 / 100)
+
+        beef_lamb_carbon = initial_replaced_kg * self.pf.conversion_factor["beef_lamb"]
+        other_meat_carbon = initial_replaced_kg * self.pf.conversion_factor["other_meat"]
+
+        initial_carbon_saved = beef_lamb_carbon - other_meat_carbon
+
+        other_meat_kg = (getattr(self.cf, "other_meat") / self.pf.conversion_factor["other_meat"]) + initial_replaced_kg
+        replaced_kg = (other_meat_kg) * (50 / 100)
+
+        veg_carbon = replaced_kg * self.pf.conversion_factor["fruit_veg_other"]
+        second_other_meat_saved = replaced_kg * self.pf.conversion_factor["other_meat"]
+
+        secondary_carbon_saved = second_other_meat_saved - veg_carbon
+
+        expected_carbon_saved = initial_carbon_saved + secondary_carbon_saved
+        actual_carbon_saved = (self.pf.swap_beef_lamb_for_other_meat(50) + self.pf.swap_other_meat_for_non_meat(50))
+
+        self.assertEqual(expected_carbon_saved, actual_carbon_saved)
 
 class CornerCaseTests(TestCase):
     def setUp(self):
