@@ -281,3 +281,9 @@ class CornerCaseTests(TestCase):
 class IndirectSavingTests(TestCase):
     def setUp(self):
         self.cf, self.pf = test_setup()
+
+    def test_indirect(self):
+        self.assertEqual("Indirect Savings", self.pf.energy_audit(1))
+
+    def test_no_indirect(self):
+        self.assertEqual("", self.pf.energy_audit(0))
