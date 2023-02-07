@@ -14,7 +14,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
 from .forms import RegistrationForm, RegistrationFormStage2
-from .models import CarbonFootprint
+from .models import CarbonFootprint, ActionPlan
 from .pledge_functions import PledgeFunctions
 
 
@@ -219,15 +219,9 @@ class PledgeLoaderView:
         file = open("static/action_plan_verbose.json")
         self.action_plan_verbose = json.load(file)
         file.close()
-        self.user = None
-        self.business = None
-        self.footprints = None
+        self.conversion_factors = self.verbose["conversion_factors"]
 
     def pledges(self, request):
-        self.user = request.user
-        self.business, _ = Business.objects.get_or_create(user=self.user)
-        self.footprint, _ = CarbonFootprint.objects.get_or_create(business=self.business, year=2023)
-
         if request.method == "POST":
             return self.__pledges_post_request(request)
         elif request.method == "GET":
@@ -239,9 +233,11 @@ class PledgeLoaderView:
 
         # # Parse post data and handle functions
         # # Handle footprint error
+        user = request.user
+        business, _ = Business.objects.get_or_create(user=user)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
 
-        pledge_functions = PledgeFunctions(self.footprint, conversion_factor)
-        func_map = pledge_functions.get_func_map()
+        pledge_functions = PledgeFunctions(footprint, self.conversion_factors)
 
         data = request.POST
 
@@ -249,11 +245,15 @@ class PledgeLoaderView:
         data = dict(data)
         del data["csrfmiddlewaretoken"]
 
-        pledge_functions_results = {key: func_map[key](int(value[0])) for key, value in data.items()}
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=2023)
 
-        # save pledge_functions_results to database
-        #
-        #
+        # save to database
+        # TODO
+        #  Ensure that all data is within the limits/range
+        for k, v in data.items():
+            setattr(ap, k, int(v[0]))
+
+        ap.save()
 
         # redirect to remove pledge page
         repsonse = redirect('/my/action_plan')
@@ -265,8 +265,6 @@ class PledgeLoaderView:
 
         fields = ActionPlanUtil.retrieve_meta_fields()
 
-        print(fields)
-        print()
         colours = self.action_plan_verbose["type-colours"]
         context = {"act_plan": [PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
                                                   self.action_plan_verbose[field]["type"],
@@ -304,19 +302,14 @@ class CalculatorLoaderView:
         file = open("static/JS/categories.json")
         self.categories = json.load(file)
         file.close()
-        self.user = None
-        self.business = None
-        self.footprint = None
 
-        # TODO
-        #  Should be called every request with login data
-        # test_business, _ = Business.objects.get_or_create(user=test_user, company_name="views_test")
-        # self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        self.proper_names = self.verbose["fields"]
+        self.categories = self.categories
+        self.category_names = self.verbose["categories"]
+        self.conversion_factors = self.verbose["conversion_factors"]
+
 
     def calculator(self, request):
-        self.user = request.user
-        self.business, _ = Business.objects.get_or_create(user=self.user)
-        self.footprint, _ = CarbonFootprint.objects.get_or_create(business=self.business, year=2023)
 
         if request.method == "POST":
             return self.__calculator_post_request(request)
@@ -334,36 +327,38 @@ class CalculatorLoaderView:
         # Replacing blanks with default values
         data = {key: 0 if value[0] == "" or value[0] == " " else value[0] for key, value in data.items()}
 
-        # TODO
-        #  Parse cookie data here to query database
-        # Save data to database
-        for k, v in data.items():
-            setattr(self.footprint, k, v)
-        self.footprint.save()
+        user = request.user
+        business, _ = Business.objects.get_or_create(user=user)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
 
-        # Updates current footprint
         # TODO
-        #   Only update fields that are required, compare this to dictionary
+        #  Ensure that all data is within the limits/range
+        for k, v in data.items():
+            setattr(footprint, k, v)
+
+
+        footprint.save()
 
         return self.__calculator_get_request(request)
 
     def __calculator_get_request(self, request, progress=0):
         # Initialise data fields
+
         cal_form = CalculatorForm()
-        proper_names = self.verbose["fields"]
-        categories = self.categories
-        category_names = self.verbose["categories"]
-        conversion_factors = self.verbose["conversion_factors"]
+
+        user = request.user
+        business, _ = Business.objects.get_or_create(user=user)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
+
 
         category_list = []
-        for key, value in categories.items():
+        for key, value in self.categories.items():
             field_list = []
             for field_id in value:
                 field_list.append(CalculatorDataWrapper(field_id,
-                                                        cal_form[field_id], proper_names[field_id],
-                                                        conversion_factors[field_id]))
-            category_list.append(CalculatorCategoryWrapper(key, category_names[key], field_list))
-
+                                                        cal_form[field_id], self.proper_names[field_id],
+                                                        self.conversion_factors[field_id]))
+            category_list.append(CalculatorCategoryWrapper(key, self.category_names[key], field_list))
 
         # Determine what category to show
         context = {}
@@ -377,7 +372,7 @@ class CalculatorLoaderView:
         progress = max(0, progress)
         context["category"] = category_list[progress]
         for cal_data_wrapper in context["category"].fields:
-            database_value = getattr(self.footprint, cal_data_wrapper.id)
+            database_value = getattr(footprint, cal_data_wrapper.id)
             if database_value == -1:
                 database_value = " "
             elif database_value == 0:
