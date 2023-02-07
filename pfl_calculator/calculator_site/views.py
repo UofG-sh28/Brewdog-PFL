@@ -55,8 +55,61 @@ def scope(request):
 def dash(request):
     context = {}
     context['login'] = 'yes'
-    data = Business.objects.all().values()
-    context['business'] = data
+    user = User.objects.get(username=request.user)
+    business = Business.objects.get(user=user)
+    business_id = business.id
+    footprints = CarbonFootprint.objects.filter(business=business)
+    carbon_sum = 0
+    for footprint in footprints:
+        carbon_sum += sum([
+            footprint.mains_gas,
+            footprint.fuel,
+            footprint.oil,
+            footprint.coal,
+            footprint.wood,
+            footprint.grid_electricity,
+            footprint.grid_electricity_LOWCARBON,
+            footprint.waste_food_landfill,
+            footprint.waste_food_compost,
+            footprint.waste_food_charity,
+            footprint.bottles_recycle,
+            footprint.aluminum_can_recycle,
+            footprint.general_waste_landfill,
+            footprint.general_waste_recycle,
+            footprint.special_waste,
+            footprint.goods_delivered_company_owned,
+            footprint.goods_delivered_contracted,
+            footprint.travel_company_business,
+            footprint.flights_domestic,
+            footprint.flights_international,
+            footprint.staff_commuting,
+            footprint.beef_lamb,
+            footprint.other_meat,
+            footprint.lobster_prawn,
+            footprint.fin_fish_seafood,
+            footprint.milk_yoghurt,
+            footprint.cheeses,
+            footprint.fruit_veg_local,
+            footprint.fruit_veg_other,
+            footprint.dried_food,
+            footprint.beer_kegs,
+            footprint.beer_cans,
+            footprint.beer_bottles,
+            footprint.beer_kegs_LOWCARBON,
+            footprint.beer_cans_LOWCARBON,
+            footprint.beer_bottles_LOWCARBON,
+            footprint.soft_drinks,
+            footprint.wine,
+            footprint.spirits,
+            footprint.kitchen_equipment_assets,
+            footprint.building_repair_maintenance,
+            footprint.cleaning,
+            footprint.IT_Marketing,
+            footprint.main_water,
+            footprint.sewage,
+        ])
+        
+    context = {'carbon_sum': carbon_sum, 'login': 'yes'}
     return render(request, 'calculator_site/dashboard.html', context)
 
 

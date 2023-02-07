@@ -7,17 +7,19 @@
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <div id="container">
-      <div id="dashboard_div">    
-          {% if business  %}
-          <h2>Welcome {{ business.company_name }}</h2>
-          {% endif %}
-      </div>
-      <div id="dashboard_div">      
-          <h2>Hi</h2>
-      </div>
-      <div id="dashboard_div">      
-          <h2>Hi</h2>
-      </div>
-  </div>
+    <div id="container">
+        <div id="dashboard_div">    
+            <h2> Welcome {{ user.username }}</h2>
+        </div>
+      
+        <div id="dashboard_div"></div>
+        <div id="dashboard_div"> 
+            <div id="dashboard_info">
+                <div style="background-color: lightblue; padding: 20px;">
+                    <h2>Customer Information:</h2>
+                    <h3 style="text-align: center">Total Carbon Footprint</h3> <h4>{{ carbon_sum }} CO2</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
