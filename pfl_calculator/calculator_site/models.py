@@ -278,7 +278,7 @@ class ActionPlan(models.Model):
     reduce_staff_flights = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     reduce_emissions = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     adopt_sustainable_diposable_items = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    sustainable_procuremed_equipment = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    sustainably_procure_equipment = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
 
 

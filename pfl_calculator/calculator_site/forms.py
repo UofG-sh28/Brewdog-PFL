@@ -94,7 +94,6 @@ class CalculatorUtil:
 
 class CalculatorForm(forms.ModelForm):
 
-
     class Meta:
         model = models.CarbonFootprint
         fields = CalculatorUtil.retrieve_meta_fields()
