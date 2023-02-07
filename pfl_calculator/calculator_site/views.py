@@ -113,6 +113,10 @@ def dash(request):
     return render(request, 'calculator_site/dashboard.html', context)
 
 
+def dash_redirect(request):
+    return redirect("/my/dashboard/")
+
+
 def metrics(request):
     return render(request, 'calculator_site/metrics.html')
 
@@ -236,8 +240,6 @@ class PledgeLoaderView:
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
-
-        pledge_functions = PledgeFunctions(footprint, self.conversion_factors)
 
         data = request.POST
 
