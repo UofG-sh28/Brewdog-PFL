@@ -217,8 +217,15 @@ class PledgeLoaderView:
         file = open("static/action_plan_verbose.json")
         self.action_plan_verbose = json.load(file)
         file.close()
+        self.user = None
+        self.business = None
+        self.footprints = None
 
     def pledges(self, request):
+        self.user = request.user
+        self.business, _ = Business.objects.get_or_create(user=self.user)
+        self.footprint, _ = CarbonFootprint.objects.get_or_create(business=self.business, year=2023)
+
         if request.method == "POST":
             return self.__pledges_post_request(request)
         elif request.method == "GET":
@@ -229,9 +236,6 @@ class PledgeLoaderView:
     def __pledges_post_request(self, request):
 
         # # Parse post data and handle functions
-        # test_business = Business.objects.filter(company_name="test_business").first()
-        # footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
-        # conversion_factor = self.verbose["conversion_factors"]
         # # Handle footprint error
 
         pledge_functions = PledgeFunctions(self.footprint, conversion_factor)
@@ -330,11 +334,6 @@ class CalculatorLoaderView:
 
         # TODO
         #  Parse cookie data here to query database
-
-        # sh28 = User.objects.get(username="sh28")
-        # test_business = Business.objects.get(company_name="views_test")
-        # footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
-
         # Save data to database
         for k, v in data.items():
             setattr(self.footprint, k, v)
