@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
 from .forms import RegistrationForm, RegistrationFormStage2, CalculatorUtil
 from .models import CarbonFootprint, ActionPlan
-from .pledge_functions import PledgeFunctions
+from datetime import date
 
 
 # CHECK COOKIE
@@ -181,6 +181,7 @@ class PledgeLoaderView:
         self.conversion_factors = self.verbose["conversion_factors"]
 
     def pledges(self, request):
+
         if request.method == "POST":
             return self.__pledges_post_request(request)
         elif request.method == "GET":
@@ -194,7 +195,7 @@ class PledgeLoaderView:
         # # Handle footprint error
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
 
         data = request.POST
 
@@ -202,7 +203,7 @@ class PledgeLoaderView:
         data = dict(data)
         del data["csrfmiddlewaretoken"]
 
-        ap, _ = ActionPlan.objects.get_or_create(business=business, year=2023)
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=date.today().year)
 
         # save to database
         # TODO
@@ -217,6 +218,11 @@ class PledgeLoaderView:
         return repsonse
 
     def __pledges_get_request(self, request):
+        user = request.user
+        business, _ = Business.objects.get_or_create(user=user)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
+
+            
 
         action_plan_form = ActionPlanForm()
 
@@ -286,7 +292,7 @@ class CalculatorLoaderView:
 
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
 
         # TODO
         #  Ensure that all data is within the limits/range
@@ -305,7 +311,7 @@ class CalculatorLoaderView:
 
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=2023)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
 
 
         category_list = []
