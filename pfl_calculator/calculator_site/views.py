@@ -63,7 +63,6 @@ def dash(request):
     for footprint in footprints:
         carbon_sum += sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
 
-
     context = {'carbon_sum': carbon_sum, 'login': 'yes'}
     return render(request, 'calculator_site/dashboard.html', context)
 
@@ -79,7 +78,7 @@ def metrics(request):
 def report(request):
     user = request.user
     business = Business.objects.get_or_create(user=user)[0]
-    data = list(CarbonFootprint.objects.get_or_create(business = business))
+    data = list(CarbonFootprint.objects.get_or_create(business=business))
     context = {"json_data": mark_safe(json.dumps(str(data[0])))}
     with open('static/JS/categories.json') as cd:
         test = json.load(cd)
@@ -224,17 +223,32 @@ class PledgeLoaderView:
 
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
-            
 
         action_plan_form = ActionPlanForm()
 
         fields = ActionPlanUtil.retrieve_meta_fields()
 
         colours = self.action_plan_verbose["type-colours"]
+
+        tables = []
+        group_fields = []
+        table = False
+        for field in fields:
+            if self.action_plan_verbose[field]["type"] == "Beer" and not table:
+                tables.append(PledgeTableWrapper(1, group_fields))
+                group_fields = []
+                table = True
+
+            pdw = PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
+                                    self.action_plan_verbose[field]["type"],
+                                    colours[self.action_plan_verbose[field]["type"]])
+
+            group_fields.append(pdw)
+
+        tables.append(PledgeTableWrapper(2, group_fields))
+
         context = {
-            "act_plan": [PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
-                                           self.action_plan_verbose[field]["type"],
-                                           colours[self.action_plan_verbose[field]["type"]]) for field in fields],
+            "act_plan": tables,
             "cal": 1}
         return render(request, 'calculator_site/pledges.html', context=context)
 
@@ -246,6 +260,12 @@ class PledgeDataWrapper:
         self.name = name
         self.plan_type = plan_type
         self.colour = colour
+
+
+class PledgeTableWrapper:
+    def __init__(self, column, fields):
+        self.column = column
+        self.fields = fields
 
 
 class CalculatorLoaderView:
@@ -272,7 +292,6 @@ class CalculatorLoaderView:
         self.categories = self.categories
         self.category_names = self.verbose["categories"]
         self.conversion_factors = self.verbose["conversion_factors"]
-
 
     def calculator(self, request):
 
@@ -301,7 +320,6 @@ class CalculatorLoaderView:
         for k, v in data.items():
             setattr(footprint, k, v)
 
-
         footprint.save()
 
         return self.__calculator_get_request(request)
@@ -314,7 +332,6 @@ class CalculatorLoaderView:
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
-
 
         category_list = []
         for key, value in self.categories.items():
