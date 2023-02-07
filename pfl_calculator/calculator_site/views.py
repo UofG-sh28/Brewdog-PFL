@@ -57,6 +57,7 @@ def dash(request):
     context['login'] = 'yes'
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
+    business_id = business.id
     footprints = CarbonFootprint.objects.filter(business=business)
     carbon_sum = 0
     for footprint in footprints:
@@ -107,7 +108,7 @@ def dash(request):
             footprint.main_water,
             footprint.sewage,
         ])
-        
+
     context = {'carbon_sum': carbon_sum, 'login': 'yes'}
     return render(request, 'calculator_site/dashboard.html', context)
 
@@ -227,13 +228,13 @@ class PledgeLoaderView:
 
     def __pledges_post_request(self, request):
 
-        # Parse post data and handle functions
-        test_business = Business.objects.filter(company_name="test_business").first()
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
-        conversion_factor = self.verbose["conversion_factors"]
-        # Handle footprint error
+        # # Parse post data and handle functions
+        # test_business = Business.objects.filter(company_name="test_business").first()
+        # footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        # conversion_factor = self.verbose["conversion_factors"]
+        # # Handle footprint error
 
-        pledge_functions = PledgeFunctions(footprint, conversion_factor)
+        pledge_functions = PledgeFunctions(self.footprint, conversion_factor)
         func_map = pledge_functions.get_func_map()
 
         data = request.POST
@@ -297,14 +298,20 @@ class CalculatorLoaderView:
         file = open("static/JS/categories.json")
         self.categories = json.load(file)
         file.close()
+        self.user = None
+        self.business = None
+        self.footprint = None
 
         # TODO
         #  Should be called every request with login data
-        test_user, _ = User.objects.get_or_create(username="views_test", password="testing")
-        test_business, _ = Business.objects.get_or_create(user=test_user, company_name="views_test")
-        self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        # test_business, _ = Business.objects.get_or_create(user=test_user, company_name="views_test")
+        # self.footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
     def calculator(self, request):
+        self.user = request.user
+        self.business, _ = Business.objects.get_or_create(user=self.user)
+        self.footprint, _ = CarbonFootprint.objects.get_or_create(business=self.business, year=2023)
+
         if request.method == "POST":
             return self.__calculator_post_request(request)
         elif request.method == "GET":
@@ -324,20 +331,19 @@ class CalculatorLoaderView:
         # TODO
         #  Parse cookie data here to query database
 
-        sh28 = User.objects.get(username="sh28")
-        test_business = Business.objects.get(company_name="views_test")
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
+        # sh28 = User.objects.get(username="sh28")
+        # test_business = Business.objects.get(company_name="views_test")
+        # footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
 
         # Save data to database
         for k, v in data.items():
-            setattr(footprint, k, v)
-        footprint.save()
+            setattr(self.footprint, k, v)
+        self.footprint.save()
 
         # Updates current footprint
         # TODO
         #   Only update fields that are required, compare this to dictionary
 
-        self.footprint = footprint
         return self.__calculator_get_request(request)
 
     def __calculator_get_request(self, request, progress=0):

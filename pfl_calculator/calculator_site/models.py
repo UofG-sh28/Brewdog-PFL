@@ -51,7 +51,7 @@ class Business(models.Model):
     #FK
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     #FIELDS
-    company_name = models.CharField(max_length=50)
+    company_name = models.CharField(max_length=50, unique=True)
     business_address = models.CharField(max_length=150)
     area_type = models.CharField(max_length=1, choices=AREA_TYPES)
     part_of_world = models.CharField(max_length=2, choices=PARTS_OF_WORLD)
