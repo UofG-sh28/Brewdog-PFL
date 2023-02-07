@@ -181,6 +181,7 @@ table {
     text-align: center;
     align-content: center;
     vertical-align: middle;
+    scale: 1.1;
 }
 .checkboxtd input {
     margin: 0;
@@ -200,6 +201,13 @@ th {
 
 tr:nth-child(even) {
   background-color: #F5F5F5; /* light gray */
+}
+tr{
+    transition: 0.3s ease-in;
+}
+
+tr:hover{
+    background-color: #f0f0f0;
 }
 
 .tooltip {
