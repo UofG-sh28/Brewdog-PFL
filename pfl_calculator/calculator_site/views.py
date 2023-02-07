@@ -229,7 +229,7 @@ class PledgeLoaderView:
     def __pledges_post_request(self, request):
 
         # Parse post data and handle functions
-        test_business = Business.objects.get(company_name="test_business")
+        test_business = Business.objects.filter(company_name="test_business").first()
         footprint, _ = CarbonFootprint.objects.get_or_create(business=test_business, year=2022)
         conversion_factor = self.verbose["conversion_factors"]
         # Handle footprint error
@@ -241,17 +241,16 @@ class PledgeLoaderView:
 
         # Parse post data into python dictionary
         data = dict(data)
-        print(data)
         del data["csrfmiddlewaretoken"]
 
-        pledge_functions_results = {key: func_map[key](value) for key, value in data.items()}
+        pledge_functions_results = {key: func_map[key](int(value[0])) for key, value in data.items()}
 
         # save pledge_functions_results to database
         #
         #
 
         # redirect to remove pledge page
-        repsonse = redirect('/my/pledge_report')
+        repsonse = redirect('/my/action_plan')
         return repsonse
 
     def __pledges_get_request(self, request):
@@ -260,6 +259,8 @@ class PledgeLoaderView:
 
         fields = ActionPlanUtil.retrieve_meta_fields()
 
+        print(fields)
+        print()
         colours = self.action_plan_verbose["type-colours"]
         context = {"act_plan": [PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
                                                   self.action_plan_verbose[field]["type"],
