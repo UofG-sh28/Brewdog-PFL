@@ -1,4 +1,5 @@
 {% extends 'calculator_site/base.html' %}
+{% load static %}
 
 {% block title %}
   My Dashboard
@@ -10,14 +11,21 @@
     <div id="container">
         <div id="dashboard_div">    
             <h2> Welcome {{ user.username }}</h2>
+            <div class="dropdown">
+                <a href="{% url 'outline' %}">Outline</a>
+                <a href="{% url 'how-it-works' %}">How it works</a>
+                <a href="{% url 'login' %}">Login</a>
+            </div>
         </div>
       
         <div id="dashboard_div"></div>
         <div id="dashboard_div"> 
             <div id="dashboard_info">
-                <div style="background-color: lightblue; padding: 20px;">
+                <div style="background-color: lightblue; padding: 20px; text-align: center;">
                     <h2>Customer Information:</h2>
-                    <h3 style="text-align: center">Total Carbon Footprint</h3> <h4>{{ carbon_sum }} CO2</h4>
+                    <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">{{ carbon_sum }} CO</h4><h6 style="display: inline;">2</h6>
+                    <h3>Total Pledged</h3>
+                    <h4>Fergus can figure out how to display this bit</h4>
                 </div>
             </div>
         </div>

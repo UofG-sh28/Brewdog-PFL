@@ -57,7 +57,6 @@ def dash(request):
     context['login'] = 'yes'
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
-    business_id = business.id
     footprints = CarbonFootprint.objects.filter(business=business)
     carbon_sum = 0
     for footprint in footprints:

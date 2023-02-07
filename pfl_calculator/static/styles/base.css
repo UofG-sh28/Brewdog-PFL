@@ -297,10 +297,7 @@ tr:nth-child(even) {
 }
 
 #dashboard_info {
-    padding-top: 50%;
-    background-color: gray;
-    color: green;
-    width: 50%;
+    margin-top: 25%;
     height: 50%;
 }
 
