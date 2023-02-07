@@ -219,7 +219,7 @@ class Pledge(models.Model):
 
     def __str__(self):
         try:
-            return self.text
+            return f"{self.get_category_display()}: {self.text}"
         except:
             return "Error: Pledge text not found."
 
