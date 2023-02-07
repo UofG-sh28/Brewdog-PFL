@@ -20,11 +20,11 @@ def flush_database():
         print("Path exists: ", os.path.exists("db.sqlite3"))
 
 def remake_database():
-    print("making migratios")
+    print("Creating Migrations...")
     message = os.popen("python manage.py makemigrations")
     print(message.read())
 
-    print("migratiaon")
+    print("Migrating...")
     message = os.popen("python manage.py migrate")
     print(message.read())
 
@@ -33,10 +33,16 @@ def populate_pledges():
     print(msg.read())
 
 if __name__ == "__main__":
-    print("Deleting old database")
+    print("Deleting old database...")
     flush_database()
 
-    print("Remaking Database")
+    print("Remaking Database...")
     remake_database()
+
+    print("Creating Admin Users...")
     create_super_user()
+
+    print("Populating Models...")
     populate_pledges()
+
+    print("Finished")
