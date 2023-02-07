@@ -21,7 +21,7 @@ urlpatterns = [
     path('register/about', views.register2, name='register2'),
     #
     # # USER PAGES
-    re_path(r'^my\/(?!dashboard).*$', views.dash_redirect, name='dash_redirect'),
+
     path('my/dashboard/', views.dash, name='dash'),
     path('my/calculator/', views.CalculatorLoaderView().calculator, name='calculator'),
     path('my/metrics', views.metrics, name='metrics'),
@@ -29,6 +29,7 @@ urlpatterns = [
     path('my/pledges', views.PledgeLoaderView().pledges, name='pledges'),
     path('my/action_plan', views.action_plan, name='action_plan'),
     path('my/profile', views.profile, name='profile'),
+    re_path(r'^my\/.*$', views.dash_redirect, name='dash_redirect'),
 
 
 ]

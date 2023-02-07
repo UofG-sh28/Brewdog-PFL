@@ -9,27 +9,31 @@
 {% block body_block %}
 <h2>Pledges</h2>
 
-
-<form action="/my/pledges" enctype="application/x-www-form-urlencoded" method="post">
-  {% csrf_token %}
-  <table id="PledgeTable" class="table">
-    <tr id="headers">
-      <th>Type</th>
-      <th>Cutting actions</th>
-      <th>Options Target</th>
-      <th>Kg CO2e Savings</th>
-    </tr>
-      {% for pled_data in act_plan %}
-        <tr>
-          <td style="background-color: {{ pled_data.colour }}" >{{pled_data.plan_type}}</td>
-          <td style="color: {{ pled_data.colour }}">{{pled_data.name}}</td>
-          <td>{{pled_data.form}}</td>
-          <td>-</td>
+{% if cal %}
+    <form action="/my/pledges" enctype="application/x-www-form-urlencoded" method="post">
+      {% csrf_token %}
+      <table id="PledgeTable" class="table">
+        <tr id="headers">
+          <th>Type</th>
+          <th>Cutting actions</th>
+          <th>Options Target</th>
+          <th>Kg CO2e Savings</th>
         </tr>
-      {% endfor %}
-  </table>
+          {% for pled_data in act_plan %}
+            <tr>
+              <td style="background-color: {{ pled_data.colour }}" >{{pled_data.plan_type}}</td>
+              <td style="color: {{ pled_data.colour }}">{{pled_data.name}}</td>
+              <td>{{pled_data.form}}</td>
+              <td>-</td>
+            </tr>
+          {% endfor %}
+      </table>
 
-  <input class="shine-button" type="submit" value="Commit">
-</form>
+      <input class="shine-button" type="submit" value="Commit">
+    </form>
+{% else %}
+    <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+    <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
+{% endif %}
 
 {% endblock %}

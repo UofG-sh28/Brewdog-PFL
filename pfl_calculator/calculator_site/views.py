@@ -222,6 +222,8 @@ class PledgeLoaderView:
         business, _ = Business.objects.get_or_create(user=user)
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
 
+        if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+            return render(request, 'calculator_site/pledges.html', context={'cal': 0})
             
 
         action_plan_form = ActionPlanForm()
@@ -229,11 +231,11 @@ class PledgeLoaderView:
         fields = ActionPlanUtil.retrieve_meta_fields()
 
         colours = self.action_plan_verbose["type-colours"]
-        context = {"act_plan": [PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
-                                                  self.action_plan_verbose[field]["type"],
-                                                  colours[self.action_plan_verbose[field]["type"]]) for field in fields]}
-
-
+        context = {
+            "act_plan": [PledgeDataWrapper(field, action_plan_form[field], self.action_plan_verbose[field]["name"],
+                                           self.action_plan_verbose[field]["type"],
+                                           colours[self.action_plan_verbose[field]["type"]]) for field in fields],
+            "cal": 1}
         return render(request, 'calculator_site/pledges.html', context=context)
 
 
