@@ -118,7 +118,9 @@ def metrics(request):
 
 
 def report(request):
-    data = list(CarbonFootprint.objects.all().values())
+    user = request.user
+    business = Business.objects.get_or_create(user=user)[0]
+    data = list(CarbonFootprint.objects.get_or_create(business = business))
     context = {"json_data": mark_safe(json.dumps(str(data[0])))}
     with open('static/JS/categories.json') as cd:
         test = json.load(cd)
