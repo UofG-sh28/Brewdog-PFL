@@ -428,7 +428,7 @@ class CalculatorLoaderView:
         context["progress"] = progress + 1
         context["progress_total"] = len(category_list)
         context["progress_complete_range"] = range(progress)
-        context["progress_incomplete_range"] = range(len(category_list) - progress)
+        context["progress_incomplete_range"] = range(len(category_list) - progress - 1)
         context["progress_back"] = progress - 1
 
         return render(request, 'calculator_site/calculator.html', context=context)
