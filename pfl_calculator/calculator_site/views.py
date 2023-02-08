@@ -237,6 +237,36 @@ class PledgeLoaderView:
         self.action_plan_verbose = json.load(file)
         file.close()
         self.conversion_factors = self.verbose["conversion_factors"]
+        
+        self.action_plan_field_dependencies = {
+            "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
+            "switch_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
+            "reduce_gas": ["mains_gas"],
+            "reduce_oil": ["oil"],
+            "reduce_coal": ["coal"],
+            "reduce_wood": ["wood"],
+            "energy_audit": [],
+            "swap_beef_lamb_for_non_meat": ["beef_lamb"],
+            "swap_beef_lamb_for_other_meat": ["beef_lamb"],
+            "swap_other_meat_for_non_meat": ["other_meat"],
+            "replace_fruit_veg": ["fruit_veg_other"],
+            "detailed_menu": [],
+            "reduce_food_waste": ["waste_food_landfill", "waste_food_compost", "waste_food_charity"],
+            "waste_audit": [],
+            "switch_hc_beer_for_lc_beer": ["beer_kegs", "beer_cans", "beer_bottles"],
+            "switch_bottle_beer_for_kegs": ["beer_bottles", "beer_bottles_LOWCARBON"],
+            "switch_bottle_beer_for_cans": ["beer_bottles", "beer_bottles_LOWCARBON"],
+            "switch_canned_beer_for_kegs": ["beer_cans", "beer_cans_LOWCARBON"],
+            "reduce_general_waste": ["general_waste_landfill", "general_waste_recycle", "special_waste"],
+            "reduce_vehicle_travel_miles": ["goods_delivered_company_owned", "goods_delivered_contracted",
+                                            "travel_company_business"],
+            "reduce_commuting_miles": ["staff_commuting"],
+            "reduce_staff_flights": ["flights_domestic", "flights_international"],
+            "reduce_emissions": ["kitchen_equipment_assets", "building_repair_maintenance", "cleaning", "IT_Marketing",
+                                 "main_water"],
+            "adopt_sustainable_diposable_items": [],
+            "sustainably_procure_equipment": [],
+        }
 
     def pledges(self, request):
 
@@ -280,6 +310,7 @@ class PledgeLoaderView:
         business, _ = Business.objects.get_or_create(user=user)
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
 
+        # Can only display pledges if user has filled out all fields aka no -1s
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
 
