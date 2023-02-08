@@ -11,7 +11,7 @@ def indirect_saving(amount):
 
 class PledgeFunctions:
 
-    def __init__(self, cf, conversion_factor):
+    def __init__(self, cf, conversion_factor: dict):
         self.cf = cf
         self.conversion_factor = conversion_factor
         self.func_map = {
@@ -46,8 +46,6 @@ class PledgeFunctions:
         self.beef_lamb_counter = 0
         self.other_meat_counter = 0
         self.beer_cans_counter = 0
-
-
 
 
     def get_func_map(self) -> dict:

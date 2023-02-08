@@ -1,15 +1,15 @@
 {% extends 'calculator_site/base.html' %}
 
 {% block title %}
-  login
+  Login
 {% endblock %}
 
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <div class="">
+  <div class="login">
     <h2>Login</h2>
-    <form method="post">
+    <form id="login_form" method="post">
       {% csrf_token %}
       {{ log_form }}
       <button type="submit" name="login">Login</button>
@@ -19,6 +19,6 @@
       <small style="color:red">{{ error }}</small> <br>
     {% endif %}
 
-    <small><i><a href="{% url 'register' %}">Don't Have an account? Create one here.</a></i></small>
+    <small>Don't have an account? <a href="{% url 'register' %}"><b>Create one here</b>.</a></small>
   </div>
 {% endblock %}
