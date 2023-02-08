@@ -81,13 +81,47 @@ def report(request):
     business = Business.objects.get_or_create(user=user)[0]
     data = list(CarbonFootprint.objects.get_or_create(business = business))
     context = {"json_data": mark_safe(json.dumps(str(data[0])))}
+
+    carbon_sum = 0
+    # GET TOTAL CARBON EMISSIONS
+    carbon_sum += sum([getattr(data[0], field) for field in CalculatorUtil.retrieve_meta_fields()])
+
+    # GET CARBON SUMS FOR EACH CATEGORY
+    with open('static/JS/categories.json') as cd:
+        categories = json.load(cd)
+
+    carbon_dict = {}
+    for cat in categories:
+        carbon_dict[str(cat)] = {
+            "total": 0,
+            "percent": 0
+        }
+        for field in categories[cat]:
+            carbon_dict[cat]["total"] += getattr(data[0], field)
+        carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
+
+    # Combine food drink categories.
+    carbon_dict["food_drink"]["total"] += carbon_dict["food_drink2"]["total"]
+    carbon_dict["food_drink"]["percent"] += carbon_dict["food_drink2"]["percent"]
+
+    # FORMAT THE TOTALS & PERCENTAGES
+    for cat in carbon_dict:
+        carbon_dict[cat]["total"] = format(carbon_dict[cat]["total"], ".2f")
+        carbon_dict[cat]["percent"] = format(carbon_dict[cat]["percent"], ".2f")
+
+
+    context["carbon_sum"] = format(carbon_sum, ".2f")
+    context["carbon_dict"] = carbon_dict
+
+
     with open('static/JS/categories.json') as cd:
         test = json.load(cd)
         context["category_json"] = mark_safe(json.dumps(json.dumps(test)))
     with open('static/JS/scope.json') as sd:
         test = json.load(sd)
         context["scope_json"] = mark_safe(json.dumps(json.dumps(test)))
-    return render(request, 'calculator_site/report.html', context)
+        
+    return render(request, 'calculator_site/report.html', context=context)
 
 
 def action_plan(request):
@@ -224,7 +258,7 @@ class PledgeLoaderView:
 
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
-            
+
 
         action_plan_form = ActionPlanForm()
 
