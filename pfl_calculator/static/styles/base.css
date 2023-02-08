@@ -304,10 +304,34 @@ tr:hover{
     float:left;
 }
 
+#dashboard_welcome {
+    margin-bottom: 2%;
+}
+
 #dashboard_info {
-    margin-top: 25%;
+    margin-top: 20%;
     height: 50%;
 }
+
+#dashboard_options a {
+    border: none;  
+    font-size: large;
+    padding: 10px; 
+    color: rgb (50, 0, 54);
+    background-color: rgb (193, 54, 135);
+}
+
+.dashboard_buttons {
+    border: none;  
+    font-size: large;
+    padding: 10px; 
+    color: rgb (50, 0, 54);
+    background-color: rgb (193, 54, 135);
+    margin-top: 5%;
+    padding: 15px;
+    width: 100%;
+}
+
 
 /*To sort*/
 #inapplicable{

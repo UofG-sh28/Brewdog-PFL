@@ -62,7 +62,8 @@ def dash(request):
     carbon_sum = 0
     for footprint in footprints:
         carbon_sum += sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
-
+    if carbon_sum <= 0:
+        carbon_sum = -500
 
     context = {'carbon_sum': carbon_sum, 'login': 'yes'}
     return render(request, 'calculator_site/dashboard.html', context)

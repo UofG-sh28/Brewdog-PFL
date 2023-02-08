@@ -10,11 +10,11 @@
 {% block body_block %}
     <div id="container">
         <div id="dashboard_div">    
-            <h2> Welcome {{ user.username }}</h2>
-            <div class="dropdown">
-                <a href="{% url 'outline' %}">Outline</a>
-                <a href="{% url 'how-it-works' %}">How it works</a>
-                <a href="{% url 'login' %}">Login</a>
+            <h2 id="dashboard_welcome"> Welcome {{ user.username }}</h2>
+            <div id="dashboard_options" style="text-align: center;">
+                <a href="{% url 'calculator' %}"><button class="dashboard_buttons">Submit Carbon Emission Values</button></a><br>
+                <a href="{% url 'report' %}"><button class="dashboard_buttons">Carbon Output Report</button></a><br>
+                 <a href="{% url 'pledges' %}"><button class="dashboard_buttons">View and Alter Your Pledges</button></a><br>
             </div>
         </div>
       
@@ -23,7 +23,9 @@
             <div id="dashboard_info">
                 <div style="background-color: lightblue; padding: 20px; text-align: center;">
                     <h2>Customer Information:</h2>
-                    <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">{{ carbon_sum }} CO</h4><h6 style="display: inline;">2</h6>
+                    <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">
+                    {% if carbon_sum == -500 %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
+                    CO</h4><h6 style="display: inline;">2</h6> {% endif %}
                     <h3>Total Pledged</h3>
                     <h4>Fergus can figure out how to display this bit</h4>
                 </div>
