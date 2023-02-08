@@ -543,3 +543,7 @@ input[type="checkbox"]:checked::before {
     flex: 50%;
     padding: 5px;
 }
+
+.pledge-disabled *{
+    opacity: 0.3;
+}
