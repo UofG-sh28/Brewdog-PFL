@@ -112,8 +112,6 @@ def action_plan(request):
 
     print(pf_mappings)
 
-
-
     return render(request, 'calculator_site/action_plan.html')
 
 
@@ -145,6 +143,9 @@ def login(request):
                 context["error"] = "Incorrect Username or Password"
         else:
             context["error"] = "Incorrect Username or Password"
+
+    if request.user.is_authenticated:
+        return dash_redirect(request)
 
     form = AuthenticationForm()
     context["log_form"] = form
