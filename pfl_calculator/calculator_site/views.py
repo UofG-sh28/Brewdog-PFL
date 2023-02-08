@@ -19,6 +19,34 @@ from datetime import date
 
 from .pledge_functions import PledgeFunctions
 
+# START UP
+static_categories = None
+static_scope = None
+static_verbose = None
+static_action_plan = None
+
+def load_global_data():
+    global static_categories
+    global static_scope
+    global static_verbose
+    global static_action_plan
+
+    with open('static/JS/categories.json') as cd:
+        static_categories = json.load(cd)
+
+    with open("static/JS/verbose.json") as verbose:
+        static_verbose = json.load(verbose)
+
+    with open('static/JS/scope.json') as sd:
+        static_scope = json.load(sd)
+
+    with open("static/action_plan_verbose.json") as ap_verbose:
+        static_action_plan = json.load(ap_verbose)
+
+    print("HELLO!!!!!!!!!!!!")
+
+load_global_data()
+
 
 # CHECK COOKIE
 def check_login(func):
@@ -89,17 +117,14 @@ def report(request):
     # GET TOTAL CARBON EMISSIONS
     carbon_sum += sum([getattr(data[0], field) for field in CalculatorUtil.retrieve_meta_fields()])
 
-    # GET CARBON SUMS FOR EACH CATEGORY
-    with open('static/JS/categories.json') as cd:
-        categories = json.load(cd)
 
     carbon_dict = {}
-    for cat in categories:
+    for cat in static_categories:
         carbon_dict[str(cat)] = {
             "total": 0,
             "percent": 0
         }
-        for field in categories[cat]:
+        for field in static_categories[cat]:
             carbon_dict[cat]["total"] += getattr(data[0], field)
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
 
@@ -116,14 +141,9 @@ def report(request):
     context["carbon_sum"] = format(carbon_sum, ".2f")
     context["carbon_dict"] = carbon_dict
 
+    context["category_json"] = mark_safe(json.dumps(json.dumps(static_categories)))
+    context["scope_json"] = mark_safe(json.dumps(json.dumps(static_scope)))
 
-    with open('static/JS/categories.json') as cd:
-        test = json.load(cd)
-        context["category_json"] = mark_safe(json.dumps(json.dumps(test)))
-    with open('static/JS/scope.json') as sd:
-        test = json.load(sd)
-        context["scope_json"] = mark_safe(json.dumps(json.dumps(test)))
-        
     return render(request, 'calculator_site/report.html', context=context)
 
 
@@ -132,9 +152,7 @@ def action_plan(request):
     business = Business.objects.get(user=user)
     footprints = CarbonFootprint.objects.filter(business=business).first()
 
-
-    file = open("static/JS/verbose.json")
-    conversion_factors = json.load(file)["conversion_factors"]
+    conversion_factors = static_verbose["conversion_factors"]
     file.close()
 
     pf = PledgeFunctions(footprints, conversion_factors)
@@ -230,13 +248,9 @@ def about(request):
 class PledgeLoaderView:
 
     def __init__(self):
-        file = open("static/JS/verbose.json")
-        self.verbose = json.load(file)
-        file.close()
-        file = open("static/action_plan_verbose.json")
-        self.action_plan_verbose = json.load(file)
-        file.close()
-        self.conversion_factors = self.verbose["conversion_factors"]
+        self.verbose = static_verbose
+        self.action_plan_verbose = static_action_plan
+        self.conversion_factors = static_verbose["conversion_factors"]
 
     def pledges(self, request):
 
@@ -341,13 +355,8 @@ class CalculatorLoaderView:
             return 0
 
     def __init__(self):
-        file = open("static/JS/verbose.json")
-        self.verbose = json.load(file)
-        file.close()
-
-        file = open("static/JS/categories.json")
-        self.categories = json.load(file)
-        file.close()
+        self.verbose = static_verbose
+        self.categories = static_categories
 
         self.proper_names = self.verbose["fields"]
         self.categories = self.categories
