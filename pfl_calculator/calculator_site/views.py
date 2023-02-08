@@ -17,6 +17,8 @@ from .forms import RegistrationForm, RegistrationFormStage2, CalculatorUtil
 from .models import CarbonFootprint, ActionPlan
 from datetime import date
 
+from .pledge_functions import PledgeFunctions
+
 
 # CHECK COOKIE
 def check_login(func):
@@ -92,6 +94,26 @@ def report(request):
 
 
 def action_plan(request):
+    user = User.objects.get(username=request.user)
+    business = Business.objects.get(user=user)
+    footprints = CarbonFootprint.objects.filter(business=business).first()
+
+
+    file = open("static/JS/verbose.json")
+    conversion_factors = json.load(file)["conversion_factors"]
+    file.close()
+
+    pf = PledgeFunctions(footprints, conversion_factors)
+    conversion_map = pf.get_func_map()
+
+    ap, _ = ActionPlan.objects.get_or_create(business=business, year=date.today().year)
+
+    pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
+
+    print(pf_mappings)
+
+
+
     return render(request, 'calculator_site/action_plan.html')
 
 
@@ -210,7 +232,7 @@ class PledgeLoaderView:
         # TODO
         #  Ensure that all data is within the limits/range
         for k, v in data.items():
-            setattr(ap, k, int(v[0]))
+            setattr(ap, k, 0 if v[0] == " " else int(v[0]))
 
         ap.save()
 
@@ -246,6 +268,7 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
+            pdw.form.field.initial = " "
 
         tables.append(PledgeTableWrapper(2, group_fields))
 
