@@ -463,3 +463,22 @@ input[type="checkbox"]:checked::before {
     padding: 10px;
     font-size: 20px;
 }
+
+
+.pledge{
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.table-pledge-row {
+    display: flex;
+    margin-left:-5px;
+    margin-right:-5px;
+}
+
+.table-pledge-column {
+    flex: 50%;
+    padding: 5px;
+}
