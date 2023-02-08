@@ -267,7 +267,7 @@ class PledgeLoaderView:
         # TODO
         #  Ensure that all data is within the limits/range
         for k, v in data.items():
-            setattr(ap, k, 0 if v[0] == " " else int(v[0]))
+            setattr(ap, k, 0 if v[0] == "" else int(v[0]))
 
         ap.save()
 
@@ -304,7 +304,9 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
-            pdw.form.field.initial = " "
+            pdw.form.field.initial = ""
+            pdw.form.field.required = False
+
 
         tables.append(PledgeTableWrapper(2, group_fields))
 
