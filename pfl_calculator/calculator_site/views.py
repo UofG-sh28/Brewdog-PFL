@@ -206,7 +206,7 @@ def login(request):
 @check_login
 def logout(request):
     lo(request)
-    response = render(request, 'calculator_site/index.html')
+    response = redirect("/")
     response.delete_cookie('login')
     return response
 
