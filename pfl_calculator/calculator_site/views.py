@@ -43,7 +43,6 @@ def load_global_data():
     with open("static/action_plan_verbose.json") as ap_verbose:
         static_action_plan = json.load(ap_verbose)
 
-    print("HELLO!!!!!!!!!!!!")
 
 load_global_data()
 
