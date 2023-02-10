@@ -25,6 +25,7 @@ static_scope = None
 static_verbose = None
 static_action_plan = None
 
+
 def load_global_data():
     global static_categories
     global static_scope
@@ -107,15 +108,20 @@ def metrics(request):
 
 
 def report(request):
-    user = request.user
-    business = Business.objects.get_or_create(user=user)[0]
+    user = User.objects.get(username=request.user)
+    business = Business.objects.get(user=user)
+    footprint = CarbonFootprint.objects.filter(business=business).first()
     data = list(CarbonFootprint.objects.get_or_create(business=business))
-    context = {"json_data": mark_safe(json.dumps(str(data[0])))}
+
+    if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+        return render(request, 'calculator_site/pledges.html', context={'cal': 0})
+
+    context = {"json_data": mark_safe(json.dumps(str(data[0]))),
+               'cal': 1}
 
     carbon_sum = 0
     # GET TOTAL CARBON EMISSIONS
     carbon_sum += sum([getattr(data[0], field) for field in CalculatorUtil.retrieve_meta_fields()])
-
 
     carbon_dict = {}
     for cat in static_categories:
@@ -135,7 +141,6 @@ def report(request):
     for cat in carbon_dict:
         carbon_dict[cat]["total"] = format(carbon_dict[cat]["total"], ".2f")
         carbon_dict[cat]["percent"] = format(carbon_dict[cat]["percent"], ".2f")
-
 
     context["carbon_sum"] = format(carbon_sum, ".2f")
     context["carbon_dict"] = carbon_dict
@@ -196,7 +201,6 @@ def login(request):
 
     print(request.user.is_authenticated)
     if request.user.is_authenticated:
-
         return dash_redirect(request)
 
     form = AuthenticationForm()
@@ -328,7 +332,6 @@ class PledgeLoaderView:
 
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
-
 
         action_plan_form = ActionPlanForm()
 
