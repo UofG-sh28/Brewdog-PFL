@@ -152,7 +152,6 @@ def action_plan(request):
     footprints = CarbonFootprint.objects.filter(business=business).first()
 
     conversion_factors = static_verbose["conversion_factors"]
-    file.close()
 
     pf = PledgeFunctions(footprints, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -195,7 +194,9 @@ def login(request):
         else:
             context["error"] = "Incorrect Username or Password"
 
+    print(request.user.is_authenticated)
     if request.user.is_authenticated:
+
         return dash_redirect(request)
 
     form = AuthenticationForm()
@@ -230,7 +231,9 @@ def register2(request):
             form.user = request.user
             form.save()
             print("Registration Completed")
-            return render(request, 'calculator_site/register_success.html')
+            response = render(request, 'calculator_site/register_success.html')
+            response.set_signed_cookie('login', 'yes', salt="sh28", max_age=60 * 60 * 12)
+            return response
         print("Registration Failed")
     form = RegistrationFormStage2(user=request.user)
     print(request.user.username)
