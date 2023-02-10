@@ -2,7 +2,9 @@
 //error check json data
 function categorise(){
   if(cat){
+    for(const category in category_json){
 
+    }
   }else{
 
   }

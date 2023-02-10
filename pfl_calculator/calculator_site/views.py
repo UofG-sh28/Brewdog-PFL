@@ -1,5 +1,6 @@
 import json
 import math
+from itertools import chain
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil
@@ -107,22 +108,34 @@ def metrics(request):
     return render(request, 'calculator_site/metrics.html')
 
 
+def to_dict(instance):
+    opts = instance._meta
+    data = {}
+    for f in chain(opts.concrete_fields, opts.private_fields):
+        data[f.name] = f.value_from_object(instance)
+    for f in opts.many_to_many:
+        data[f.name] = [i.id for i in f.value_from_object(instance)]
+    return data
+
 def report(request):
+    
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
-    data = list(CarbonFootprint.objects.get_or_create(business=business))
-
+    data, created= CarbonFootprint.objects.get_or_create(business=business)
+    data = to_dict(data)
     if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
         return render(request, 'calculator_site/pledges.html', context={'cal': 0})
-
-    context = {"json_data": mark_safe(json.dumps(str(data[0]))),
-               'cal': 1}
-
+    context = {"id": data["id"], "business_id": data["business"], "year": data["year"]}
+    data.pop("year")
+    data.pop("business")
+    data.pop("id")
+    context["json_data"] = mark_safe(json.dumps(str(data)))
+    context["cal"] = 1
+    
     carbon_sum = 0
     # GET TOTAL CARBON EMISSIONS
-    carbon_sum += sum([getattr(data[0], field) for field in CalculatorUtil.retrieve_meta_fields()])
-
+    carbon_sum += sum([data[field] for field in CalculatorUtil.retrieve_meta_fields()])
     carbon_dict = {}
     for cat in static_categories:
         carbon_dict[str(cat)] = {
@@ -130,7 +143,8 @@ def report(request):
             "percent": 0
         }
         for field in static_categories[cat]:
-            carbon_dict[cat]["total"] += getattr(data[0], field)
+            #carbon_dict[cat]["total"] += getattr(data[0], field)
+            carbon_dict[cat]["total"] += data[field]
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
 
     # Combine food drink categories.
