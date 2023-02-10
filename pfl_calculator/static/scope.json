@@ -1,13 +1,17 @@
 {
-  "scope1": ["mains_gas,fuel",
+  "scope1": [
+    "mains_gas",
+    "fuel",
     "oil",
     "coal",
     "wood",
     "goods_delivered_company_owned"
   ],
-  "scope2_up": ["grid_electricity"
+  "scope2_up": [
+    "grid_electricity"
   ],
-  "scope3_up": ["grid_electricity_LOWCARBON2",
+  "scope3_up": [
+    "grid_electricity_LOWCARBON",
     "waste_food_landfill",
     "waste_food_compost",
     "waste_food_charity",
@@ -45,7 +49,8 @@
     "main_water",
     "sewage"
   ],
-  "scope3_down": ["goods_delivered_contracted"
+  "scope3_down": [
+    "goods_delivered_contracted"
   ]
 }
   
