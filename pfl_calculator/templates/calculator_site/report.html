@@ -63,6 +63,12 @@
       </table>
     </div>
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
+    <div>
+        <select onchange="test()">
+            <option>Category</option>
+            <option>Scope</option>
+        </select>
+    </div>
 {% block script %}
   <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
   <script src = "{% static 'JS/report-functions.js' %}"></script>

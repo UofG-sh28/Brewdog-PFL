@@ -213,7 +213,6 @@ def login(request):
         else:
             context["error"] = "Incorrect Username or Password"
 
-    print(request.user.is_authenticated)
     if request.user.is_authenticated:
         return dash_redirect(request)
 
