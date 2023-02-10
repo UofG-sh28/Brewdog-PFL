@@ -77,16 +77,14 @@
     var data = {{json_data}};
     data = data.replace(/'/g, '"');
     var json_data = JSON.parse(data);
-    console.log(json_data);
     data = {{category_json}};
-    const category_json = JSON.parse(data);
-    console.log(category_json);
+    var category_json = JSON.parse(data);
     data = {{scope_json}};
-    const scope_json = JSON.parse(data);
-    console.log(scope_json);
-
+    var scope_json = JSON.parse(data);
+    var cat = 1;
     //plot initial graph
     plot_sunburst();
+
   </script>
 {% endblock %}
 {% else %}

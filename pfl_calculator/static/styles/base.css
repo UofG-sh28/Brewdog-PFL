@@ -201,7 +201,7 @@ h2 {
 .login input[type="text"], input[type="password"] {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     border-radius: 5px;
     border: none;
 }
@@ -226,6 +226,120 @@ h2 {
     font-size: 27px;
 }
 
+
+.register{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-left: 3px solid;
+    border-right: 3px solid;
+    margin-top: 5%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 15%;
+}
+
+.register form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register input{
+    width: 88% !important;
+}
+
+.register input[type="text"], input[type="email"] , input[type="password"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+.register button[type="submit"] {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 40%;
+    padding: 10px;
+    background-color: #94BA73;
+    color: rgb(255, 255, 255);
+}
+
+.register label {
+    font-family: NewGroteskSquareTHREE;
+    font-size: 27px;
+}
+
+.helptext{
+    font-style: normal;
+    text-decoration: none;
+    font-size: 5px;
+    color: rgb(0, 0, 0);
+    margin-bottom: 10px ;
+}
+
+.helptext ul li{
+    line-height: 18px;
+}
+
+
+.register_detail{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-left: 3px solid;
+    border-right: 3px solid;
+    margin-top: 5%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 15%;
+}
+
+.register_detail form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#id_area_type{
+    width: 100px;
+    
+}
+
+.register_detail input{
+    width: 150% !important;
+}
+
+.register_detail input[type="text"], input[type="email"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.register_detail select {
+    margin-bottom: 20px;
+    height: 25px;
+}
+
+
+
+.register_detail button[type="submit"] {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 40%;
+    padding: 10px;
+    background-color: #94BA73;
+    color: rgb(255, 255, 255);
+}
+
+.register_detail label {
+    font-family: NewGroteskSquareTHREE;
+    font-size: 27px;
+}
 
 /* Calculator */
 table {
