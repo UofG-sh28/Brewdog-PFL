@@ -151,7 +151,8 @@ class PledgeFunctions:
 
     def reduce_food_waste(self, amount):
         """ Reduce Food Waste """
-        total_food_waste = (getattr(self.cf,"waste_food_landfill") + getattr(self.cf,"waste_food_compost") + getattr(self.cf,"waste_food_charity"))
+        total_food_waste = (getattr(self.cf, "waste_food_landfill") + getattr(self.cf, "waste_food_compost") +
+                            getattr(self.cf, "waste_food_charity"))
         carbon_saved = (total_food_waste) * (amount / 100)
         return carbon_saved
 
@@ -233,13 +234,16 @@ class PledgeFunctions:
 
     def reduce_general_waste(self, amount):
         """ Reduce general waste """
-        total_general_waste = (getattr(self.cf,"general_waste_landfill") + getattr(self.cf,"general_waste_recycle") + getattr(self.cf,"special_waste"))
+        total_general_waste = (getattr(self.cf, "general_waste_landfill") + getattr(self.cf, "general_waste_recycle")
+                               + getattr(self.cf, "special_waste"))
         carbon_saved = (total_general_waste) * (amount / 100)
         return carbon_saved
 
     def reduce_vehicle_travel_miles(self, amount):
         """ Reduce vehicle road miles (companny travel and deliveries) """
-        total_vehicle_travel_miles = (getattr(self.cf,"goods_delivered_company_owned") + getattr(self.cf,"goods_delivered_contracted") + getattr(self.cf,"travel_company_business"))
+        total_vehicle_travel_miles = (getattr(self.cf, "goods_delivered_company_owned")
+                                      + getattr(self.cf, "goods_delivered_contracted")
+                                      + getattr(self.cf, "travel_company_business"))
         carbon_saved = (total_vehicle_travel_miles * (amount / 100))
         return carbon_saved
 
@@ -257,7 +261,10 @@ class PledgeFunctions:
 
     def reduce_emissions(self, amount):
         """ Reduce emissions from Operations and Maintenance """
-        total_emissions = (getattr(self.cf,"kitchen_equipment_assets") + getattr(self.cf,"building_repair_maintenance") + getattr(self.cf,"cleaning") + getattr(self.cf, "IT_Marketing") + getattr(self.cf, "main_water"))
+        total_emissions = (getattr(self.cf, "kitchen_equipment_assets") +
+                           getattr(self.cf, "building_repair_maintenance") +
+                           getattr(self.cf, "cleaning") + getattr(self.cf, "IT_Marketing") +
+                           getattr(self.cf, "main_water"))
         carbon_saved = (total_emissions) * (amount / 100)
         return carbon_saved
 

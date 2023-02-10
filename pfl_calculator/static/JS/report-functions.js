@@ -2,7 +2,9 @@
 //error check json data
 function categorise(){
   if(cat){
+    for(const category in category_json){
 
+    }
   }else{
 
   }
@@ -31,5 +33,11 @@ function plot_sunburst(){
   catch{
     return 0;
   }
+}
+
+
+
+function test(){
+  console.log("Clicked");
 }
 

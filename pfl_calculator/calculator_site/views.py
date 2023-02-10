@@ -1,5 +1,6 @@
 import json
 import math
+from itertools import chain
 
 from django.shortcuts import render
 from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil
@@ -25,6 +26,7 @@ static_scope = None
 static_verbose = None
 static_action_plan = None
 
+
 def load_global_data():
     global static_categories
     global static_scope
@@ -43,7 +45,6 @@ def load_global_data():
     with open("static/action_plan_verbose.json") as ap_verbose:
         static_action_plan = json.load(ap_verbose)
 
-    print("HELLO!!!!!!!!!!!!")
 
 load_global_data()
 
@@ -107,17 +108,34 @@ def metrics(request):
     return render(request, 'calculator_site/metrics.html')
 
 
-def report(request):
-    user = request.user
-    business = Business.objects.get_or_create(user=user)[0]
-    data = list(CarbonFootprint.objects.get_or_create(business=business))
-    context = {"json_data": mark_safe(json.dumps(str(data[0])))}
+def to_dict(instance):
+    opts = instance._meta
+    data = {}
+    for f in chain(opts.concrete_fields, opts.private_fields):
+        data[f.name] = f.value_from_object(instance)
+    for f in opts.many_to_many:
+        data[f.name] = [i.id for i in f.value_from_object(instance)]
+    return data
 
+def report(request):
+    
+    user = User.objects.get(username=request.user)
+    business = Business.objects.get(user=user)
+    footprint = CarbonFootprint.objects.filter(business=business).first()
+    data, created= CarbonFootprint.objects.get_or_create(business=business)
+    data = to_dict(data)
+    if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+        return render(request, 'calculator_site/pledges.html', context={'cal': 0})
+    context = {"id": data["id"], "business_id": data["business"], "year": data["year"]}
+    data.pop("year")
+    data.pop("business")
+    data.pop("id")
+    context["json_data"] = mark_safe(json.dumps(str(data)))
+    context["cal"] = 1
+    
     carbon_sum = 0
     # GET TOTAL CARBON EMISSIONS
-    carbon_sum += sum([getattr(data[0], field) for field in CalculatorUtil.retrieve_meta_fields()])
-
-
+    carbon_sum += sum([data[field] for field in CalculatorUtil.retrieve_meta_fields()])
     carbon_dict = {}
     for cat in static_categories:
         carbon_dict[str(cat)] = {
@@ -125,7 +143,8 @@ def report(request):
             "percent": 0
         }
         for field in static_categories[cat]:
-            carbon_dict[cat]["total"] += getattr(data[0], field)
+            #carbon_dict[cat]["total"] += getattr(data[0], field)
+            carbon_dict[cat]["total"] += data[field]
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
 
     # Combine food drink categories.
@@ -136,7 +155,6 @@ def report(request):
     for cat in carbon_dict:
         carbon_dict[cat]["total"] = format(carbon_dict[cat]["total"], ".2f")
         carbon_dict[cat]["percent"] = format(carbon_dict[cat]["percent"], ".2f")
-
 
     context["carbon_sum"] = format(carbon_sum, ".2f")
     context["carbon_dict"] = carbon_dict
@@ -153,7 +171,6 @@ def action_plan(request):
     footprints = CarbonFootprint.objects.filter(business=business).first()
 
     conversion_factors = static_verbose["conversion_factors"]
-    file.close()
 
     pf = PledgeFunctions(footprints, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -207,7 +224,7 @@ def login(request):
 @check_login
 def logout(request):
     lo(request)
-    response = render(request, 'calculator_site/index.html')
+    response = redirect("/")
     response.delete_cookie('login')
     return response
 
@@ -231,7 +248,9 @@ def register2(request):
             form.user = request.user
             form.save()
             print("Registration Completed")
-            return render(request, 'calculator_site/register_success.html')
+            response = render(request, 'calculator_site/register_success.html')
+            response.set_signed_cookie('login', 'yes', salt="sh28", max_age=60 * 60 * 12)
+            return response
         print("Registration Failed")
     form = RegistrationFormStage2(user=request.user)
     print(request.user.username)
@@ -251,6 +270,36 @@ class PledgeLoaderView:
         self.verbose = static_verbose
         self.action_plan_verbose = static_action_plan
         self.conversion_factors = static_verbose["conversion_factors"]
+
+        self.action_plan_field_dependencies = {
+            "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
+            "switch_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
+            "reduce_gas": ["mains_gas"],
+            "reduce_oil": ["oil"],
+            "reduce_coal": ["coal"],
+            "reduce_wood": ["wood"],
+            "energy_audit": [],
+            "swap_beef_lamb_for_non_meat": ["beef_lamb"],
+            "swap_beef_lamb_for_other_meat": ["beef_lamb"],
+            "swap_other_meat_for_non_meat": ["other_meat"],
+            "replace_fruit_veg": ["fruit_veg_other"],
+            "detailed_menu": [],
+            "reduce_food_waste": ["waste_food_landfill", "waste_food_compost", "waste_food_charity"],
+            "waste_audit": [],
+            "switch_hc_beer_for_lc_beer": ["beer_kegs", "beer_cans", "beer_bottles"],
+            "switch_bottle_beer_for_kegs": ["beer_bottles", "beer_bottles_LOWCARBON"],
+            "switch_bottle_beer_for_cans": ["beer_bottles", "beer_bottles_LOWCARBON"],
+            "switch_canned_beer_for_kegs": ["beer_cans", "beer_cans_LOWCARBON"],
+            "reduce_general_waste": ["general_waste_landfill", "general_waste_recycle", "special_waste"],
+            "reduce_vehicle_travel_miles": ["goods_delivered_company_owned", "goods_delivered_contracted",
+                                            "travel_company_business"],
+            "reduce_commuting_miles": ["staff_commuting"],
+            "reduce_staff_flights": ["flights_domestic", "flights_international"],
+            "reduce_emissions": ["kitchen_equipment_assets", "building_repair_maintenance", "cleaning", "IT_Marketing",
+                                 "main_water"],
+            "adopt_sustainable_diposable_items": [],
+            "sustainably_procure_equipment": [],
+        }
 
     def pledges(self, request):
 
@@ -281,7 +330,7 @@ class PledgeLoaderView:
         # TODO
         #  Ensure that all data is within the limits/range
         for k, v in data.items():
-            setattr(ap, k, 0 if v[0] == " " else int(v[0]))
+            setattr(ap, k, 0 if v[0] == "" else int(v[0]))
 
         ap.save()
 
@@ -296,7 +345,6 @@ class PledgeLoaderView:
 
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
-
 
         action_plan_form = ActionPlanForm()
 
@@ -318,7 +366,12 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
-            pdw.form.field.initial = " "
+            pdw.form.field.initial = ""
+            pdw.form.field.required = False
+            if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]
+                    if len(dependency) != 0]):
+                pdw.applicable = False
+                pdw.form.field.disabled = True
 
         tables.append(PledgeTableWrapper(2, group_fields))
 
@@ -335,6 +388,7 @@ class PledgeDataWrapper:
         self.name = name
         self.plan_type = plan_type
         self.colour = colour
+        self.applicable = True
 
 
 class PledgeTableWrapper:

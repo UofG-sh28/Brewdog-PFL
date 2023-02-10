@@ -6,7 +6,9 @@
 
 <!--{% block css %}{% endblock %}-->
 
+
 {% block body_block %}
+{% if cal %}
   <h2>Report Page</h2>
     <div class="results-summary" style="float: left; display: inline; width: 40%">
       <table>
@@ -15,6 +17,7 @@
           <th>kg CO2e</th>
           <th>%</th>
         </tr>
+        
         <tr>
           <td>Heating and Fuel</td>
           <td>{{ carbon_dict.heating_fuel.total }}</td>
@@ -59,24 +62,38 @@
         </tfoot>
       </table>
     </div>
-    <!-- This is Luke commenting this out. I don't know if it's useful being visible, but it's not useful to me, therefore *it isn't for anyone* :P -->
-    <!--{{category_json}}-->
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
-
-{% endblock %}
+    <div>
+        <select onchange="test()">
+            <option>Category</option>
+            <option>Scope</option>
+        </select>
+    </div>
 {% block script %}
   <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
   <script src = "{% static 'JS/report-functions.js' %}"></script>
   <script>
+    //load data and json files
     var data = {{json_data}};
     data = data.replace(/'/g, '"');
     var json_data = JSON.parse(data);
+    console.log(json_data);
     data = {{category_json}};
     const category_json = JSON.parse(data);
     console.log(category_json);
     data = {{scope_json}};
     const scope_json = JSON.parse(data);
     console.log(scope_json);
+
+    //plot initial graph
     plot_sunburst();
   </script>
 {% endblock %}
+{% else %}
+        <h2>Report Page</h2>
+        <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+        <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
+    
+{% endif %}
+{% endblock %}
+
