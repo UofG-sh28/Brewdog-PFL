@@ -245,6 +245,10 @@ class ActionPlan(models.Model):
             year - year of ActionPlan
             selected_pledges - many to many SelectedPledge
     """
+    ACTION_CHOICES = ((0, "0%"), (10, "10%"), (20, "20%"), (30, "30%"), (40, "50%"), (50, "50%"), (60, "60%"),
+                      (70, "70%"), (80, "80%"), (90, "90%"), (100, "100%"))
+    
+    
     class Meta:
         unique_together = (('business', 'year'),)
         verbose_name = "Action Plan"
@@ -252,35 +256,34 @@ class ActionPlan(models.Model):
 
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
     year = models.IntegerField()
+    
 
     # fields:
-    reduce_electricity = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_electricity = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_gas = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_oil = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_coal = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_wood = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    energy_audit = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    swap_beef_lamb_for_non_meat = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    swap_beef_lamb_for_other_meat = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    swap_other_meat_for_non_meat = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    replace_fruit_veg = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    detailed_menu = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_food_waste = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    waste_audit = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_hc_beer_for_lc_beer = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_bottle_beer_for_kegs = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_bottle_beer_for_cans = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_canned_beer_for_kegs = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_general_waste = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_vehicle_travel_miles = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_commuting_miles = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_staff_flights = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_emissions = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    adopt_sustainable_diposable_items = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    sustainably_procure_equipment = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-
+    reduce_electricity = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_electricity = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_gas = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_oil = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_coal = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_wood = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    energy_audit = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_beef_lamb_for_non_meat = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_beef_lamb_for_other_meat = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_other_meat_for_non_meat = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    replace_fruit_veg = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    detailed_menu = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_food_waste = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    waste_audit = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_hc_beer_for_lc_beer = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_bottle_beer_for_kegs = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_bottle_beer_for_cans = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_canned_beer_for_kegs = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_general_waste = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_vehicle_travel_miles = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_commuting_miles = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_staff_flights = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_emissions = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    adopt_sustainable_diposable_items = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    sustainably_procure_equipment = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
 
     def __str__(self):

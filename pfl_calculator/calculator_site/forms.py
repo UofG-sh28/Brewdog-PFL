@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms import TextInput
+from django.forms import TextInput, Select
 from calculator_site import models
 
-#Choices for business forms
+# Choices for business forms
 AREA_TYPES = (
     ("C", "Inner City"),
     ("U", "Urban"),
@@ -12,9 +12,9 @@ AREA_TYPES = (
 )
 PARTS_OF_WORLD = (
     ("UK", "UK"),
-    ("EU","Europe"),
-    ("NA","North America"),
-    ("GL","Global"),
+    ("EU", "Europe"),
+    ("NA", "North America"),
+    ("GL", "Global"),
 )
 BUSINESS_TYPES = (
     ("BNFNA", "Bar (no food, no accomodation)"),
@@ -28,6 +28,8 @@ BUSINESS_TURNOVERS = (
     ("M", "£500k-£10,000k"),
     ("L", "Over £10,000k"),
 )
+
+
 # Registration Form
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -42,6 +44,7 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
 
 class RegistrationFormStage2(forms.Form):
     """ Following a successful registration a user will be prompted to create their business """
@@ -60,13 +63,20 @@ class RegistrationFormStage2(forms.Form):
         super(RegistrationFormStage2, self).__init__(*args, **kwargs)
 
     class Meta:
-        fields = ("user", "company_name", "business_address", "area_type", "part_of_world", "business_type", "contact_number", "contact_email", "business_size")
-
+        fields = (
+        "user", "company_name", "business_address", "area_type", "part_of_world", "business_type", "contact_number",
+                                                            "contact_email", "business_size")
 
     def save(self, commit=True):
-        business = models.Business(user=self.user, company_name=self.cleaned_data['company_name'], business_address=self.cleaned_data['business_address'], area_type=self.cleaned_data['area_type'], part_of_world=self.cleaned_data['part_of_world'], business_type=self.cleaned_data['business_type'], contact_number=self.cleaned_data['contact_number'], contact_email=self.cleaned_data['contact_email'], business_size=self.cleaned_data['business_size'])
+        business = models.Business(user=self.user, company_name=self.cleaned_data['company_name'],
+                                   business_address=self.cleaned_data['business_address'],
+                                   area_type=self.cleaned_data['area_type'],
+                                   part_of_world=self.cleaned_data['part_of_world'],
+                                   business_type=self.cleaned_data['business_type'],
+                                   contact_number=self.cleaned_data['contact_number'],
+                                   contact_email=self.cleaned_data['contact_email'],
+                                   business_size=self.cleaned_data['business_size'])
         business.save()
-
 
 
 class CalculatorUtil:
@@ -93,7 +103,6 @@ class CalculatorUtil:
 
 
 class CalculatorForm(forms.ModelForm):
-
     class Meta:
         model = models.CarbonFootprint
         fields = CalculatorUtil.retrieve_meta_fields()
@@ -101,7 +110,6 @@ class CalculatorForm(forms.ModelForm):
 
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
 
 
 class ActionPlanUtil:
@@ -123,13 +131,11 @@ class ActionPlanUtil:
         for field in fields:
             attrs = {'type': 'text', 'class': 'pledge-input', 'id': field + '-pledge-input',
                      "value": ""}
-            widgets[field] = TextInput(attrs=attrs)
+            widgets[field] = Select(attrs=attrs)
         return widgets
 
 
-
 class ActionPlanForm(forms.ModelForm):
-
     class Meta:
         model = models.ActionPlan
         fields = ActionPlanUtil.retrieve_meta_fields()
