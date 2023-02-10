@@ -33,13 +33,13 @@ def load_global_data():
     global static_verbose
     global static_action_plan
 
-    with open('static/JS/categories.json') as cd:
+    with open('static/categories.json') as cd:
         static_categories = json.load(cd)
 
-    with open("static/JS/verbose.json") as verbose:
+    with open("static/verbose.json") as verbose:
         static_verbose = json.load(verbose)
 
-    with open('static/JS/scope.json') as sd:
+    with open('static/scope.json') as sd:
         static_scope = json.load(sd)
 
     with open("static/action_plan_verbose.json") as ap_verbose:
