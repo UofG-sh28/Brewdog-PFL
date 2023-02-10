@@ -35,6 +35,8 @@ function getParentsAndSubtotals(labels){
   }
   return [parents, cat_totals];
 }
+
+
 function plot_sunburst(){
   try{
     const element = document.getElementById('plot');
@@ -74,14 +76,13 @@ function plot_sunburst(){
       width: 500,
       height: 500
     };
-    Plotly.newPlot(element, data, layout);
+    Plotly.newPlot(element, data, layout, {displaylogo: false});
     return 1;
   }
   catch{
     return 0;
   }
 }
-
 
 
 function switchGrouping(){
