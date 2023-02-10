@@ -366,13 +366,12 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
-            pdw.form.field.initial = ""
-            pdw.form.field.required = False
             if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]
                     if len(dependency) != 0]):
                 pdw.applicable = False
                 pdw.form.field.disabled = True
 
+        print(group_fields[0].form.field.__dict__)
         tables.append(PledgeTableWrapper(2, group_fields))
 
         context = {
