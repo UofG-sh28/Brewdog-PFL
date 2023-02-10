@@ -64,9 +64,9 @@
     </div>
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
     <div>
-        <select onchange="test()">
-            <option>Category</option>
-            <option>Scope</option>
+        <select id="cat_switch"onchange="switchGrouping()">
+            <option value="category" selected="selected">Category</option>
+            <option value="scope">Scope</option>
         </select>
     </div>
 {% block script %}
@@ -81,6 +81,7 @@
     var category_json = JSON.parse(data);
     data = {{scope_json}};
     var scope_json = JSON.parse(data);
+    //initially category is selcted
     var cat = 1;
     //plot initial graph
     plot_sunburst();

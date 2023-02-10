@@ -3,10 +3,11 @@
 function getParentsAndSubtotals(labels){
   let parents = [""];
   var cat_totals = {};
-  for(key in category_json){
-    cat_totals[key] = 0;
-  }
+
   if(cat){
+    for(key in category_json){
+      cat_totals[key] = 0;
+    }
     for(var i=0; i < labels.length; i++){
       for(category in category_json){
         if(category_json[category].includes(labels[i])){
@@ -17,11 +18,16 @@ function getParentsAndSubtotals(labels){
       }
     }
   }else{
+    for(key in scope_json){
+      cat_totals[key] = 0;
+    }
     for(var i=0;i<labels.length;i++){
+      found = false;
       for(scope in scope_json){
         if(scope_json[scope].includes(labels[i])){
           parents.push(scope);
           cat_totals[scope] += json_data[labels[i]];
+          found = true;
           break;
         }
       }
@@ -53,8 +59,7 @@ function plot_sunburst(){
       valueArr.push(subtotals[cat]);
     }
     valueArr[0] = total_emissions;
-
-    var data = [{
+        var data = [{
       type: "sunburst",
       labels: labelArr,
       parents: parentArr,
@@ -79,7 +84,15 @@ function plot_sunburst(){
 
 
 
-function test(){
-  console.log("Clicked");
+function switchGrouping(){
+  //is category selected?
+  const e = document.getElementById("cat_switch");
+  if(e.value == "category"){
+    cat = 1;
+  }
+  else{
+    cat = 0;
+  }
+  plot_sunburst();
 }
 

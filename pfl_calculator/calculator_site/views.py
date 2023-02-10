@@ -161,7 +161,6 @@ def report(request):
 
     context["category_json"] = mark_safe(json.dumps(json.dumps(static_categories)))
     context["scope_json"] = mark_safe(json.dumps(json.dumps(static_scope)))
-
     return render(request, 'calculator_site/report.html', context=context)
 
 
