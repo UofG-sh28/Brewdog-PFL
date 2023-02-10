@@ -63,7 +63,7 @@ def test_setup():
 
     populate_footprint(footprint)
 
-    file = open("static/JS/verbose.json")
+    file = open("static/verbose.json")
     verbose = json.load(file)
     conversion_factor = verbose["conversion_factors"]
     pledge_functions = PledgeFunctions(footprint, conversion_factor)
