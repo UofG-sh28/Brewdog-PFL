@@ -84,16 +84,30 @@ function plot_sunburst(){
   }
 }
 
+function updateTable(cat) {
+  if (cat == 1){
+    table_show = document.getElementById("summary-table-category");
+    table_hide = document.getElementById("summary-table-scope");
+    table_show.style.display = "inline";
+    table_hide.style.display = "none";
+  } else if (cat == 0) {
+    table_show = document.getElementById("summary-table-scope");
+    table_hide = document.getElementById("summary-table-category");
+    table_show.style.display = "inline";
+    table_hide.style.display = "none";
+  }
+}
 
 function switchGrouping(){
   //is category selected?
   const e = document.getElementById("cat_switch");
   if(e.value == "category"){
     cat = 1;
+    updateTable(cat);
   }
   else{
     cat = 0;
+    updateTable(cat);
   }
   plot_sunburst();
 }
-

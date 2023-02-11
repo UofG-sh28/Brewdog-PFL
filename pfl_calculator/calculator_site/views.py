@@ -118,7 +118,7 @@ def to_dict(instance):
     return data
 
 def report(request):
-    
+
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
@@ -132,7 +132,8 @@ def report(request):
     data.pop("id")
     context["json_data"] = mark_safe(json.dumps(str(data)))
     context["cal"] = 1
-    
+
+    # CALCULATE VALUES BY CATEGORY
     carbon_sum = 0
     # GET TOTAL CARBON EMISSIONS
     carbon_sum += sum([data[field] for field in CalculatorUtil.retrieve_meta_fields()])
@@ -158,6 +159,28 @@ def report(request):
 
     context["carbon_sum"] = format(carbon_sum, ".2f")
     context["carbon_dict"] = carbon_dict
+
+    # CALCULATE VALUES BY SCOPE
+    carbon_sum_scope = 0
+    # GET TOTAL CARBON EMISSIONS
+    carbon_sum_scope += sum([data[field] for field in CalculatorUtil.retrieve_meta_fields()])
+    carbon_dict_scope = {}
+    for scope in static_scope:
+        carbon_dict_scope[str(scope)] = {
+            "total": 0,
+            "percent": 0
+        }
+        for field in static_scope[scope]:
+            carbon_dict_scope[scope]["total"] += data[field]
+        carbon_dict_scope[scope]["percent"] = (carbon_dict_scope[scope]["total"] / carbon_sum_scope) * 100
+
+    # FORMAT THE TOTALS & PERCENTAGES
+    for scope in carbon_dict_scope:
+        carbon_dict_scope[scope]["total"] = format(carbon_dict_scope[scope]["total"], ".2f")
+        carbon_dict_scope[scope]["percent"] = format(carbon_dict_scope[scope]["percent"], ".2f")
+
+    context["carbon_sum_scope"] = format(carbon_sum_scope, ".2f")
+    context["carbon_dict_scope"] = carbon_dict_scope
 
     context["category_json"] = mark_safe(json.dumps(json.dumps(static_categories)))
     context["scope_json"] = mark_safe(json.dumps(json.dumps(static_scope)))
