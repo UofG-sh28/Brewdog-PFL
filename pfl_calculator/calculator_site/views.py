@@ -126,6 +126,7 @@ def report(request):
     data = to_dict(data)
     if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
         return render(request, 'calculator_site/pledges.html', context={'cal': 0})
+
     context = {"id": data["id"], "business_id": data["business"], "year": data["year"]}
     data.pop("year")
     data.pop("business")
@@ -203,7 +204,9 @@ def action_plan(request):
 
     print(pf_mappings)
 
-    return render(request, 'calculator_site/action_plan.html')
+    json_data = json.dumps(pf_mappings)
+
+    return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data})
 
 
 def profile(request):
@@ -357,7 +360,7 @@ class PledgeLoaderView:
         ap.save()
 
         # redirect to remove pledge page
-        repsonse = redirect('/my/action_plan')
+        repsonse = redirect('/my/action-plan')
         return repsonse
 
     def __pledges_get_request(self, request):

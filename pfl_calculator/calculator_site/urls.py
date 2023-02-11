@@ -27,7 +27,7 @@ urlpatterns = [
     path('my/metrics', views.metrics, name='metrics'),
     path('my/report', views.report, name='report'),
     path('my/pledges', views.PledgeLoaderView().pledges, name='pledges'),
-    path('my/action_plan', views.action_plan, name='action_plan'),
+    path('my/action-plan', views.action_plan, name='action_plan'),
     path('my/profile', views.profile, name='profile'),
     re_path(r'^my\/.*$', views.dash_redirect, name='dash_redirect'),
 
