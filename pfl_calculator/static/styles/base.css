@@ -178,11 +178,10 @@ h2 {
     flex-direction: column;
     align-items: center;
     background-color: #f5f5f5;
-    border-left: 3px solid;
-    border-right: 3px solid;
-    margin-top: 5%;
-    margin-left: 35%;
-    margin-right: 35%;
+    /*border-left: 2px solid;
+    border-right: 2px solid;*/
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 .login form {
@@ -198,20 +197,21 @@ h2 {
     color: black;
 }
 
-.login input[type="text"], input[type="password"] {
+.login input[type="text"], .login input[type="password"] {
     width: 100%;
     padding: 10px;
     /* margin-bottom: 20px; */
     border-radius: 5px;
-    border: none;
+    border: 1.5px solid;
 }
 
 .login button[type="submit"] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 40%;
+    width: 50%;
     padding: 10px;
+    margin-top: 15px;
     background-color: #94BA73;
     color: white;
 }
@@ -227,17 +227,16 @@ h2 {
 }
 
 
-.register{
+.register {
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #f5f5f5;
-    border-left: 3px solid;
-    border-right: 3px solid;
-    margin-top: 5%;
+    /*border-left: 3px solid;
+    border-right: 3px solid;*/
     margin-left: 25%;
     margin-right: 25%;
-    margin-bottom: 15%;
+    margin-bottom: 10%;
 }
 
 .register form {
@@ -250,17 +249,18 @@ h2 {
     width: 88% !important;
 }
 
-.register input[type="text"], input[type="email"] , input[type="password"] {
+.register input[type="text"], .register input[type="email"], .register input[type="password"] {
     padding: 10px;
     border-radius: 5px;
     border: none;
+    border: 1.5px solid;
 }
 
 .register button[type="submit"] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 40%;
+    width: 50%;
     padding: 10px;
     background-color: #94BA73;
     color: rgb(255, 255, 255);
@@ -271,10 +271,10 @@ h2 {
     font-size: 27px;
 }
 
-.helptext{
+.helptext {
     font-style: normal;
     text-decoration: none;
-    font-size: 5px;
+    font-size: 15px;
     color: rgb(0, 0, 0);
     margin-bottom: 10px ;
 }
@@ -284,14 +284,13 @@ h2 {
 }
 
 
-.register_detail{
+.register_detail {
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #f5f5f5;
-    border-left: 3px solid;
-    border-right: 3px solid;
-    margin-top: 5%;
+    /*border-left: 3px solid;
+    border-right: 3px solid;*/
     margin-left: 25%;
     margin-right: 25%;
     margin-bottom: 15%;
@@ -303,7 +302,7 @@ h2 {
     align-items: center;
 }
 
-#id_area_type{
+#id_area_type {
     width: 100px;
     
 }
@@ -312,11 +311,11 @@ h2 {
     width: 150% !important;
 }
 
-.register_detail input[type="text"], input[type="email"] {
+.register_detail input[type="text"], .register_detail input[type="email"] {
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
-    border: none;
+    border: 1.5px solid;
 }
 
 .register_detail select {
@@ -330,7 +329,7 @@ h2 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 40%;
+    width: 50%;
     padding: 10px;
     background-color: #94BA73;
     color: rgb(255, 255, 255);
