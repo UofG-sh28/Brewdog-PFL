@@ -345,9 +345,10 @@ table {
   border-collapse: collapse;
   width: 100%;
   box-shadow: 0 12px 24px 0 rgba(0,0,0,0.15);
+  margin-bottom: 20px;
 }
 
-.checkboxtd{
+.checkboxtd {
     text-align: center;
     align-content: center;
     vertical-align: middle;
@@ -372,7 +373,7 @@ th {
 tr:nth-child(even) {
   background-color: #F5F5F5; /* light gray */
 }
-tr{
+tr {
     transition: 0.3s ease-in;
 }
 
@@ -454,9 +455,10 @@ tr:hover{
 .shine-button:hover::before {
   opacity: 1;
   transform: scale(1);
+  transition-duration: 100ms;
 }
 
-.shine-button a{
+.shine-button a {
     text-decoration: none;
     color: white;
     display:block;
@@ -464,6 +466,10 @@ tr:hover{
     height: 100%;
     padding: 0;
     margin: 0;
+}
+
+.shine-button:hover {
+  transform: scale(1.3);
 }
 
 /* Dashboard */
@@ -608,38 +614,33 @@ input[type="checkbox"]:checked::before {
 
 .information {
     width: 100%;
-    height: 80vh;
+    margin-bottom: 20px;
 }
 
 .scope-box {
+    width: 80%;
     display: inline-flex;
-    flex-direction: row;
-    width: 50vw;
     justify-content: center;
-    padding-left: 25%;
-    height: 100vh;
+    padding-left: 10%;
 }
 
-.scope-box .scope-container{
-    /*border: black 1px solid;*/
-    width: 40%;
-    height: auto;
-    margin: 10px;
+.scope-box .scope-container {
+    width: 20%;
+    margin: 1%;
     box-shadow: 0 6px 12px 0 rgba(0,0,0,0.20);
     transition: 0.15s;
+    min-width: 100px;
 }
 
-.scope-box .scope-container:hover{
+.scope-box .scope-container:hover {
     transform: scale(1.03);
 }
 
-.scope-box .scope-container p {
-    padding: 10px;
-    font-size: 20px;
+.scope-box img {
+    width: 100%;
 }
 
-
-.pledge{
+.pledge {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;

@@ -1,7 +1,7 @@
 {% extends 'calculator_site/base.html' %}
 {% load static %}
 {% block title %}
-  Homepage
+Homepage
 {% endblock %}
 
 <!--{% block css %}{% endblock %}-->
@@ -9,95 +9,95 @@
 
 {% block body_block %}
 {% if cal %}
-  <h2>Report Page</h2>
+    <h2>Report Page</h2>
     <div id="summary-table-category" class="results-summary" style="float: left; display: inline; width: 40%">
-      <table>
-        <tr>
-          <th>Results Summary</th>
-          <th>kg CO2e</th>
-          <th>%</th>
-        </tr>
+        <table>
+            <tr>
+                <th>Results Summary</th>
+                <th>kg CO2e</th>
+                <th>%</th>
+            </tr>
 
-        <tr>
-          <td>Heating and Fuel</td>
-          <td>{{ carbon_dict.heating_fuel.total }}</td>
-          <td>{{ carbon_dict.heating_fuel.percent }}</td>
-        </tr>
-        <tr>
-          <td>Electricity</td>
-          <td>{{ carbon_dict.electricity.total }}</td>
-          <td>{{ carbon_dict.electricity.percent }}</td>
-        </tr>
-        <tr>
-          <td>Food Waste</td>
-          <td>{{ carbon_dict.food_waste.total }}</td>
-          <td>{{ carbon_dict.food_waste.percent }}</td>
-        </tr>
-        <tr>
-          <td>Other Waste</td>
-          <td>{{ carbon_dict.solid_waste.total }}</td>
-          <td>{{ carbon_dict.solid_waste.percent }}</td>
-        </tr>
-        <tr>
-          <td>Transport and Travel</td>
-          <td>{{ carbon_dict.transport_travel.total }}</td>
-          <td>{{ carbon_dict.transport_travel.percent }}</td>
-        </tr>
-        <tr>
-          <td>Food and Drink</td>
-          <td>{{ carbon_dict.food_drink.total  }}</td>
-          <td>{{ carbon_dict.food_drink.percent }}</td>
-        </tr>
-        <tr>
-          <td>Operations and Maintenance</td>
-          <td>{{ carbon_dict.operations_maintenance.total }}</td>
-          <td>{{ carbon_dict.operations_maintenance.percent }}</td>
-        </tr>
-        <tfoot style="font-weight: bold; background-color: #fbfbg6;">
-          <tr>
-              <td>Totals</td>
-              <td>{{ carbon_sum }}</td>
-              <td>100.00</td>
-          </tr>
-        </tfoot>
-      </table>
+            <tr>
+                <td>Heating and Fuel</td>
+                <td>{{ carbon_dict.heating_fuel.total }}</td>
+                <td>{{ carbon_dict.heating_fuel.percent }}</td>
+            </tr>
+            <tr>
+                <td>Electricity</td>
+                <td>{{ carbon_dict.electricity.total }}</td>
+                <td>{{ carbon_dict.electricity.percent }}</td>
+            </tr>
+            <tr>
+                <td>Food Waste</td>
+                <td>{{ carbon_dict.food_waste.total }}</td>
+                <td>{{ carbon_dict.food_waste.percent }}</td>
+            </tr>
+            <tr>
+                <td>Other Waste</td>
+                <td>{{ carbon_dict.solid_waste.total }}</td>
+                <td>{{ carbon_dict.solid_waste.percent }}</td>
+            </tr>
+            <tr>
+                <td>Transport and Travel</td>
+                <td>{{ carbon_dict.transport_travel.total }}</td>
+                <td>{{ carbon_dict.transport_travel.percent }}</td>
+            </tr>
+            <tr>
+                <td>Food and Drink</td>
+                <td>{{ carbon_dict.food_drink.total  }}</td>
+                <td>{{ carbon_dict.food_drink.percent }}</td>
+            </tr>
+            <tr>
+                <td>Operations and Maintenance</td>
+                <td>{{ carbon_dict.operations_maintenance.total }}</td>
+                <td>{{ carbon_dict.operations_maintenance.percent }}</td>
+            </tr>
+            <tfoot style="font-weight: bold; background-color: #fbfbg6;">
+                <tr>
+                    <td>Totals</td>
+                    <td>{{ carbon_sum }}</td>
+                    <td>100.00</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
     <div id="summary-table-scope" class="results-summary" style="float: left; display: none; width: 40%">
-      <table>
-        <tr>
-          <th>Results Summary</th>
-          <th>kg CO2e</th>
-          <th>%</th>
-        </tr>
+        <table>
+            <tr>
+                <th>Results Summary</th>
+                <th>kg CO2e</th>
+                <th>%</th>
+            </tr>
 
-        <tr>
-          <td>Scope 1</td>
-          <td>{{ carbon_dict_scope.scope1.total }}</td>
-          <td>{{ carbon_dict_scope.scope1.percent }}</td>
-        </tr>
-        <tr>
-          <td>Scope 2 - Upstream</td>
-          <td>{{ carbon_dict_scope.scope2_up.total }}</td>
-          <td>{{ carbon_dict_scope.scope2_up.percent }}</td>
-        </tr>
-        <tr>
-          <td>Scope 3 - Upstream</td>
-          <td>{{ carbon_dict_scope.scope3_up.total }}</td>
-          <td>{{ carbon_dict_scope.scope3_up.percent }}</td>
-        </tr>
-        <tr>
-          <td>Scope 3 - Downstream</td>
-          <td>{{ carbon_dict_scope.scope3_down.total }}</td>
-          <td>{{ carbon_dict_scope.scope3_down.percent }}</td>
-        </tr>
-        <tfoot style="font-weight: bold; background-color: #fbfbg6;">
-          <tr>
-              <td>Totals</td>
-              <td>{{ carbon_sum_scope }}</td>
-              <td>100.00</td>
-          </tr>
-        </tfoot>
-      </table>
+            <tr>
+                <td>Scope 1</td>
+                <td>{{ carbon_dict_scope.scope1.total }}</td>
+                <td>{{ carbon_dict_scope.scope1.percent }}</td>
+            </tr>
+            <tr>
+                <td>Scope 2 - Upstream</td>
+                <td>{{ carbon_dict_scope.scope2_up.total }}</td>
+                <td>{{ carbon_dict_scope.scope2_up.percent }}</td>
+            </tr>
+            <tr>
+                <td>Scope 3 - Upstream</td>
+                <td>{{ carbon_dict_scope.scope3_up.total }}</td>
+                <td>{{ carbon_dict_scope.scope3_up.percent }}</td>
+            </tr>
+            <tr>
+                <td>Scope 3 - Downstream</td>
+                <td>{{ carbon_dict_scope.scope3_down.total }}</td>
+                <td>{{ carbon_dict_scope.scope3_down.percent }}</td>
+            </tr>
+            <tfoot style="font-weight: bold; background-color: #fbfbg6;">
+                <tr>
+                    <td>Totals</td>
+                    <td>{{ carbon_sum_scope }}</td>
+                    <td>100.00</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
     <div>
@@ -107,9 +107,9 @@
         </select>
     </div>
 {% block script %}
-  <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
-  <script src = "{% static 'JS/report-functions.js' %}"></script>
-  <script>
+<script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
+<script src = "{% static 'JS/report-functions.js' %}"></script>
+<script>
     //load data and json files
     var data = {{json_data}};
     data = data.replace(/'/g, '"');
@@ -123,12 +123,11 @@
     //plot initial graph
     plot_sunburst();
 
-  </script>
+</script>
 {% endblock %}
 {% else %}
-        <h2>Report Page</h2>
-        <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
-        <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
-
+    <h2>Report Page</h2>
+    <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+    <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
 {% endif %}
 {% endblock %}
