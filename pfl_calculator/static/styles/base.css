@@ -658,8 +658,9 @@ input[type="checkbox"]:checked::before {
     padding: 5px;
 }
 
-.pledge-disabled *{
+.pledge-disabled * {
     opacity: 0.3;
+    cursor: default;
 }
 
 
@@ -682,7 +683,7 @@ input[type="checkbox"]:checked::before {
     pointer-events: none;
 }
 
-.pledge-select-label select{
+.pledge-select-label select {
     -webkit-appearance: none;
     padding: 7px 40px 7px 12px;
     width: 100%;
@@ -694,6 +695,10 @@ input[type="checkbox"]:checked::before {
     font-family: inherit;
     font-size: 16px;
     transition: all 150ms ease;
+}
+
+.pledge-disabled .pledge-select-label select {
+    cursor: default;
 }
 
 
