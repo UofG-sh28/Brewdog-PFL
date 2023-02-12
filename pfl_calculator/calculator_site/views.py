@@ -183,6 +183,8 @@ def report(request):
     for scope in carbon_dict_scope:
         carbon_dict_scope[scope]["total"] = format(carbon_dict_scope[scope]["total"], ".2f")
         carbon_dict_scope[scope]["percent"] = format(carbon_dict_scope[scope]["percent"], ".2f")
+        if carbon_dict_scope[scope]["percent"] == "0.00":
+            carbon_dict_scope[scope]["percent"] = "<0.01"
 
     context["carbon_sum_scope"] = format(carbon_sum_scope, ".2f")
     context["carbon_dict_scope"] = carbon_dict_scope
