@@ -157,6 +157,8 @@ def report(request):
     for cat in carbon_dict:
         carbon_dict[cat]["total"] = format(carbon_dict[cat]["total"], ".2f")
         carbon_dict[cat]["percent"] = format(carbon_dict[cat]["percent"], ".2f")
+        if carbon_dict[cat]["percent"] == "0.00":
+            carbon_dict[cat]["percent"] = "<0.01"
 
     context["carbon_sum"] = format(carbon_sum, ".2f")
     context["carbon_dict"] = carbon_dict
@@ -171,8 +173,10 @@ def report(request):
             "total": 0,
             "percent": 0
         }
+        
         for field in static_scope[scope]:
             carbon_dict_scope[scope]["total"] += data[field]
+            
         carbon_dict_scope[scope]["percent"] = (carbon_dict_scope[scope]["total"] / carbon_sum_scope) * 100
 
     # FORMAT THE TOTALS & PERCENTAGES
@@ -438,6 +442,8 @@ class CalculatorLoaderView:
         self.proper_names = self.verbose["fields"]
         self.categories = self.categories
         self.category_names = self.verbose["categories"]
+        self.conversion_factors = static_verbose["conversion_factors"]
+        
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             if request.method == "POST":
