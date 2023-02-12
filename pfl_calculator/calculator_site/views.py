@@ -99,7 +99,7 @@ def dash(request):
     context = {'carbon_sum': carbon_sum, 'login': 'yes'}
     return render(request, 'calculator_site/dashboard.html', context)
 
-
+@check_login
 def dash_redirect(request):
     return redirect("/my/dashboard/")
 
@@ -117,8 +117,8 @@ def to_dict(instance):
         data[f.name] = [i.id for i in f.value_from_object(instance)]
     return data
 
+@check_login
 def report(request):
-
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
@@ -187,7 +187,7 @@ def report(request):
     context["scope_json"] = mark_safe(json.dumps(json.dumps(static_scope)))
     return render(request, 'calculator_site/report.html', context=context)
 
-
+@check_login
 def action_plan(request):
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
@@ -208,7 +208,7 @@ def action_plan(request):
 
     return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data})
 
-
+@check_login
 def profile(request):
     return render(request, 'calculator_site/profile.html')
 
@@ -420,7 +420,6 @@ class PledgeTableWrapper:
         self.column = column
         self.fields = fields
 
-
 class CalculatorLoaderView:
 
     # Matching implementation as found in calcualtor.js
@@ -439,16 +438,16 @@ class CalculatorLoaderView:
         self.proper_names = self.verbose["fields"]
         self.categories = self.categories
         self.category_names = self.verbose["categories"]
-        self.conversion_factors = self.verbose["conversion_factors"]
-
     def calculator(self, request):
-
-        if request.method == "POST":
-            return self.__calculator_post_request(request)
-        elif request.method == "GET":
-            return self.__calculator_get_request(request)
+        if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
+            if request.method == "POST":
+                return self.__calculator_post_request(request)
+            elif request.method == "GET":
+                return self.__calculator_get_request(request)
+            else:
+                return HttpResponse("<h1>Error</h1>")
         else:
-            return HttpResponse("<h1>Error</h1>")
+            return redirect('/login/')
 
     def __calculator_post_request(self, request):
         data = request.POST
