@@ -32,6 +32,7 @@ body {
     animation-fill-mode: forwards;
     overflow: scroll;
     max-height: calc(100% - 120px) !important;
+    scrollbar-width: none;
 }
 
 #fadein::-webkit-scrollbar {
@@ -366,12 +367,12 @@ th, td {
 }
 
 th {
-  background-color: #F9A825; /* Brewdog's "pumpkin" color */
+  background-color: #F9A825;
   color: white;
 }
 
 tr:nth-child(even) {
-  background-color: #F5F5F5; /* light gray */
+  background-color: #F5F5F5;
 }
 tr {
     transition: 0.3s ease-in;
@@ -437,6 +438,10 @@ tr:hover{
   position: relative;
 }
 
+#calc {
+  margin-bottom: 5%;
+}
+
 .shine-button::before {
   content: "";
   position: absolute;
@@ -447,7 +452,6 @@ tr:hover{
   border-radius: 4px;
   z-index: -1;
   filter: blur(5px);
-  transform: scale(1.3);
   opacity: 0;
   transition: all 0.3s ease-in-out;
 }
@@ -466,10 +470,6 @@ tr:hover{
     height: 100%;
     padding: 0;
     margin: 0;
-}
-
-.shine-button:hover {
-  transform: scale(1.3);
 }
 
 /* Dashboard */
