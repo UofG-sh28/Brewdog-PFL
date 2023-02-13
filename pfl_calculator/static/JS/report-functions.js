@@ -111,3 +111,44 @@ function switchGrouping(){
   }
   plot_sunburst();
 }
+
+function generateSubTable(subcat){
+  const e = document.getElementById('cat_switch');
+  var dict;
+  if(e.value == "category"){
+    dict = category_json[subcat];
+  }else{
+    dict = scope_json[subcat];
+  }
+  const table = document.getElementById("subcategories");
+  for(let i=table.rows.length-1;i>0;i--){//clear all but header row
+    table.deleteRow(i);
+  }
+
+  var verbose_fields = verbose_json["fields"];
+  let total_emissions = 0;
+  for(let i=0; i <dict.length; i++){
+    total_emissions += json_data[dict[i]];
+  }
+  for(let i=0; i <dict.length; i++){
+    console.log(dict[i]);
+    var row = table.insertRow();
+    var cell0 = row.insertCell();
+    var cell1 = row.insertCell();
+    var cell2 = row.insertCell()
+    cell0.innerHTML = verbose_fields[dict[i]];
+    cell1.innerHTML = json_data[dict[i]];
+    cell2.innerHTML = Math.round(json_data[dict[i]]/total_emissions*10000)/100;
+  }
+  var row = table.insertRow();
+  var cell0 = row.insertCell();
+  var cell1 = row.insertCell();
+  var cell2 = row.insertCell();
+  cell0.innerHTML = "Totals";
+  cell1.innerHTML = Math.round(total_emissions *100)/100;
+  cell2.innerHTML = "100";
+  row.style.fontWeight = "bold";
+  row.style.backgroundColor = "#fbfbg6";  // Find a <table> element with id="myTable":
+
+  // Create an empty <tr> element and add it to the 1st position of the table:
+}

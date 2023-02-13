@@ -188,9 +188,9 @@ def report(request):
 
     context["carbon_sum_scope"] = format(carbon_sum_scope, ".2f")
     context["carbon_dict_scope"] = carbon_dict_scope
-
     context["category_json"] = mark_safe(json.dumps(json.dumps(static_categories)))
     context["scope_json"] = mark_safe(json.dumps(json.dumps(static_scope)))
+    context["verbose_json"] = mark_safe(json.dumps(json.dumps(static_verbose)))
     return render(request, 'calculator_site/report.html', context=context)
 
 @check_login
