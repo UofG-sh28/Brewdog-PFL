@@ -397,8 +397,8 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
-            if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]
-                    if len(dependency) != 0]):
+            if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]])\
+                    and len(self.action_plan_field_dependencies[field]) != 0:
                 pdw.applicable = False
                 pdw.form.field.disabled = True
 
