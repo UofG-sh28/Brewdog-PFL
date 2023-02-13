@@ -99,12 +99,43 @@ Homepage
             </tfoot>
         </table>
     </div>
+
     <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
     <div>
         <select id="cat_switch"onchange="switchGrouping()">
             <option value="category" selected="selected">Category</option>
             <option value="scope">Scope</option>
         </select>
+    </div>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+    <div class = "results-summary" style="float:left; display: inline; width = 40%;">
+        <table id = "subcategories">
+            <tr>
+                <th>Heating and Fuel</th>
+                <th>kg CO2e</th>
+                <th>%</th>
+            </tr>
+        </table>
     </div>
 {% block script %}
 <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
@@ -118,11 +149,13 @@ Homepage
     var category_json = JSON.parse(data);
     data = {{scope_json}};
     var scope_json = JSON.parse(data);
-    //initially category is selcted
-    var cat = 1;
+    data = {{verbose_json}}
+    var verbose_json = JSON.parse(data);
+
+    var cat = 1; //initially category is selcted
     //plot initial graph
     plot_sunburst();
-
+    generateSubTable("heating_fuel");
 </script>
 {% endblock %}
 {% else %}
