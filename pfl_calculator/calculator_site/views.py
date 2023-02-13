@@ -197,18 +197,28 @@ def report(request):
 def action_plan(request):
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
-    footprints = CarbonFootprint.objects.filter(business=business).first()
+    footprint = CarbonFootprint.objects.filter(business=business).first()
 
     conversion_factors = static_verbose["conversion_factors"]
 
-    pf = PledgeFunctions(footprints, conversion_factors)
+    pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
 
     ap, _ = ActionPlan.objects.get_or_create(business=business, year=date.today().year)
 
     pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
+    ap_values = [getattr(ap, field) for field in ActionPlanUtil.retrieve_meta_fields()]
 
     print(pf_mappings)
+
+    pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
+
+    total_emissions = sum([value for value in ap_values if value != -1])
+
+    #                           Cal percentage
+
+    actual_percent_savings = sum([])
+
 
     json_data = json.dumps(pf_mappings)
 
@@ -386,6 +396,15 @@ class PledgeLoaderView:
         tables = []
         group_fields = []
         table = False
+        default_choice = ((-1, "Yes"), (0, "Yes but later"), (0, "Not possible"))
+        choices = {
+            "switch_electricity": ((75, "Yes"), (0, "Yes but later"), (0, "Not possible")),
+            "detailed_menu": default_choice,
+            "waste_audit": default_choice,
+            "adopt_sustainable_diposable_items": default_choice,
+            "sustainably_procure_equipment": default_choice
+        }
+
         for field in fields:
             if self.action_plan_verbose[field]["type"] == "Beer" and not table:
                 tables.append(PledgeTableWrapper(1, group_fields))
@@ -397,12 +416,13 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
+            if field in choices:
+                pdw.form.field.widget.choices = choices.get(field)
             if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]])\
                     and len(self.action_plan_field_dependencies[field]) != 0:
                 pdw.applicable = False
                 pdw.form.field.disabled = True
 
-        print(group_fields[0].form.field.__dict__)
         tables.append(PledgeTableWrapper(2, group_fields))
 
         context = {
