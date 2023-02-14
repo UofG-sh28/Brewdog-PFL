@@ -54,7 +54,11 @@
     "transport_travel": "Transport & Travel",
     "food_drink": "Food & Drink 1",
     "food_drink2": "Food & Drink 2",
-    "operations_maintenance": "Operations & Maintenance"
+    "operations_maintenance": "Operations & Maintenance",
+    "scope1": "Scope 1",
+    "scope2_up": "Scope 2 - Upstream",
+    "scope3_up": "Scope 3 - Upstream",
+    "scope3_down": "Scope 3 - Downstream"
   },
   "conversion_factors": {
     "mains_gas":0.22,
