@@ -404,7 +404,8 @@ class PledgeLoaderView:
             "detailed_menu": default_choice,
             "waste_audit": default_choice,
             "adopt_sustainable_diposable_items": default_choice,
-            "sustainably_procure_equipment": default_choice
+            "sustainably_procure_equipment": default_choice,
+            "energy_audit": default_choice
         }
 
         for field in fields:
