@@ -16,42 +16,50 @@ Homepage
                 <th>Results Summary</th>
                 <th>kg CO2e</th>
                 <th>%</th>
+                <th>Sub</th>
             </tr>
 
             <tr>
                 <td>Heating and Fuel</td>
                 <td>{{ carbon_dict.heating_fuel.total }}</td>
                 <td>{{ carbon_dict.heating_fuel.percent }}</td>
+                <td><label for="heating_fuel"><input type="radio" name="cat_radio" id="heating_fuel" value="1" onclick="subRadioClick(this);"checked="checked"></label></button></td>
             </tr>
             <tr>
                 <td>Electricity</td>
                 <td>{{ carbon_dict.electricity.total }}</td>
                 <td>{{ carbon_dict.electricity.percent }}</td>
+                <td><label for="electricity"><input type="radio" name="cat_radio" id="electricity" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Food Waste</td>
                 <td>{{ carbon_dict.food_waste.total }}</td>
                 <td>{{ carbon_dict.food_waste.percent }}</td>
+                <td><label for="food_waste"><input type="radio" name="cat_radio" id="food_waste" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Other Waste</td>
                 <td>{{ carbon_dict.solid_waste.total }}</td>
                 <td>{{ carbon_dict.solid_waste.percent }}</td>
+                <td><label for="solid_waste"><input type="radio" name="cat_radio" id="solid_waste" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Transport and Travel</td>
                 <td>{{ carbon_dict.transport_travel.total }}</td>
                 <td>{{ carbon_dict.transport_travel.percent }}</td>
+                <td><label for="transport_travel"><input type="radio" name="cat_radio" id="transport_travel" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Food and Drink</td>
                 <td>{{ carbon_dict.food_drink.total  }}</td>
                 <td>{{ carbon_dict.food_drink.percent }}</td>
+                <td><label for="food_drink"><input type="radio" name="cat_radio" id="food_drink" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Operations and Maintenance</td>
                 <td>{{ carbon_dict.operations_maintenance.total }}</td>
                 <td>{{ carbon_dict.operations_maintenance.percent }}</td>
+                <td><label for="operations_maintenance"><input type="radio" name="cat_radio" id="operations_maintenance" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tfoot style="font-weight: bold; background-color: #fbfbg6;">
                 <tr>
@@ -68,27 +76,32 @@ Homepage
                 <th>Results Summary</th>
                 <th>kg CO2e</th>
                 <th>%</th>
+                <th>Sub</th>
             </tr>
 
             <tr>
                 <td>Scope 1</td>
                 <td>{{ carbon_dict_scope.scope1.total }}</td>
                 <td>{{ carbon_dict_scope.scope1.percent }}</td>
+                <td><label for="scope1"><input type="radio" name="scope_radio" id="scope1" value="1" onclick="subRadioClick(this);" checked="checked"></label></button></td>
             </tr>
             <tr>
                 <td>Scope 2 - Upstream</td>
                 <td>{{ carbon_dict_scope.scope2_up.total }}</td>
                 <td>{{ carbon_dict_scope.scope2_up.percent }}</td>
+                <td><label for="scope2_up"><input type="radio" name="scope_radio" id="scope2_up" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Scope 3 - Upstream</td>
                 <td>{{ carbon_dict_scope.scope3_up.total }}</td>
                 <td>{{ carbon_dict_scope.scope3_up.percent }}</td>
+                <td><label for="scope3_up"><input type="radio" name="scope_radio" id="scope3_up" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tr>
                 <td>Scope 3 - Downstream</td>
                 <td>{{ carbon_dict_scope.scope3_down.total }}</td>
                 <td>{{ carbon_dict_scope.scope3_down.percent }}</td>
+                <td><label for="scope3_down"><input type="radio" name="scope_radio" id="scope3_down" value="1" onclick="subRadioClick(this);"></label></button></td>
             </tr>
             <tfoot style="font-weight: bold; background-color: #fbfbg6;">
                 <tr>
@@ -100,7 +113,7 @@ Homepage
         </table>
     </div>
 
-    <div id = "plot" style="height: 90%; float: right; aspect-ratio:1/1;"></div>
+    <div id = "plot" style="width: 40%; float: right; aspect-ratio:1/1; "></div>
     <div>
         <select id="cat_switch"onchange="switchGrouping()">
             <option value="category" selected="selected">Category</option>
@@ -131,7 +144,7 @@ Homepage
     <div class = "results-summary" style="float:left; display: inline; width = 40%;">
         <table id = "subcategories">
             <tr>
-                <th>Heating and Fuel</th>
+                <th id = "subCatHead">Heating and Fuel</th>
                 <th>kg CO2e</th>
                 <th>%</th>
             </tr>

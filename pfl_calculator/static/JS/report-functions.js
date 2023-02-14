@@ -108,6 +108,7 @@ function switchGrouping(){
   else{
     cat = 0;
     updateTable(cat);
+    generateSubTable("scope1");
   }
   plot_sunburst();
 }
@@ -124,14 +125,16 @@ function generateSubTable(subcat){
   for(let i=table.rows.length-1;i>0;i--){//clear all but header row
     table.deleteRow(i);
   }
-
+  const head = document.getElementById("subCatHead");
   var verbose_fields = verbose_json["fields"];
+  console.log(verbose_json["categories"]);
+  head.innerHTML = verbose_json["categories"][subcat];;
   let total_emissions = 0;
   for(let i=0; i <dict.length; i++){
     total_emissions += json_data[dict[i]];
   }
+
   for(let i=0; i <dict.length; i++){
-    console.log(dict[i]);
     var row = table.insertRow();
     var cell0 = row.insertCell();
     var cell1 = row.insertCell();
@@ -151,4 +154,9 @@ function generateSubTable(subcat){
   row.style.backgroundColor = "#fbfbg6";  // Find a <table> element with id="myTable":
 
   // Create an empty <tr> element and add it to the 1st position of the table:
+}
+
+function subRadioClick(field){
+  console.log(field.id);
+  generateSubTable(field.id);
 }
