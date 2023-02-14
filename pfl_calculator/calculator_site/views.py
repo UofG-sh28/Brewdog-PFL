@@ -25,6 +25,7 @@ static_categories = None
 static_scope = None
 static_verbose = None
 static_action_plan = None
+static_calculator_categories = None
 
 
 def load_global_data():
@@ -32,6 +33,7 @@ def load_global_data():
     global static_scope
     global static_verbose
     global static_action_plan
+    global static_calculator_categories
 
     with open('static/categories.json', encoding='utf8') as cd:
         static_categories = json.load(cd)
@@ -44,6 +46,9 @@ def load_global_data():
 
     with open("static/action_plan_verbose.json", encoding='utf8') as ap_verbose:
         static_action_plan = json.load(ap_verbose)
+
+    with open("static/calculator_categories.json", encoding='utf8') as cal_cat:
+        static_calculator_categories = json.load(cal_cat)
 
 
 load_global_data()
@@ -149,9 +154,6 @@ def report(request):
             carbon_dict[cat]["total"] += data[field]
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
 
-    # Combine food drink categories.
-    carbon_dict["food_drink"]["total"] += carbon_dict["food_drink2"]["total"]
-    carbon_dict["food_drink"]["percent"] += carbon_dict["food_drink2"]["percent"]
 
     # FORMAT THE TOTALS & PERCENTAGES
     for cat in carbon_dict:
@@ -459,12 +461,12 @@ class CalculatorLoaderView:
 
     def __init__(self):
         self.verbose = static_verbose
-        self.categories = static_categories
+        self.categories = static_calculator_categories
 
         self.proper_names = self.verbose["fields"]
-        self.categories = self.categories
         self.category_names = self.verbose["categories"]
         self.conversion_factors = static_verbose["conversion_factors"]
+        self.tooltips = static_verbose["information"]
         
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
@@ -514,7 +516,7 @@ class CalculatorLoaderView:
             for field_id in value:
                 field_list.append(CalculatorDataWrapper(field_id,
                                                         cal_form[field_id], self.proper_names[field_id],
-                                                        self.conversion_factors[field_id]))
+                                                        self.conversion_factors[field_id], self.tooltips[field_id]))
             category_list.append(CalculatorCategoryWrapper(key, self.category_names[key], field_list))
 
         # Determine what category to show
@@ -558,10 +560,11 @@ class CalculatorCategoryWrapper:
 
 class CalculatorDataWrapper:
 
-    def __init__(self, field, form, name, conversion):
+    def __init__(self, field, form, name, conversion, tooltip):
         self.id = field
         self.form = form
         self.name = name
         self.conversion = conversion
         self.input_value = " "
         self.checked = "checked"
+        self.tooltip = tooltip

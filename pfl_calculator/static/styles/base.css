@@ -395,12 +395,12 @@ tr:hover{
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 5px;
     position: absolute;
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -60px;
+    margin-left: -80px;
     opacity: 0;
     transition: opacity 0.3s;
 }
