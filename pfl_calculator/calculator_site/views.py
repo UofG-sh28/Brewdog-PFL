@@ -465,6 +465,7 @@ class CalculatorLoaderView:
         self.categories = self.categories
         self.category_names = self.verbose["categories"]
         self.conversion_factors = static_verbose["conversion_factors"]
+        self.tooltips = static_verbose["information"]
         
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
@@ -514,7 +515,7 @@ class CalculatorLoaderView:
             for field_id in value:
                 field_list.append(CalculatorDataWrapper(field_id,
                                                         cal_form[field_id], self.proper_names[field_id],
-                                                        self.conversion_factors[field_id]))
+                                                        self.conversion_factors[field_id], self.tooltips[field_id]))
             category_list.append(CalculatorCategoryWrapper(key, self.category_names[key], field_list))
 
         # Determine what category to show
@@ -558,10 +559,11 @@ class CalculatorCategoryWrapper:
 
 class CalculatorDataWrapper:
 
-    def __init__(self, field, form, name, conversion):
+    def __init__(self, field, form, name, conversion, tooltip):
         self.id = field
         self.form = form
         self.name = name
         self.conversion = conversion
         self.input_value = " "
         self.checked = "checked"
+        self.tooltip = tooltip
