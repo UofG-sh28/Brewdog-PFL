@@ -60,8 +60,29 @@ function plot_sunburst(){
       parentArr.push("Usages");
       valueArr.push(subtotals[cat]);
     }
+    console.log("before");
+    console.log(labelArr);
+    console.log(parentArr);
+    for(let i=0; i < labelArr.length; i++){
+      var label = labelArr[i];
+      if(Object.keys(verbose_json["fields"]).includes(label)){
+        labelArr[i] = verbose_json["fields"][label];
+      }
+      else if(Object.keys(verbose_json["categories"]).includes(label)){
+        labelArr[i] = verbose_json["categories"][label];
+      }
+    }
+
+    for(let i=0; i < parentArr.length; i++){
+      if(Object.keys(verbose_json["categories"]).includes(parentArr[i])){
+        parentArr[i] = verbose_json["categories"][parentArr[i]];
+      }
+    }
+    console.log("after");
+    console.log(labelArr);
+    console.log(parentArr);
     valueArr[0] = total_emissions;
-        var data = [{
+    var data = [{
       type: "sunburst",
       labels: labelArr,
       parents: parentArr,
@@ -74,7 +95,9 @@ function plot_sunburst(){
     var layout = {
       margin: {l: 0, r: 0, b: 0, t: 0},
       width: 500,
-      height: 500
+      height: 500,
+      paper_bgcolor:"#f6f6f6"
+
     };
     Plotly.newPlot(element, data, layout, {displaylogo: false});
     return 1;
@@ -127,7 +150,6 @@ function generateSubTable(subcat){
   }
   const head = document.getElementById("subCatHead");
   var verbose_fields = verbose_json["fields"];
-  console.log(verbose_json["categories"]);
   head.innerHTML = verbose_json["categories"][subcat];;
   let total_emissions = 0;
   for(let i=0; i <dict.length; i++){
