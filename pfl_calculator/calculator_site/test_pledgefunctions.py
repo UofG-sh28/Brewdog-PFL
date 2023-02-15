@@ -131,7 +131,7 @@ class SimpleSwitchTests(TestCase):
 
     def test_switch_electricity(self):
         amount_electricity = getattr(self.cf, "grid_electricity") / self.pf.conversion_factor["grid_electricity"]
-        replaced_electricity = (amount_electricity) * (1/100)
+        replaced_electricity = (amount_electricity) 
 
         replaced_carbon = replaced_electricity * self.pf.conversion_factor["grid_electricity"]
         renewable_carbon = replaced_electricity * self.pf.conversion_factor["grid_electricity_LOWCARBON"]

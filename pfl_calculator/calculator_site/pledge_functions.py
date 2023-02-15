@@ -65,7 +65,7 @@ class PledgeFunctions:
         carbon_saved = 0
         if amount > 0:
             grid_electricity_kwh = (getattr(self.cf, "grid_electricity")) / self.conversion_factor["grid_electricity"]
-            replaced_kwh = (grid_electricity_kwh) * (self.grid_electricity_offset / 100)
+            replaced_kwh = (grid_electricity_kwh) * (self.grid_electricity_offset)
 
             grid_co2 = (replaced_kwh) * self.conversion_factor["grid_electricity"]
             renewable_co2 = (replaced_kwh) * self.conversion_factor["grid_electricity_LOWCARBON"]
