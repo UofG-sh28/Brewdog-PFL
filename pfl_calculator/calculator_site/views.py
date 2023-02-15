@@ -401,13 +401,14 @@ class PledgeLoaderView:
         tables = []
         group_fields = []
         table = False
-        default_choice = ((-1, "Yes"), (0, "Yes but later"), (0, "Not possible"))
+        default_choice = ((1, "Yes"), (0, "Yes but later"), (0, "Not possible"))
         choices = {
-            "switch_electricity": ((75, "Yes"), (0, "Yes but later"), (0, "Not possible")),
+            "switch_electricity": default_choice,
             "detailed_menu": default_choice,
             "waste_audit": default_choice,
             "adopt_sustainable_diposable_items": default_choice,
-            "sustainably_procure_equipment": default_choice
+            "sustainably_procure_equipment": default_choice,
+            "energy_audit": default_choice
         }
 
         for field in fields:

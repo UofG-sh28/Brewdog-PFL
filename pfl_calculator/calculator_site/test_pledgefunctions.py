@@ -131,13 +131,13 @@ class SimpleSwitchTests(TestCase):
 
     def test_switch_electricity(self):
         amount_electricity = getattr(self.cf, "grid_electricity") / self.pf.conversion_factor["grid_electricity"]
-        replaced_electricity = (amount_electricity) * (50/100)
+        replaced_electricity = (amount_electricity) 
 
         replaced_carbon = replaced_electricity * self.pf.conversion_factor["grid_electricity"]
         renewable_carbon = replaced_electricity * self.pf.conversion_factor["grid_electricity_LOWCARBON"]
 
         carbon_saved = replaced_carbon - renewable_carbon
-        self.assertEqual(carbon_saved, self.pf.switch_electricity(50))
+        self.assertEqual(carbon_saved, self.pf.switch_electricity(1))
 
     def test_switch_hc_beer_for_lc_beer(self):
         kegs, cans, bottles = getattr(self.cf, "beer_kegs") / self.pf.conversion_factor["beer_kegs"], getattr(self.cf, "beer_cans") / self.pf.conversion_factor["beer_cans"], getattr(self.cf, "beer_bottles") / self.pf.conversion_factor["beer_bottles"]
@@ -313,13 +313,6 @@ class ComplexMeatSwitchTests(TestCase):
 class CornerCaseTests(TestCase):
     def setUp(self):
         self.cf, self.pf = test_setup()
-
-    def test_switch_all_electricity(self):
-        carbon_saved = self.pf.switch_electricity(100)
-        original_carbon = (getattr(self.cf, "grid_electricity"))
-        expected_save = (original_carbon / self.pf.conversion_factor["grid_electricity"]) * self.pf.conversion_factor["grid_electricity_LOWCARBON"]
-
-        self.assertEqual(int(original_carbon - expected_save), int(carbon_saved))
 
     def test_no_reduction(self):
         carbon_saved = self.pf.reduce_oil(0)
