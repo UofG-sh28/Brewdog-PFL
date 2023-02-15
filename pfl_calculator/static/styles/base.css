@@ -465,8 +465,8 @@ tr:hover{
 .shine-button a {
     text-decoration: none;
     color: white;
-    display:block;
-    width:100%;
+    display: block;
+    width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
@@ -662,8 +662,6 @@ input[type="checkbox"]:checked::before {
     opacity: 0.3;
     cursor: default;
 }
-
-
 
 .pledge-select-label {
     position: relative;
