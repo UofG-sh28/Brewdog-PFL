@@ -381,7 +381,7 @@ class PledgeLoaderView:
         ap.save()
 
         # redirect to remove pledge page
-        repsonse = redirect('/my/action-plan')
+        repsonse = redirect('/my/pledge-report')
         return repsonse
 
     def __pledges_get_request(self, request):
