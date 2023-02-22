@@ -173,9 +173,7 @@ function generateSubTable(subcat){
   cell1.innerHTML = Math.round(total_emissions *100)/100;
   cell2.innerHTML = "100";
   row.style.fontWeight = "bold";
-  row.style.backgroundColor = "#fbfbg6";  // Find a <table> element with id="myTable":
-
-  // Create an empty <tr> element and add it to the 1st position of the table:
+  row.style.backgroundColor = "#fbfbg6";
 }
 
 function subRadioClick(field){
