@@ -16,13 +16,13 @@ window.onload = () => {
         const input = this.document.getElementById(tableRow.id + 'Input');
         const output = this.document.getElementById(tableRow.id + "Output");
         const conversion = this.document.getElementById(tableRow.id + "Conv");
-        const value = parseFloat(input.value) * parseFloat(conversion.innerText);
+        let value = parseFloat(input.value) * parseFloat(conversion.innerText);
         const decimalLength = getDecimalLength(parseFloat(input.value));
+        if(value <= 0) value = "";
         output.value = isNaN(value) ? "" : value.toFixed(Math.max(2, decimalLength));
     }
 
     const outputValidation = (e) => {
-        e.preventDefault();
         const output = this.document.querySelector('input:invalid')
         const tableRowId = output.parentNode.parentNode.id;
         const input = this.document.getElementById(tableRowId + "Input");
@@ -39,10 +39,14 @@ window.onload = () => {
 
             const input = this.document.getElementById(row.id + "Input");
             const output = this.document.getElementById(row.id + "Output");
-            if (input === undefined || output === undefined) continue;
+            const check = this.document.getElementById(row.id + "Checkbox")
+            if (input === undefined || output === undefined
+                || check===undefined) continue;
 
-            output.value = null;
-            output.addEventListener('invalid', outputValidation);
+            if(!check.checked) applicableCheck(check);
+
+            input.addEventListener('invalid', outputValidation);
+            output.addEventListener('invalid', (e) => e.preventDefault());
             input.addEventListener('input', inputHandler);
             input.addEventListener('propertychange', inputHandler);
         }
@@ -74,8 +78,8 @@ function applicableCheck(current){
 
 
     input.disabled = !input.disabled;
-    output.required = !output.required;
+    input.required = !input.required;
     input.value = "";
-    output.value = "";
+    output.value = " ";
 
 }

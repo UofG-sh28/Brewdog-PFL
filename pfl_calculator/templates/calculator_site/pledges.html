@@ -1,11 +1,64 @@
 {% extends 'calculator_site/base.html' %}
+{% load static %}
 
-{% block title %}
-  Homepage
-{% endblock %}
 
+{% block title %} Pledges {% endblock %}
+{% block script %}<script src="{% static 'JS/pledge.js' %}"></script> {% endblock %}
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <h2>This is the pledge page where users will be able to view and select pledges in order to create their action plan.</h2>
+<h2>Pledges</h2>
+
+{% if cal %}
+    <form action="/my/pledges" enctype="application/x-www-form-urlencoded" method="post">
+      {% csrf_token %}
+    <div class="table-pledge-row">
+        {% for table in act_plan %}
+            <div class="table-pledge-column">
+            <table id="PledgeTable{{ table.column }}" class="table pledge">
+                <tr id="headers">
+                  <th>Type</th>
+                  <th style="width:60%">Cutting actions</th>
+                  <th style="width:25%">Options Target</th>
+                  <th>Kg CO2e Savings</th>
+                </tr>
+              {% for pled_data in table.fields %}
+                {% if pled_data.applicable %}
+                    <tr>
+                {% else %}
+                    <tr class="pledge-disabled">
+                {% endif %}
+                  <td style="background-color: {{ pled_data.colour }}" >{{pled_data.plan_type}}</td>
+                  <td style="color: {{ pled_data.colour }}">{{pled_data.name}}</td>
+                  <td>
+                      <label class="pledge-select-label">
+                          {{pled_data.form}}
+                          <svg>
+                              <use xlink:href="#select-arrow-down"></use>
+                          </svg>
+                      </label>
+                  </td>
+                  <td>-</td>
+                </tr>
+              {% endfor %}
+            </table>
+            </div>
+          {% endfor %}
+
+    </div>
+
+    <input class="shine-button" type="submit" value="Commit">
+    <br><br><br><br><br>
+
+    </form>
+    <svg class="sprites">
+        <symbol id="select-arrow-down" viewbox="0 0 10 6">
+            <polyline points="1 1 5 5 9 1"></polyline>
+        </symbol>
+    </svg>
+{% else %}
+    <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+    <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
+{% endif %}
+
 {% endblock %}

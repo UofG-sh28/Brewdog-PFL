@@ -23,14 +23,12 @@ before_script:
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r pfl_calculator/requirements.txt
-
 test:
   script:
     - cd pfl_calculator
-    - echo "Disabled"
-
+    - python manage.py behave
+    - python manage.py test
 deploy:
   stage: deploy
   script: 
-    - cd pfl_calculator
     - echo "Disabled"

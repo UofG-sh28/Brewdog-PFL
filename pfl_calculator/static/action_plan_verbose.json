@@ -1,0 +1,126 @@
+{
+  "reduce_electricity": {
+    "type":  "Energy",
+    "name": "Reduce electricity consumption"
+  },
+  "switch_electricity":{
+    "type":  "Energy",
+    "name": "Switch to a high quality 100% renewable electricity supplier (that matches all supply to all customers with 100% renewable power purchase agreements (PPAs).)"
+  },
+  "reduce_gas":{
+    "type":  "Energy",
+    "name": "Reduce gas consumption"
+  },
+  "reduce_oil":{
+    "type":  "Energy",
+    "name": "Reduce oil consumption"
+  },
+  "reduce_coal":{
+    "type":  "Energy",
+    "name": "Reduce coal consumption"
+  },
+  "reduce_wood":{
+    "type":  "Energy",
+    "name": "Reduce wood consumption"
+  },
+  "energy_audit":{
+    "type":  "Energy",
+    "name": "Commission an energy audit undertaken with detailed energy advice"
+  },
+
+
+
+  "swap_beef_lamb_for_non_meat":{
+    "type":  "Food",
+    "name": "Swap beef and lamb for non-animal alternatives"
+  },
+  "swap_beef_lamb_for_other_meat":{
+    "type":  "Food",
+    "name": "Swap beef and lamb for other meat products"
+  },
+  "swap_other_meat_for_non_meat":{
+    "type":  "Food",
+    "name": "Swap other meats for non-animal alternatives"
+  },
+  "replace_fruit_veg":{
+    "type":  "Food",
+    "name": "Replace high carbon fruit and veg (air freight, hot house) for low carbon fruit and veg (local, seasonal)"
+  },
+  "detailed_menu":{
+    "type":  "Food",
+    "name": "Use a detailed menu carbon calculator to understand and reduce our food carbon"
+  },
+  "reduce_food_waste":{
+    "type":  "Food",
+    "name": "Reduce food waste "
+  },
+  "waste_audit":{
+    "type":  "Food",
+    "name": "Carry out a waste audit "
+  },
+
+
+  "switch_hc_beer_for_lc_beer":{
+    "type":  "Beer",
+    "name": "Switch higher carbon beers to lower carbon beers"
+  },
+  "switch_bottle_beer_for_kegs":{
+    "type":  "Beer",
+    "name": "Switch bottled beer to beer from reusable kegs"
+  },
+  "switch_bottle_beer_for_cans":{
+    "type":  "Beer",
+    "name": "Switch bottled beer to canned beer "
+  },
+  "switch_canned_beer_for_kegs":{
+    "type":  "Beer",
+    "name": "Switch our canned beer to beer from reusable kegs"
+  },
+
+
+  "reduce_general_waste":{
+    "type":  "Waste",
+    "name": "Reduce general waste"
+  },
+
+
+  "reduce_vehicle_travel_miles":{
+    "type":  "Travel",
+    "name": "Reduce vehicle road miles (company travel and deliveries)"
+  },
+  "reduce_commuting_miles":{
+    "type":  "Travel",
+    "name": "Reduce commuting vehicle road miles"
+  },
+  "reduce_staff_flights":{
+    "type":  "Travel",
+    "name": "Reduce staff flights"
+  },
+
+
+  "reduce_emissions":{
+    "type":  "Operations",
+    "name": "Reduce Emissions from Operations and Maintenance"
+  },
+
+
+  "adopt_sustainable_diposable_items":{
+    "type":  "Other",
+    "name": "Adopt sustainable purchasing of non-food disposable items"
+  },
+  "sustainably_procure_equipment":{
+    "type":  "Other",
+    "name": "Sustainable procurement of equipment and furniture: where possible, buy pre-loved, sustainably produced, or repair what we already have."
+  },
+
+
+  "type-colours": {
+    "Energy": "#8db4e2",
+    "Food": "#e6b8b7",
+    "Beer": "#c4bd97",
+    "Waste": "#ffc000",
+    "Travel": "#a8d4a9",
+    "Operations": "#aac2dd",
+    "Other": "#b1a0c7"
+  }
+}

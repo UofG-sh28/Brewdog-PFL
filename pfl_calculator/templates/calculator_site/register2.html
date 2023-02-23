@@ -1,0 +1,16 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Register
+{% endblock %}
+
+{% block body_block %}
+<div class="register_detail">
+  <h2>Create Business</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ reg_form }}
+    <button type="submit" name="register">Finish</button>
+  </form>
+</div>
+{% endblock %}

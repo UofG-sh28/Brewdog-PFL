@@ -15,19 +15,32 @@
     </head>
     <body>
         <div id=header>
-            <a href="{% url 'index' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dash' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
+            {% else %}
+                <a href="{% url 'index' %}"><img id="logo" src="{% static 'images/logo.png' %}"></a>
+            {% endif %}
+            <a href="{% url 'index' %}"><h1 style="font-family: NewGroteskSquareTHREE;color:black;font-size: 70px;">Planet First Locals</h1></a>
 
             <div class="dropdown">
                 <img style="height: 75px" id="menu" src="{% static 'images/menu.png' %}">
                 <div class="dropdown-content">
-                    <a href="{% url 'outline' %}">Outline</a>
-                    <a href="{% url 'how-it-works' %}">How it works</a>
-                    <a href="{% url 'calculator' %}">Calculator</a>
-                    <a href="{% url 'report' %}">Reports</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'calculator' %}">Calculator</a>
+                        <a href="{% url 'report' %}">Reports</a>
+                        <a href="{% url 'pledges' %}">Pledges</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a href="{% url 'outline' %}">Outline</a>
+                        <a href="{% url 'how-it-works' %}">How it works</a>
+                        <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
+
+
                 </div>
             </div>
         </div>
-        <div style="height: 100%">
+        <div style="height: 100%" id="fadein">
             {% block body_block %}{% endblock %}
         </div>
     </body>

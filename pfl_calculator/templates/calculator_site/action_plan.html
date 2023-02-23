@@ -1,12 +1,101 @@
 {% extends 'calculator_site/base.html' %}
+{% load static %}
 
 {% block title %}
-  Homepage
+  Pledge Report
 {% endblock %}
 
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <h2>This is the action plan page where users can view their action plan if they have created one</h2>
-  <h2>This page will show their plans selected pladges and the estimated effect their plan will have on their footprint</h2>
+    <h2>Pledge Report</h2>
+    <div id = "pledgeTable" style="width: 40%; float: left;"></div>
+    <div id = "pie" style="height: 50%; float: left; "></div>
+    <div id = "plot" style="height: 70%; float: right; "></div>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+
+    <center><img src="{% static 'images/pledge-difficulty.png' %}" alt="My image"></center>
+
+
+{% endblock %}
+{% block script %}
+    <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
+    <script src = "{% static 'JS/action_plan.js' %}"></script>
+    <script>
+        const json_data = JSON.parse("{{json_data|escapejs}}");
+        console.log(json_data);
+        //generatePledgeTable();
+
+        var data = [{
+          values: [4818.12, 14868.61],
+          labels: ['Pledged', 'Residual'],
+          type: 'pie'
+        }];
+
+        var layout = {
+          title: "Overall Pledged Reductions",
+          height: 400,
+          width: 500
+        };
+
+        Plotly.newPlot('pie', data, layout);
+
+
+        var trace1 = {
+          x: [380.7, 2337.86, 2099.56],
+          y: ['Operations & Maintenance', 'Transport & Travel', 'Food & Drink'],
+          name: 'Pledged',
+          orientation: 'h',
+          marker: {
+            color: 'rgba(55,128,191,0.6)',
+            width: 1
+          },
+          type: 'bar'
+        };
+
+        var trace2 = {
+          x: [843.05, 3206.79, 10818.77],
+          y: ['Operations & Maintenance', 'Transport & Travel', 'Food & Drink'],
+          name: 'Residual',
+          orientation: 'h',
+          type: 'bar',
+          marker: {
+            color: 'rgba(255,153,51,0.6)',
+            width: 1
+          }
+        };
+
+        var data = [trace1, trace2];
+
+        var layout = {
+          title: 'Pledged Reduction Breakdown',
+          barmode: 'stack',
+          margin: {
+            l: 200
+          }
+        };
+
+        Plotly.newPlot('plot', data, layout);
+    </script>
 {% endblock %}

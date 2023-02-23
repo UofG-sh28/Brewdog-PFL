@@ -1,0 +1,15 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Register Success
+{% endblock %}
+
+{% block body_block %}
+  {% if user.is_authenticated %}
+    <h2> Registration Successful, Hi {{ user.username }}</h2>
+
+    <div class="">
+      <button class="shine-button" id="dash-button"><a href="{% url 'dash' %}">Continue to your dashboard.</a></button>
+    </div>
+  {% endif %}
+{% endblock %}
