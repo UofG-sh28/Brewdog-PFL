@@ -31,6 +31,20 @@ def set_testup():
     CarbonFootprint.objects.create(business=test_business2, year=2022)
     ActionPlan.objects.create(business=test_business2, year=2022)
 
+    urls = {
+        "login": "/login/",
+        "logout": "/logout/",
+        "dashboard": "/my/dashboard/",
+        "metrics": "/my/metrics",
+        "report": "/my/report",
+        "action-plan": "/my/pledge-report",
+        "register": "/register/",
+        "outline": "/outline/",
+        "how-it-works": "/how-it-works",
+        "profile": "/my/profile",
+        "mytest": "/my/test"
+    }
+    return urls
 
 
 class TestMyPages(TestCase):
@@ -41,50 +55,85 @@ class TestMyPages(TestCase):
     """
 
     def setUp(self):
-        set_testup()
+        self.urls = set_testup()
         self.client = Client()
 
     def login(self, username, password):
-        url = '/login/'
+        url = self.urls.get("login")
         form = {"username": username, "password": password}
         response = self.client.post(url, form)
 
-    # def test_dashboard_visit_before_login(self):
-    #     url = '/my/dashboard/'
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertRedirects(response, '/login/')
+    def test_dashboard_visit_before_login(self):
+        url = self.urls.get("dashboard")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.urls.get("login"))
 
     def test_dashboard_visit_after_login(self):
         self.login("pftesting3", "testing3")
-        url = '/my/dashboard/'
+        url = self.urls.get("dashboard")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'calculator_site/dashboard.html')
 
     def test_metrics(self):
         self.login("pftesting3", "testing3")
-        url = '/my/metrics'
+        url = self.urls.get("metrics")
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'calculator_site/metrics.html')
 
-    # def test_report_before_login(self):
-    #     url = '/my/report'
-    #     response = self.client.get(url)
-    #     self.assertRedirects(response, '/login/')
+    def test_report_before_login(self):
+        url = self.urls.get("report")
+        response = self.client.get(url)
+        self.assertRedirects(response, self.urls.get("login"))
 
     def test_report_with_detailed_cf(self):
         self.login("pftesting3", "testing3")
-        url = '/my/report'
+        url = self.urls.get("report")
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'calculator_site/report.html')
 
     def test_report_with_default_cf(self):
         self.login("pftesting2", "testing2")
-        url = '/my/report'
+        url = self.urls.get("report")
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'calculator_site/pledges.html')
 
+    def test_action_plan_after_login(self):
+        self.login("pftesting3", "testing3")
+        url = self.urls.get("action-plan")
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'calculator_site/action_plan.html')
+
+    def test_action_plan_before_login(self):
+        # self.login("pftesting3", "testing3")
+        url = self.urls.get("action-plan")
+        response = self.client.get(url)
+        self.assertRedirects(response, self.urls.get("login"))
+
+    def test_my_profile_before_login(self):
+        response = self.client.get(self.urls.get("profile"))
+        self.assertRedirects(response, self.urls.get("login"))
+
+    def test_my_profile_after_login(self):
+        self.login("pftesting3", "testing3")
+        response = self.client.get(self.urls.get("profile"))
+        self.assertTemplateUsed(response, 'calculator_site/profile.html')
+
+    def test_how_it_works(self):
+        self.login("pftesting3", "testing3")
+        response = self.client.get(self.urls.get("how-it-works"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'calculator_site/how_it_works.html')
+
+    def test_wrong_my_page_after_login(self):
+        self.login("pftesting3", "testing3")
+        response = self.client.get(self.urls.get("mytest"))
+        self.assertRedirects(response, self.urls.get("dashboard"))
+
+    def test_wrong_my_page_before_login(self):
+        response = self.client.get(self.urls.get("mytest"))
+        self.assertRedirects(response, self.urls.get("login"))
 
 
 class TestLogin(TestCase):
@@ -96,26 +145,26 @@ class TestLogin(TestCase):
     """
 
     def setUp(self):
-        set_testup()
+        self.urls = set_testup()
         self.client = Client()
 
     def test_login_success(self):
-        url = '/login/'
+        url = self.urls.get("login")
         form = {"username": "pftesting2", "password": "testing2"}
         response = self.client.post(url, form)
         self.assertIsNotNone(self.client.cookies['login'])
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/my/dashboard/')
+        self.assertRedirects(response, self.urls.get("dashboard"))
 
     def test_non_existed_user(self):
-        url = '/login/'
+        url = self.urls.get("login")
         form = {"username": "nouser", "password": "testing"}
         response = self.client.post(url, form)
         self.assertEqual(response.status_code, 200)
         self.assertEqual("Incorrect Username or Password", response.context["error"])
 
     def test_password_incorrect(self):
-        url = '/login/'
+        url = self.urls.get("login")
         form = {"username": "pftesting", "password": "123"}
         response = self.client.post(url, form)
         self.assertEqual(response.status_code, 200)
@@ -130,11 +179,12 @@ class TestRegister(TestCase):
         3. Register successfully
     """
 
-    def setup(self):
+    def setUp(self):
         self.client = Client()
+        self.urls = set_testup()
 
     def test_password_not_equal(self):
-        url = '/register/'
+        url = self.urls.get("register")
         form = {'username': 'fred', 'email': '123123123@gmail.com', 'password1': 'abcab123123',
                 'password2': '123'}
         response = self.client.post(url, form)
@@ -142,7 +192,7 @@ class TestRegister(TestCase):
         self.assertTemplateUsed(response, 'calculator_site/register.html')
 
     def test_password_too_simple(self):
-        url = '/register/'
+        url = self.urls.get("register")
         form = {'username': 'fred', 'email': '123123123@gmail.com', 'password1': '12341234',
                 'password2': '12341234'}
         response = self.client.post(url, form)
@@ -150,11 +200,10 @@ class TestRegister(TestCase):
         self.assertTemplateUsed(response, 'calculator_site/register.html')
 
     def test_register_success(self):
-        url = '/register/'
+        url = self.urls.get("register")
         form = {'username': 'fred', 'email': '123123123@gmail.com', 'password1': 'abcab123123',
                 'password2': 'abcab123123'}
         response = self.client.post(url, form)
-        print("registered")
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/register/about')
 
@@ -180,9 +229,9 @@ class TestOutline(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.urls = set_testup()
 
     def test_outline_page(self):
-        response = self.client.get('/outline/')
-        print(response)
+        response = self.client.get(self.urls.get("outline"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'calculator_site/outline.html')
