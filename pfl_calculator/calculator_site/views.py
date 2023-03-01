@@ -358,6 +358,8 @@ def staff_dash(request):
                     with open('static/conversion_factors.json', "w", encoding='utf8') as cf:
                         json.dump(cfs, cf)
                         cf.write("\n")
+
+                load_global_data()
         else:
             form = AdminForm()
             context["form"] = form
