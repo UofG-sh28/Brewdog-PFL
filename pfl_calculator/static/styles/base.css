@@ -324,8 +324,6 @@ h2 {
     height: 25px;
 }
 
-
-
 .register_detail button[type="submit"] {
     border: none;
     border-radius: 5px;
@@ -726,4 +724,7 @@ input[type="checkbox"]:checked::before {
 }
 
 
+#results-summary {
+    width: 100vw;
+}
 

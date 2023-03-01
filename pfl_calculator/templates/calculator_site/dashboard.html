@@ -24,10 +24,9 @@
                 <div style="background-color: lightblue; padding: 20px; text-align: center;">
                     <h2>Customer Information:</h2>
                     <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">
-                    {% if carbon_sum == -500 %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
+                    <!-- WHY DOES THIS NOT WORK -->
+                    {% if carbon_sum == -500.00 %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
                     CO</h4><h6 style="display: inline;">2</h6> {% endif %}
-                    <h3>Total Pledged</h3>
-                    <h4>Fergus can figure out how to display this bit</h4>
                 </div>
             </div>
         </div>

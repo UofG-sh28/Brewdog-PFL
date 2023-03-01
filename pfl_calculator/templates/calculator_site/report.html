@@ -113,35 +113,15 @@ Homepage
         </table>
     </div>
 
-    <div id = "plot" style="width: 40%; float: right; aspect-ratio:1/1; "></div>
+    <div id = "plot" style="width: 40%; float: right; aspect-ratio:1/1; display: inline-block;"></div>
     <div>
         <select id="cat_switch"onchange="switchGrouping()">
             <option value="category" selected="selected">Category</option>
             <option value="scope">Scope</option>
         </select>
     </div>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
 
-
-    <div class = "results-summary" style="float:left; display: inline; width = 40%; margin-bottom:5%">
+    <div id="results-summary" style="float:left; display: inline-block; margin-bottom:5%; width:40%">
         <table id = "subcategories">
             <tr>
                 <th id = "subCatHead">Heating and Fuel</th>
@@ -150,6 +130,9 @@ Homepage
             </tr>
         </table>
     </div>
+
+<a href="{% url 'pledges' %}" style="text-decoration: none; float:right; margin-top: 38vh; left: 50%; position: fixed;"><button class="shine-button" style="background-color: #F9A825">View Pledges</button></a>
+
 {% block script %}
 <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
 <script src = "{% static 'JS/report-functions.js' %}"></script>
@@ -171,6 +154,7 @@ Homepage
     generateSubTable("heating_fuel");
 </script>
 {% endblock %}
+<butt
 {% else %}
     <h2>Report Page</h2>
     <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
