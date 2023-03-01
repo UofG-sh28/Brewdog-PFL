@@ -4,15 +4,7 @@ import decimal
 from itertools import chain
 
 from django.shortcuts import render
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, AdminForm
-=======
-from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, ChangePasswordForm
->>>>>>> Stashed changes
-=======
-from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, ChangePasswordForm
->>>>>>> Stashed changes
+from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, AdminForm, ChangePasswordForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.core import serializers
@@ -331,7 +323,6 @@ def account(request):
     else:
         form = ChangePasswordForm(request.user)
     return render(request, 'calculator_site/account.html', {'form': form})
-<<<<<<< Updated upstream
 
 def staff_dash(request):
     context={
@@ -389,9 +380,6 @@ def staff_dash(request):
 
     print("render")
     return render(request, 'calculator_site/admin_dash.html', context=context)
-=======
->>>>>>> Stashed changes
-
 
 class PledgeLoaderView:
 
