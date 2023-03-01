@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.forms import TextInput, Select
 from calculator_site import models
@@ -209,3 +209,13 @@ class ActionPlanForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            
+            
+            
+class ChangePasswordForm(PasswordChangeForm):
+    def clean_new_pass(self):
+        new_password = self.cleaned_data.get('new_password')
+        new_password_confirm = self.cleaned_data.get('new_password_confirm')
+        if new_password and new_password_confirm and new_password != new_password_confirm:
+            raise forms.ValidationError('Passwords do not match')
+        return new_password_confirm

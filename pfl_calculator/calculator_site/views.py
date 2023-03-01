@@ -4,7 +4,11 @@ import decimal
 from itertools import chain
 
 from django.shortcuts import render
+<<<<<<< Updated upstream
 from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, AdminForm
+=======
+from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, ChangePasswordForm
+>>>>>>> Stashed changes
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.core import serializers
@@ -15,7 +19,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
-from .forms import RegistrationForm, RegistrationFormStage2, CalculatorUtil
+from .forms import RegistrationForm, RegistrationFormStage2, CalculatorUtil, ChangePasswordForm
 from .models import CarbonFootprint, ActionPlan
 from datetime import date
 
@@ -313,6 +317,16 @@ def about(request):
         return render(request, 'register.html')
     else:
         return HttpResponse(request, 'about.html')
+    
+def account(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'calculator_site/password_change_success.html')
+    else:
+        form = ChangePasswordForm(request.user)
+    return render(request, 'calculator_site/account.html', {'form': form})
 
 def staff_dash(request):
     context={

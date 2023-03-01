@@ -29,6 +29,7 @@ urlpatterns = [
     path('my/pledges', views.PledgeLoaderView().pledges, name='pledges'),
     path('my/pledge-report', views.action_plan, name='action_plan'),
     path('my/profile', views.profile, name='profile'),
+    path('my/account', views.account, name='account'),
     re_path(r'^my\/.*$', views.dash_redirect, name='dash_redirect'),
 
 
