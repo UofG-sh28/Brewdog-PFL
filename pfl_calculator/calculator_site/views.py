@@ -1,9 +1,10 @@
 import json
 import math
+import decimal
 from itertools import chain
 
 from django.shortcuts import render
-from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil
+from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, AdminForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
 from django.core import serializers
@@ -34,6 +35,7 @@ def load_global_data():
     global static_verbose
     global static_action_plan
     global static_calculator_categories
+    global static_conversion_factors
 
     with open('static/categories.json', encoding='utf8') as cd:
         static_categories = json.load(cd)
@@ -49,6 +51,9 @@ def load_global_data():
 
     with open("static/calculator_categories.json", encoding='utf8') as cal_cat:
         static_calculator_categories = json.load(cal_cat)
+
+    with open('static/conversion_factors.json', encoding='utf8') as cf:
+        static_conversion_factors = json.load(cf)
 
 
 load_global_data()
@@ -178,10 +183,10 @@ def report(request):
             "total": 0,
             "percent": 0
         }
-        
+
         for field in static_scope[scope]:
             carbon_dict_scope[scope]["total"] += data[field]
-            
+
         carbon_dict_scope[scope]["percent"] = (carbon_dict_scope[scope]["total"] / carbon_sum_scope) * 100
 
     # FORMAT THE TOTALS & PERCENTAGES
@@ -308,6 +313,61 @@ def about(request):
         return render(request, 'register.html')
     else:
         return HttpResponse(request, 'about.html')
+
+def staff_dash(request):
+    context={
+        "error": None,
+        "conversion_factors": static_conversion_factors,
+        "form" : None
+    }
+    if (request.user.is_staff):
+        print("user")
+        if request.method == 'POST':
+            form = AdminForm(request.POST)
+            if form.is_valid():
+                year = form.cleaned_data.get("year")
+                form.cleaned_data.pop("year")
+
+                new_data = {}
+
+                for key in form.cleaned_data:
+                    new_data[key] = float(form.cleaned_data[key])
+
+                print(new_data)
+
+                if str(year) in static_conversion_factors.keys():
+                    #Update
+                    print("trying to update")
+                    with open('static/conversion_factors.json', "r+", encoding='utf8') as cf:
+                        cfs = json.load(cf)
+
+                    cfs[str(year)] = new_data
+
+                    with open('static/conversion_factors.json', "w", encoding='utf8') as cf:
+                        json.dump(cfs, cf)
+                        cf.write("\n")
+
+                else:
+                    #Create
+                    print("Trying to insert")
+                    with open('static/conversion_factors.json', "r+", encoding='utf8') as cf:
+                        cfs = json.load(cf)
+
+                    cfs[str(year)] = new_data
+
+                    with open('static/conversion_factors.json', "w", encoding='utf8') as cf:
+                        json.dump(cfs, cf)
+                        cf.write("\n")
+        else:
+            form = AdminForm()
+            context["form"] = form
+            print("set form")
+    else:
+        context["error"] = "You do not have access to this page."
+
+
+    print("render")
+    return render(request, 'calculator_site/admin_dash.html', context=context)
 
 
 class PledgeLoaderView:
@@ -471,7 +531,7 @@ class CalculatorLoaderView:
         self.category_names = self.verbose["categories"]
         self.conversion_factors = static_verbose["conversion_factors"]
         self.tooltips = static_verbose["information"]
-        
+
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             if request.method == "POST":

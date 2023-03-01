@@ -78,6 +78,72 @@ class RegistrationFormStage2(forms.Form):
                                    business_size=self.cleaned_data['business_size'])
         business.save()
 
+class AdminUtil:
+
+    @staticmethod
+    def retrieve_meta_fields():
+        bu = models.CarbonFootprint()
+        fields = list(bu.__dict__.keys())
+        del bu
+        non_cal_fields = ['_state', 'id', 'business_id', 'conversion_factor_id', 'year']
+        # List to preserve order
+        calculator_fields = [field for field in fields if field not in non_cal_fields]
+        return tuple(calculator_fields)
+
+class AdminForm(forms.Form):
+    class Meta:
+        fields = AdminUtil.retrieve_meta_fields()
+
+    year = forms.IntegerField()
+    mains_gas = forms.DecimalField()
+    fuel = forms.DecimalField()
+    oil = forms.DecimalField()
+    coal = forms.DecimalField()
+    wood = forms.DecimalField()
+    grid_electricity = forms.DecimalField()
+    grid_electricity_LOWCARBON = forms.DecimalField()
+    waste_food_landfill = forms.DecimalField()
+    waste_food_compost = forms.DecimalField()
+    waste_food_charity = forms.DecimalField()
+    bottles_recycle = forms.DecimalField()
+    aluminum_can_recycle = forms.DecimalField()
+    general_waste_landfill = forms.DecimalField()
+    general_waste_recycle = forms.DecimalField()
+    special_waste = forms.DecimalField()
+    goods_delivered_company_owned = forms.DecimalField()
+    goods_delivered_contracted = forms.DecimalField()
+    travel_company_business = forms.DecimalField()
+    flights_domestic = forms.DecimalField()
+    flights_international = forms.DecimalField()
+    staff_commuting = forms.DecimalField()
+    beef_lamb = forms.DecimalField()
+    other_meat = forms.DecimalField()
+    lobster_prawn = forms.DecimalField()
+    fin_fish_seafood = forms.DecimalField()
+    milk_yoghurt = forms.DecimalField()
+    cheeses = forms.DecimalField()
+    fruit_veg_local = forms.DecimalField()
+    fruit_veg_other = forms.DecimalField()
+    dried_food = forms.DecimalField()
+    beer_kegs = forms.DecimalField()
+    beer_cans = forms.DecimalField()
+    beer_bottles = forms.DecimalField()
+    beer_kegs_LOWCARBON = forms.DecimalField()
+    beer_cans_LOWCARBON = forms.DecimalField()
+    beer_bottles_LOWCARBON = forms.DecimalField()
+    soft_drinks = forms.DecimalField()
+    wine = forms.DecimalField()
+    spirits = forms.DecimalField()
+    kitchen_equipment_assets = forms.DecimalField()
+    building_repair_maintenance = forms.DecimalField()
+    cleaning = forms.DecimalField()
+    IT_Marketing = forms.DecimalField()
+    main_water = forms.DecimalField()
+    sewage = forms.DecimalField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
 class CalculatorUtil:
 
