@@ -209,7 +209,7 @@ def action_plan(request):
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
 
-    conversion_factors = static_verbose["conversion_factors"]
+    conversion_factors = static_conversion_factors["2023"] # USING STATIC YEAR MUST BE CHANGED
 
     pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -313,7 +313,7 @@ def about(request):
         return render(request, 'register.html')
     else:
         return HttpResponse(request, 'about.html')
-    
+
 def account(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.user, request.POST)
@@ -386,7 +386,7 @@ class PledgeLoaderView:
     def __init__(self):
         self.verbose = static_verbose
         self.action_plan_verbose = static_action_plan
-        self.conversion_factors = static_verbose["conversion_factors"]
+        self.conversion_factors = static_conversion_factors["2023"] # USING STATIC YEAR, MUST BE CHANGED
 
         self.action_plan_field_dependencies = {
             "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
@@ -540,7 +540,7 @@ class CalculatorLoaderView:
 
         self.proper_names = self.verbose["fields"]
         self.category_names = self.verbose["categories"]
-        self.conversion_factors = static_verbose["conversion_factors"]
+        self.conversion_factors = static_conversion_factors["2023"] #USING STATIC YEAR MUST BE CHANGED
         self.tooltips = static_verbose["information"]
 
     def calculator(self, request):
