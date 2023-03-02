@@ -23,7 +23,7 @@ urlpatterns = [
     #
     # # USER PAGES
 
-    path('my/dashboard/', views.dash, name='dash'),
+    path('my/dashboard/', views.Dashboard().dash, name='dash'),
     path('my/calculator/', views.CalculatorLoaderView().calculator, name='calculator'),
     path('my/metrics', views.metrics, name='metrics'),
     path('my/report', views.report, name='report'),

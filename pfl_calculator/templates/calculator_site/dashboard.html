@@ -18,7 +18,16 @@
                 <a href="{% url 'account' %}"><button class="dashboard_buttons">Change Account Password</button></a><br>
             </div>
         </div>
-      
+        <div>
+            <form action="/my/dashboard/" enctype="multipart/form-data"  method="post">
+                {% csrf_token %}
+                <select name="year_switch" id="year_switch" onchange="this.form.submit()">
+                    <option value="2023" selected="selected">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </form>
+        </div>
         <div id="dashboard_div"></div>
         <div id="dashboard_div"> 
             <div id="dashboard_info">

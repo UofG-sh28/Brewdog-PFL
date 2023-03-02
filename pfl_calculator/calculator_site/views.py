@@ -62,7 +62,6 @@ load_global_data()
 # CHECK COOKIE
 def check_login(func):
     def inner(request, *args, **kwargs):
-        next_url = request.get_full_path()
         # check cookie value
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             # if logged in
@@ -73,6 +72,8 @@ def check_login(func):
             return response
 
     return inner
+
+
 
 
 # INFO PAGES AND HOMEPAGE
@@ -93,24 +94,40 @@ def scope(request):
     return render(request, 'calculator_site/scope.html', context)
 
 
-@check_login
-# AUTHENTICATED USER PAGES
-def dash(request):
-    context = {}
-    context['login'] = 'yes'
-    user = User.objects.get(username=request.user)
-    business = Business.objects.get(user=user)
-    business_id = business.id
-    footprints = CarbonFootprint.objects.filter(business=business)
-    carbon_sum = 0
-    for footprint in footprints:
-        carbon_sum += sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
-    if carbon_sum <= 0:
-        carbon_sum = -500
-    carbon_sum = format(carbon_sum, ".2f")
 
-    context = {'carbon_sum': carbon_sum, 'login': 'yes'}
-    return render(request, 'calculator_site/dashboard.html', context)
+class Dashboard:
+
+    def dash(self, request):
+        if request.method == "GET":
+            return self.__dashboard_get(request)
+        elif request.method == "POST":
+            return self.__dashboard_post(request)
+        else:
+            return HttpResponse("<h1> Error </h1>")
+
+    def __dashboard_get(self, request):
+        context = {}
+        context['login'] = 'yes'
+        user = User.objects.get(username=request.user)
+        business = Business.objects.get(user=user)
+        business_id = business.id
+        footprints = CarbonFootprint.objects.filter(business=business)
+        carbon_sum = 0
+        for footprint in footprints:
+            carbon_sum += sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
+        if carbon_sum <= 0:
+            carbon_sum = -500
+        carbon_sum = format(carbon_sum, ".2f")
+
+        context = {'carbon_sum': carbon_sum, 'login': 'yes'}
+        return render(request, 'calculator_site/dashboard.html', context)
+
+    def __dashboard_post(self, request):
+        data = request.POST
+        print(data)
+        return self.__dashboard_get(request)
+
+
 
 @check_login
 def dash_redirect(request):
@@ -553,6 +570,7 @@ class CalculatorLoaderView:
         self.conversion_factors = static_conversion_factors["2023"] #USING STATIC YEAR MUST BE CHANGED
         self.tooltips = static_verbose["information"]
 
+    @check_login
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             if request.method == "POST":
