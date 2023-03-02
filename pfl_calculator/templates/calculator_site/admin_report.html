@@ -1,0 +1,23 @@
+{% extends 'calculator_site/base.html' %}
+{% load static %}
+
+{% block title %}
+  Admin Page
+{% endblock %}
+
+{% block body_block %}
+  {% if error %}
+    { error }
+  {% else %}
+  <div class="generate">
+      <form class="dropdown">
+        <button class="shine-button year-select">Generate Report For Previous Years:</button>
+          <div class="dropdown-years">
+          {% for year in conversion_factors.keys %}
+            <button type="submit" class="shine-button" id="generate" type="submit">Generate Report for {{ year }}</button>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+  {% endif %}
+{% endblock %}

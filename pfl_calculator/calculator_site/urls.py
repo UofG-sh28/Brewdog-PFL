@@ -15,6 +15,7 @@ urlpatterns = [
     #
     # # ADMIN PAGES
     path('staff/dashboard', views.staff_dash, name='staff_dash'),
+    path('staff/admin_report/', views.admin_report, name='admin_report'),
     #
     # # REGISTER PAGE
     path('register/', views.register, name='register'),

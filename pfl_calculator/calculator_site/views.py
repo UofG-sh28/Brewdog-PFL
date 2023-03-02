@@ -381,6 +381,16 @@ def staff_dash(request):
     print("render")
     return render(request, 'calculator_site/admin_dash.html', context=context)
 
+def admin_report(request):
+    context = {
+        "conversion_factors" : static_conversion_factors,
+    }
+    if (request.user.is_staff):
+        print("user")
+    else:
+        context["error"] = "You do not have access to this page."
+    return render(request, 'calculator_site/admin_report.html', context=context)
+
 class PledgeLoaderView:
 
     def __init__(self):
