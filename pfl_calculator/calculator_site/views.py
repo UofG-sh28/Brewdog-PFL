@@ -67,7 +67,7 @@ def check_login(func):
             # if logged in
             return func(request, *args, **kwargs)
         else:
-            response = redirect("/")
+            response = redirect("/login/")
             response.delete_cookie('login')
             return response
 
