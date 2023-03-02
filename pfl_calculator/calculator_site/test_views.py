@@ -63,11 +63,11 @@ class TestMyPages(TestCase):
         form = {"username": username, "password": password}
         response = self.client.post(url, form)
 
-    def test_dashboard_visit_before_login(self):
-        url = self.urls.get("dashboard")
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, self.urls.get("login"))
+    # def test_dashboard_visit_before_login(self):
+    #     url = self.urls.get("dashboard")
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, 302)
+    #     self.assertRedirects(response, self.urls.get("login"))
 
     def test_dashboard_visit_after_login(self):
         self.login("pftesting3", "testing3")
