@@ -109,12 +109,17 @@ class Dashboard:
             return HttpResponse("<h1> Error </h1>")
 
     def __dashboard_get(self, request, year=None):
-        context = {}
-        context['login'] = 'yes'
+        context = {'login': 'yes'}
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
+        if year is not None:
+            context["year"] = year
+        else:
+            context["year"] = year_ck
+
         user = User.objects.get(username=request.user)
         business = Business.objects.get(user=user)
         business_id = business.id
-        footprints = CarbonFootprint.objects.filter(business=business)
+        footprints = CarbonFootprint.objects.filter(business=business, year=context["year"])
         carbon_sum = 0
         for footprint in footprints:
             carbon_sum += sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
@@ -122,13 +127,10 @@ class Dashboard:
             carbon_sum = -500
         carbon_sum = format(carbon_sum, ".2f")
 
-        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
+
 
         context["years"] = ["2023", "2022", "2021", "2020"]
-        if year is not None:
-            context["year"] = year
-        else:
-            context["year"] = year_ck
+
         context['carbon_sum'] = carbon_sum
         response = render(request, 'calculator_site/dashboard.html', context)
         response.set_signed_cookie('year', context["year"], salt="sh28", max_age=60 * 60 * 12)
