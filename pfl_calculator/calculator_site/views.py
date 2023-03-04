@@ -15,8 +15,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
-from .forms import RegistrationForm, RegistrationFormStage2, CalculatorUtil, ChangePasswordForm
-from .models import CarbonFootprint, ActionPlan
+from .forms import RegistrationForm, RegistrationFormStage2, CalculatorUtil, ChangePasswordForm, FeedbackForm, \
+    FeedbackUtil, ActionPlanDetailForm
+from .models import CarbonFootprint, ActionPlan, Feedback, ActionPlanDetail
 from datetime import date
 
 from .pledge_functions import PledgeFunctions
@@ -27,6 +28,7 @@ static_scope = None
 static_verbose = None
 static_action_plan = None
 static_calculator_categories = None
+static_feedback_verbose = None
 
 
 def load_global_data():
@@ -36,6 +38,7 @@ def load_global_data():
     global static_action_plan
     global static_calculator_categories
     global static_conversion_factors
+    global static_feedback_verbose
 
     with open('static/categories.json', encoding='utf8') as cd:
         static_categories = json.load(cd)
@@ -54,6 +57,9 @@ def load_global_data():
 
     with open('static/conversion_factors.json', encoding='utf8') as cf:
         static_conversion_factors = json.load(cf)
+
+    with open('static/feedback_verbose.json', encoding='utf8') as fv:
+        static_feedback_verbose = json.load(fv)
 
 
 load_global_data()
@@ -74,8 +80,6 @@ def check_login(func):
     return inner
 
 
-
-
 # INFO PAGES AND HOMEPAGE
 def index(request):
     context = {}
@@ -92,7 +96,6 @@ def scope(request):
     data = Business.objects.all().values()
     context = {'business': data}
     return render(request, 'calculator_site/scope.html', context)
-
 
 
 class Dashboard:
@@ -128,7 +131,6 @@ class Dashboard:
         return self.__dashboard_get(request)
 
 
-
 @check_login
 def dash_redirect(request):
     return redirect("/my/dashboard/")
@@ -147,12 +149,13 @@ def to_dict(instance):
         data[f.name] = [i.id for i in f.value_from_object(instance)]
     return data
 
+
 @check_login
 def report(request):
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
-    data, created= CarbonFootprint.objects.get_or_create(business=business)
+    data, created = CarbonFootprint.objects.get_or_create(business=business)
     data = to_dict(data)
     if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
         return render(request, 'calculator_site/pledges.html', context={'cal': 0})
@@ -175,10 +178,9 @@ def report(request):
             "percent": 0
         }
         for field in static_categories[cat]:
-            #carbon_dict[cat]["total"] += getattr(data[0], field)
+            # carbon_dict[cat]["total"] += getattr(data[0], field)
             carbon_dict[cat]["total"] += data[field]
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
-
 
     # FORMAT THE TOTALS & PERCENTAGES
     for cat in carbon_dict:
@@ -220,13 +222,14 @@ def report(request):
     context["verbose_json"] = mark_safe(json.dumps(json.dumps(static_verbose)))
     return render(request, 'calculator_site/report.html', context=context)
 
+
 @check_login
 def action_plan(request):
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
 
-    conversion_factors = static_conversion_factors["2023"] # USING STATIC YEAR MUST BE CHANGED
+    conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR MUST BE CHANGED
 
     pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -246,10 +249,10 @@ def action_plan(request):
 
     actual_percent_savings = sum([])
 
-
     json_data = json.dumps(pf_mappings)
 
     return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data})
+
 
 @check_login
 def profile(request):
@@ -331,6 +334,7 @@ def about(request):
     else:
         return HttpResponse(request, 'about.html')
 
+
 def account(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.user, request.POST)
@@ -341,11 +345,12 @@ def account(request):
         form = ChangePasswordForm(request.user)
     return render(request, 'calculator_site/account.html', {'form': form})
 
+
 def staff_dash(request):
-    context={
+    context = {
         "error": None,
         "conversion_factors": static_conversion_factors,
-        "form" : None
+        "form": None
     }
     if (request.user.is_staff):
         print("user")
@@ -363,7 +368,7 @@ def staff_dash(request):
                 print(new_data)
 
                 if str(year) in static_conversion_factors.keys():
-                    #Update
+                    # Update
                     print("trying to update")
                     with open('static/conversion_factors.json', "r+", encoding='utf8') as cf:
                         cfs = json.load(cf)
@@ -375,7 +380,7 @@ def staff_dash(request):
                         cf.write("\n")
 
                 else:
-                    #Create
+                    # Create
                     print("Trying to insert")
                     with open('static/conversion_factors.json', "r+", encoding='utf8') as cf:
                         cfs = json.load(cf)
@@ -394,13 +399,13 @@ def staff_dash(request):
     else:
         context["error"] = "You do not have access to this page."
 
-
     print("render")
     return render(request, 'calculator_site/admin_dash.html', context=context)
 
+
 def admin_report(request):
     context = {
-        "conversion_factors" : static_conversion_factors,
+        "conversion_factors": static_conversion_factors,
     }
     if (request.user.is_staff):
         print("user")
@@ -408,12 +413,13 @@ def admin_report(request):
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/admin_report.html', context=context)
 
+
 class PledgeLoaderView:
 
     def __init__(self):
         self.verbose = static_verbose
         self.action_plan_verbose = static_action_plan
-        self.conversion_factors = static_conversion_factors["2023"] # USING STATIC YEAR, MUST BE CHANGED
+        self.conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR, MUST BE CHANGED
 
         self.action_plan_field_dependencies = {
             "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
@@ -522,7 +528,7 @@ class PledgeLoaderView:
             group_fields.append(pdw)
             if field in choices:
                 pdw.form.field.widget.choices = choices.get(field)
-            if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]])\
+            if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]]) \
                     and len(self.action_plan_field_dependencies[field]) != 0:
                 pdw.applicable = False
                 pdw.form.field.disabled = True
@@ -550,6 +556,7 @@ class PledgeTableWrapper:
         self.column = column
         self.fields = fields
 
+
 class CalculatorLoaderView:
 
     # Matching implementation as found in calcualtor.js
@@ -567,7 +574,7 @@ class CalculatorLoaderView:
 
         self.proper_names = self.verbose["fields"]
         self.category_names = self.verbose["categories"]
-        self.conversion_factors = static_conversion_factors["2023"] #USING STATIC YEAR MUST BE CHANGED
+        self.conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR MUST BE CHANGED
         self.tooltips = static_verbose["information"]
 
     @check_login
@@ -671,3 +678,141 @@ class CalculatorDataWrapper:
         self.input_value = " "
         self.checked = "checked"
         self.tooltip = tooltip
+
+
+class FeedbackDataWrapper:
+    def __init__(self, seq, name, form, comment=None):
+        self.seq = int(seq / 2 + 1)
+        self.name = name
+        self.form = form
+        self.comment = comment
+
+
+class FeedbackLoaderView:
+    def __init__(self):
+        self.feedback_verbose = static_feedback_verbose
+
+    def feedback(self, request):
+        if request.method == "POST":
+            return self.__feedback_post_request(request)
+        elif request.method == "GET":
+            return self.__feedback_get_request(request)
+        else:
+            return HttpResponse("<h1>Error</h1>")
+
+    def __feedback_post_request(self, request):
+        user = User.objects.get(username=request.user)
+        data = request.POST
+        data = dict(data)
+        del data["csrfmiddlewaretoken"]
+        print(data)
+        fb, _ = Feedback.objects.get_or_create(user=user)
+        for k, v in data.items():
+            setattr(fb, k, v[0])
+        fb.save()
+        response = redirect('/my/dashboard/')
+        return response
+
+    def __feedback_get_request(self, request):
+        user = User.objects.get(username=request.user)
+        try:
+            fb = Feedback.objects.get(user=request.user)
+        except Exception as error:
+            fb = None
+
+        feedback_form = FeedbackForm()
+        fileds = FeedbackUtil.retrieve_meta_fields()
+
+        context = {}
+        data = []
+        context['feedback_form'] = data
+        for index, field in enumerate(fileds):
+            if field in self.feedback_verbose.keys():
+                if fb is not None:
+                    feedback_form.fields[field].widget.attrs.update({"value": getattr(fb, field)})
+                    feedback_form.fields[field].initial = getattr(fb, field)
+                data.append(FeedbackDataWrapper(index, self.feedback_verbose[field]["name"], feedback_form[field]))
+            else:
+                dfw = data.pop()
+                if fb is not None:
+                    feedback_form.fields[field].widget.attrs.update({"value": getattr(fb, field)})
+                dfw.comment = feedback_form[field]
+                data.append(dfw)
+
+        return render(request, 'calculator_site/feedback.html', context=context)
+
+
+class ActionPlanDetailDataWrapper:
+    def __init__(self, seq, name, form, ownership, start_date, end_date):
+        self.seq = seq
+        self.name = name
+        self.form = form
+        self.ownership = ownership
+        self.start_date = start_date
+        self.end_date = end_date
+
+
+class ActionPlanDetailLoaderView:
+    def __init__(self):
+        self.static_action_plan = static_action_plan
+        return
+
+    def action_plan_detail(self, request):
+        if request.method == "POST":
+            return self.__action_plan_detail_post_request(request)
+        elif request.method == "GET":
+            return self.__action_plan_detail_get_request(request)
+        else:
+            return HttpResponse("<h1>Error</h1>")
+
+    def __action_plan_detail_post_request(self, request):
+        user = request.user
+        data = request.POST
+        data = dict(data)
+        del data["csrfmiddlewaretoken"]
+
+        business, _ = Business.objects.get_or_create(user=user)
+        apd_list = ActionPlanDetail.objects.filter(business=business, year=date.today().year)
+        for index, apd in enumerate(apd_list):
+            if data["start_date"][index] > data["end_date"][index]:
+                return render(request, 'calculator_site/action_plan_detail.html', context={'error':"start date must before end date!"})
+            setattr(apd, "ownership", data["ownership"][index])
+            setattr(apd, "start_date", data["start_date"][index])
+            setattr(apd, "end_date", data["end_date"][index])
+            apd.save()
+        response = redirect('/my/dashboard/')
+        return response
+
+    def __action_plan_detail_get_request(self, request):
+        # get pledge options
+        user = request.user
+        business, _ = Business.objects.get_or_create(user=user)
+        # check if is ok
+        ap = ActionPlan.objects.get(business=business, year=date.today().year)
+        if ap is None:
+            return redirect('/my/pledges')
+        # create ActionPlanDetail item
+        fields = ActionPlanUtil.retrieve_meta_fields()
+        try:
+            ap_list = ActionPlanDetail.objects.filter(business=business, year=date.today().year)
+            if len(ap_list) == 0:
+                raise Exception
+        except:
+            for field in fields:
+                value = getattr(ap, field)
+                if value != 0:
+                    apd = ActionPlanDetail(business=business, year=date.today().year, text=field)
+                    apd.save()
+        # return form
+        context = {}
+        data = []
+        context['action_plan_detail_forms'] = data
+        ap_list = ActionPlanDetail.objects.filter(business=business, year=date.today().year)
+        for index, item in enumerate(ap_list):
+            field = getattr(item, "text")
+            name = self.static_action_plan[field]["name"]
+            acion_plan_detail_form = ActionPlanDetailForm()
+            data.append(ActionPlanDetailDataWrapper(index + 1, name, None, acion_plan_detail_form["ownership"],
+                                                    acion_plan_detail_form["start_date"],
+                                                    acion_plan_detail_form["end_date"]))
+        return render(request, 'calculator_site/action_plan_detail.html', context=context)

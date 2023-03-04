@@ -1,0 +1,57 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Action Plan
+{% endblock %}
+
+<!--{% block css %}{% endblock %}-->
+
+{% block body_block %}
+  <div class="feedback">
+    <h2>Action Plan</h2>
+    <form id="action_plan_detail_forms" method="post">
+      {% csrf_token %}
+      <div class="table-feedback-row">
+            <div class="table-pledge-column">
+            <table id="ActionPlanTable" class="table">
+                <tr id="headers">
+                  <th>Number</th>
+                  <th style="width:40%">Pledge Detail</th>
+                  <th style="width:15%">Ownership</th>
+                    <th style="width:15%">Start Date</th>
+                    <th style="width:15%">End Date</th>
+                </tr>
+              {% for item in action_plan_detail_forms %}
+                  <td style="background-color: #ffc000" >{{item.seq}}</td>
+                  <td>{{item.name}}</td>
+                <td style="background-color: #ffc000" >{{item.ownership}}</td>
+                  <td>
+                      <label class="pledge-select-label">
+                          {{item.start_date}}
+                          <svg>
+                              <use xlink:href="#select-arrow-down"></use>
+                          </svg>
+                      </label>
+                  </td>
+                <td>
+                      <label class="pledge-select-label">
+                          {{item.end_date}}
+                          <svg>
+                              <use xlink:href="#select-arrow-down"></use>
+                          </svg>
+                      </label>
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+            </div>
+    </div>
+        <button type="submit" name="feedback">Submit</button>
+    </form>
+
+    {% if error != "" %}
+      <small style="color:red">{{ error }}</small> <br>
+    {% endif %}
+
+  </div>
+{% endblock %}
