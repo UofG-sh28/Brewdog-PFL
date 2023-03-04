@@ -127,15 +127,12 @@ class Dashboard:
             carbon_sum = -500
         carbon_sum = format(carbon_sum, ".2f")
 
-
-
         context["years"] = ["2023", "2022", "2021", "2020"]
 
         context['carbon_sum'] = carbon_sum
         response = render(request, 'calculator_site/dashboard.html', context)
         response.set_signed_cookie('year', context["year"], salt="sh28", max_age=60 * 60 * 12)
         return response
-
 
     def __dashboard_post(self, request):
         data = request.POST
@@ -243,7 +240,7 @@ def action_plan(request):
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business, year=year_ck).first()
 
-    conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR MUST BE CHANGED
+    conversion_factors = static_conversion_factors.get(year_ck, None)  # USING STATIC YEAR MUST BE CHANGED
 
     pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -588,7 +585,6 @@ class CalculatorLoaderView:
 
         self.proper_names = self.verbose["fields"]
         self.category_names = self.verbose["categories"]
-        self.conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR MUST BE CHANGED
         self.tooltips = static_verbose["information"]
 
     def calculator(self, request):
@@ -636,12 +632,16 @@ class CalculatorLoaderView:
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
 
         category_list = []
+        conversion_factors = static_conversion_factors.get(year_ck)
+        if conversion_factors is None:
+            print("Failed to load conversions factors.")
+            return HttpResponse("<h1>Failed to load conversions factors.</h1>")
         for key, value in self.categories.items():
             field_list = []
             for field_id in value:
                 field_list.append(CalculatorDataWrapper(field_id,
                                                         cal_form[field_id], self.proper_names[field_id],
-                                                        self.conversion_factors[field_id], self.tooltips[field_id]))
+                                                        conversion_factors[field_id], self.tooltips[field_id]))
             category_list.append(CalculatorCategoryWrapper(key, self.category_names[key], field_list))
 
         # Determine what category to show
