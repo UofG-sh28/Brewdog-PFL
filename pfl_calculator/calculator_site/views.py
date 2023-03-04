@@ -162,10 +162,11 @@ def to_dict(instance):
 
 @check_login
 def report(request):
+    year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
-    footprint = CarbonFootprint.objects.filter(business=business).first()
-    data, created = CarbonFootprint.objects.get_or_create(business=business)
+    footprint = CarbonFootprint.objects.filter(business=business, year=year_ck).first()
+    data, created = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
     data = to_dict(data)
     if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
         return render(request, 'calculator_site/pledges.html', context={'cal': 0})
@@ -235,9 +236,10 @@ def report(request):
 
 @check_login
 def action_plan(request):
+    year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
-    footprint = CarbonFootprint.objects.filter(business=business).first()
+    footprint = CarbonFootprint.objects.filter(business=business, year=year_ck).first()
 
     conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR MUST BE CHANGED
 
@@ -462,7 +464,6 @@ class PledgeLoaderView:
         }
 
     def pledges(self, request):
-
         if request.method == "POST":
             return self.__pledges_post_request(request)
         elif request.method == "GET":
@@ -471,12 +472,12 @@ class PledgeLoaderView:
             return HttpResponse("<h1>Error</h1>")
 
     def __pledges_post_request(self, request):
-
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
         # # Parse post data and handle functions
         # # Handle footprint error
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
 
         data = request.POST
 
@@ -499,9 +500,10 @@ class PledgeLoaderView:
         return repsonse
 
     def __pledges_get_request(self, request):
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
 
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
@@ -587,7 +589,6 @@ class CalculatorLoaderView:
         self.conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR MUST BE CHANGED
         self.tooltips = static_verbose["information"]
 
-    @check_login
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             if request.method == "POST":
@@ -600,6 +601,7 @@ class CalculatorLoaderView:
             return redirect('/login/')
 
     def __calculator_post_request(self, request):
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
         data = request.POST
 
         # Parse post data into python dictionary
@@ -610,7 +612,7 @@ class CalculatorLoaderView:
 
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
 
         # TODO
         #  Ensure that all data is within the limits/range
@@ -623,12 +625,13 @@ class CalculatorLoaderView:
 
     def __calculator_get_request(self, request, progress=0):
         # Initialise data fields
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
 
         cal_form = CalculatorForm()
 
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
-        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=date.today().year)
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
 
         category_list = []
         for key, value in self.categories.items():
