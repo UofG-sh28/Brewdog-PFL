@@ -105,7 +105,7 @@ class Dashboard:
         else:
             return HttpResponse("<h1> Error </h1>")
 
-    def __dashboard_get(self, request):
+    def __dashboard_get(self, request, year=None):
         context = {}
         context['login'] = 'yes'
         user = User.objects.get(username=request.user)
@@ -119,13 +119,23 @@ class Dashboard:
             carbon_sum = -500
         carbon_sum = format(carbon_sum, ".2f")
 
-        context = {'carbon_sum': carbon_sum, 'login': 'yes'}
-        return render(request, 'calculator_site/dashboard.html', context)
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
+
+        context["years"] = ["2023", "2022", "2021", "2020"]
+        if year is not None:
+            context["year"] = year
+        else:
+            context["year"] = year_ck
+        context['carbon_sum'] = carbon_sum
+        response = render(request, 'calculator_site/dashboard.html', context)
+        response.set_signed_cookie('year', context["year"], salt="sh28", max_age=60 * 60 * 12)
+        return response
+
 
     def __dashboard_post(self, request):
         data = request.POST
-        print(data)
-        return self.__dashboard_get(request)
+        year = data["year_switch"]
+        return self.__dashboard_get(request, year)
 
 
 
@@ -152,7 +162,7 @@ def report(request):
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business).first()
-    data, created= CarbonFootprint.objects.get_or_create(business=business)
+    data, created = CarbonFootprint.objects.get_or_create(business=business)
     data = to_dict(data)
     if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
         return render(request, 'calculator_site/pledges.html', context={'cal': 0})

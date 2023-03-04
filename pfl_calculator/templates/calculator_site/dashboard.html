@@ -22,10 +22,15 @@
             <form action="/my/dashboard/" enctype="multipart/form-data"  method="post">
                 {% csrf_token %}
                 <select name="year_switch" id="year_switch" onchange="this.form.submit()">
-                    <option value="2023" selected="selected">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
+                    {% for y in years %}
+                        {% if y == year %}
+                            <option value="{{ y }}" selected>{{ y }}</option>
+                        {% else %}
+                            <option value="{{ y }}">{{ y }}</option>
+                        {% endif %}
+                    {% endfor %}
                 </select>
+
             </form>
         </div>
         <div id="dashboard_div"></div>
@@ -34,7 +39,6 @@
                 <div style="background-color: lightblue; padding: 20px; text-align: center;">
                     <h2>Customer Information:</h2>
                     <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">
-                    <!-- WHY DOES THIS NOT WORK -->
                     {% if carbon_sum == "-500.00" %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
                     CO</h4><h6 style="display: inline;">2</h6> {% endif %}
                 </div>
