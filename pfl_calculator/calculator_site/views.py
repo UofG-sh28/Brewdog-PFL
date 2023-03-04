@@ -245,7 +245,7 @@ def action_plan(request):
     pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
 
-    ap, _ = ActionPlan.objects.get_or_create(business=business, year=date.today().year)
+    ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
     pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
     ap_values = [getattr(ap, field) for field in ActionPlanUtil.retrieve_meta_fields()]
@@ -430,7 +430,6 @@ class PledgeLoaderView:
     def __init__(self):
         self.verbose = static_verbose
         self.action_plan_verbose = static_action_plan
-        self.conversion_factors = static_conversion_factors["2023"]  # USING STATIC YEAR, MUST BE CHANGED
 
         self.action_plan_field_dependencies = {
             "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
@@ -484,7 +483,7 @@ class PledgeLoaderView:
         data = dict(data)
         del data["csrfmiddlewaretoken"]
 
-        ap, _ = ActionPlan.objects.get_or_create(business=business, year=date.today().year)
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
         # save to database
         # TODO
@@ -781,13 +780,14 @@ class ActionPlanDetailLoaderView:
             return HttpResponse("<h1>Error</h1>")
 
     def __action_plan_detail_post_request(self, request):
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
         user = request.user
         data = request.POST
         data = dict(data)
         del data["csrfmiddlewaretoken"]
 
         business, _ = Business.objects.get_or_create(user=user)
-        apd_list = ActionPlanDetail.objects.filter(business=business, year=date.today().year)
+        apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
         for index, apd in enumerate(apd_list):
             if data["start_date"][index] > data["end_date"][index]:
                 return render(request, 'calculator_site/action_plan_detail.html', context={'error':"start date must before end date!"})
@@ -799,30 +799,31 @@ class ActionPlanDetailLoaderView:
         return response
 
     def __action_plan_detail_get_request(self, request):
+        year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
         # get pledge options
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
         # check if is ok
-        ap = ActionPlan.objects.get(business=business, year=date.today().year)
+        ap = ActionPlan.objects.get(business=business, year=year_ck)
         if ap is None:
             return redirect('/my/pledges')
         # create ActionPlanDetail item
         fields = ActionPlanUtil.retrieve_meta_fields()
         try:
-            ap_list = ActionPlanDetail.objects.filter(business=business, year=date.today().year)
+            ap_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
             if len(ap_list) == 0:
                 raise Exception
         except:
             for field in fields:
                 value = getattr(ap, field)
                 if value != 0:
-                    apd = ActionPlanDetail(business=business, year=date.today().year, text=field)
+                    apd = ActionPlanDetail(business=business, year=year_ck, text=field)
                     apd.save()
         # return form
         context = {}
         data = []
         context['action_plan_detail_forms'] = data
-        ap_list = ActionPlanDetail.objects.filter(business=business, year=date.today().year)
+        ap_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
         for index, item in enumerate(ap_list):
             field = getattr(item, "text")
             name = self.static_action_plan[field]["name"]
