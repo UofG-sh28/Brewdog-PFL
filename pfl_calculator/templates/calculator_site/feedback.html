@@ -1,0 +1,49 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Feedback
+{% endblock %}
+
+<!--{% block css %}{% endblock %}-->
+
+{% block body_block %}
+  <div class="feedback">
+    <h2>Feedback</h2>
+      <h3>We would really appreciate it if you could feedback to us on what you thought of the calculator, and how we might make it better. Fill in by selecting a tick in dropdown, menu for the relevant option.</h3>
+    <form id="feedback_form" method="post">
+      {% csrf_token %}
+      <div class="table-feedback-row">
+            <div class="table-pledge-column">
+            <table id="FeedbackTable" class="table">
+                <tr id="headers">
+                  <th> </th>
+                  <th style="width:40%">Question</th>
+                  <th style="width:25%">Options Target</th>
+                    <th style="width:35%">Comment</th>
+                </tr>
+              {% for item in feedback_form %}
+                  <td style="background-color: #ffc000" >{{item.seq}}</td>
+                  <td>{{item.name}}</td>
+                  <td>
+                      <label class="pledge-select-label">
+                          {{item.form}}
+                          <svg>
+                              <use xlink:href="#select-arrow-down"></use>
+                          </svg>
+                      </label>
+                  </td>
+                <td style="background-color: #ffc000" >{{item.comment}}</td>
+                </tr>
+              {% endfor %}
+            </table>
+            </div>
+    </div>
+        <button type="submit" name="feedback">Submit</button>
+    </form>
+
+    {% if error != "" %}
+      <small style="color:red">{{ error }}</small> <br>
+    {% endif %}
+
+  </div>
+{% endblock %}

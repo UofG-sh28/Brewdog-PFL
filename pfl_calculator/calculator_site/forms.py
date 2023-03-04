@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
@@ -209,9 +211,9 @@ class ActionPlanForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            
-            
-            
+
+
+
 class ChangePasswordForm(PasswordChangeForm):
     def clean_new_pass(self):
         new_password = self.cleaned_data.get('new_password')
@@ -219,3 +221,83 @@ class ChangePasswordForm(PasswordChangeForm):
         if new_password and new_password_confirm and new_password != new_password_confirm:
             raise forms.ValidationError('Passwords do not match')
         return new_password_confirm
+
+class FeedbackUtil:
+
+    @staticmethod
+    def retrieve_meta_fields():
+        fb = models.Feedback()
+        fields = list(fb.__dict__.keys())
+        del fb
+        non_act_fields = ['_state', 'id', 'user_id']
+        # List to preserve order
+        feedback_fields = []
+        feedback_fields = [field for field in fields if field not in non_act_fields]
+
+        return tuple(feedback_fields)
+
+    @staticmethod
+    def retrieve_meta_widgets():
+        fields = FeedbackUtil.retrieve_meta_fields()
+        widgets = {}
+        for field in fields:
+            if re.match('^comment.', field):
+                attrs = {'type': 'text', 'class': 'input-style', 'id': field + 'Input', 'placeholder': ' ',
+                         "value": " ", "required": "false"}
+                widgets[field] = TextInput(attrs=attrs)
+            else:
+                attrs = {'type': 'text', 'class': 'pledge-input', 'id': field + '-pledge-input',
+                         "value": ""}
+                widgets[field] = Select(attrs=attrs)
+
+        return widgets
+
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = models.Feedback
+        fields = FeedbackUtil.retrieve_meta_fields()
+
+        widgets = FeedbackUtil.retrieve_meta_widgets()
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+class ActionPlanDetailUtil:
+
+    @staticmethod
+    def retrieve_meta_fields():
+        fb = models.ActionPlanDetail()
+        fields = list(fb.__dict__.keys())
+        del fb
+        non_act_fields = ['_state', 'id', 'business_id', 'year']
+        # List to preserve order
+        action_plan_detail_fields = [field for field in fields if field not in non_act_fields]
+
+        return tuple(action_plan_detail_fields)
+
+    @staticmethod
+    def retrieve_meta_widgets():
+        fields = ActionPlanUtil.retrieve_meta_fields()
+        widgets = {}
+        for field in fields:
+            if field == "ownership":
+                attrs = {'type': 'text', 'class': 'input-style', 'id': field + 'Input', 'placeholder': ' ',
+                         "value": " ", "required": "false"}
+                widgets[field] = TextInput(attrs=attrs)
+            else:
+                attrs = {'type': 'text', 'class': 'pledge-input', 'id': field + '-feedback-input',
+                         "value": ""}
+                widgets[field] = Select(attrs=attrs)
+
+        return widgets
+
+
+class ActionPlanDetailForm(forms.ModelForm):
+    class Meta:
+        model = models.ActionPlanDetail
+        fields = ActionPlanDetailUtil.retrieve_meta_fields()
+        widgets = ActionPlanDetailUtil.retrieve_meta_widgets()
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)

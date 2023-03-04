@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+
 class Business(models.Model):
     """This model represents a user's business,
         stores information about the Business' location, size, details and contacts.
@@ -32,9 +33,9 @@ class Business(models.Model):
     )
     PARTS_OF_WORLD = (
         ("UK", "UK"),
-        ("EU","Europe"),
-        ("NA","North America"),
-        ("GL","Global"),
+        ("EU", "Europe"),
+        ("NA", "North America"),
+        ("GL", "Global"),
     )
     BUSINESS_TYPES = (
         ("BNFNA", "Bar (no food, no accomodation)"),
@@ -48,9 +49,9 @@ class Business(models.Model):
         ("M", "£500k-£10,000k"),
         ("L", "Over £10,000k"),
     )
-    #FK
+    # FK
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    #FIELDS
+    # FIELDS
     company_name = models.CharField(max_length=50, unique=True)
     business_address = models.CharField(max_length=150)
     area_type = models.CharField(max_length=1, choices=AREA_TYPES)
@@ -70,6 +71,7 @@ class Business(models.Model):
     def save(self, *args, **kwargs):
         super(Business, self).save(*args, **kwargs)
 
+
 class BusinessMetrics(models.Model):
     """ This stores a business' yearly metrics BusinessMetrics.
 
@@ -88,9 +90,9 @@ class BusinessMetrics(models.Model):
         annual_customers - Optional
         revenue - Optional."""
 
-    #FK
+    # FK
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
-    #FIELDS
+    # FIELDS
     year = models.IntegerField()
     operating_months = models.IntegerField()
     weekly_openings = models.IntegerField()
@@ -105,6 +107,7 @@ class BusinessMetrics(models.Model):
 
     def save(self, *args, **kwargs):
         super(BusinessMetrics, self).save(*args, **kwargs)
+
 
 class CarbonFootprint(models.Model):
     """This stores a User's carbon footprint which is created by caclulator.
@@ -123,9 +126,9 @@ class CarbonFootprint(models.Model):
 
     # ForeignKey
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
-    #OTHER FIELDS
+    # OTHER FIELDS
     year = models.IntegerField()
-    #CALCULATOR FIELDS
+    # CALCULATOR FIELDS
     mains_gas = models.FloatField(default=-1)
     fuel = models.FloatField(default=-1)
     oil = models.FloatField(default=-1)
@@ -205,13 +208,13 @@ class Pledge(models.Model):
     """
 
     CATEGORY_CHOICE = (
-        ("E","Energy"),
-        ("F","Food"),
-        ("B","Beer"),
-        ("W","Waste"),
-        ("T","Travel"),
-        ("O","Operations"),
-        ("M","Miscellaneous")
+        ("E", "Energy"),
+        ("F", "Food"),
+        ("B", "Beer"),
+        ("W", "Waste"),
+        ("T", "Travel"),
+        ("O", "Operations"),
+        ("M", "Miscellaneous")
     )
 
     category = models.CharField(max_length=1, choices=CATEGORY_CHOICE)
@@ -230,6 +233,7 @@ class Pledge(models.Model):
     def save(self, *args, **kwargs):
         super(Pledge, self).save(*args, **kwargs)
 
+
 class ActionPlan(models.Model):
     """
         Action Plan stores a business's Action Plan containing their selected Pledges
@@ -247,8 +251,7 @@ class ActionPlan(models.Model):
     """
     ACTION_CHOICES = ((0, "0%"), (10, "10%"), (20, "20%"), (30, "30%"), (40, "40%"), (50, "50%"), (60, "60%"),
                       (70, "70%"), (80, "80%"), (90, "90%"), (100, "100%"))
-    
-    
+
     class Meta:
         unique_together = (('business', 'year'),)
         verbose_name = "Action Plan"
@@ -256,38 +259,208 @@ class ActionPlan(models.Model):
 
     business = models.ForeignKey(Business, on_delete=models.CASCADE)
     year = models.IntegerField()
-    
 
     # fields:
-    reduce_electricity = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_electricity = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_gas = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_oil = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_coal = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_wood = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    energy_audit = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    swap_beef_lamb_for_non_meat = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    swap_beef_lamb_for_other_meat = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    swap_other_meat_for_non_meat = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    replace_fruit_veg = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    detailed_menu = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_food_waste = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    waste_audit = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_hc_beer_for_lc_beer = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_bottle_beer_for_kegs = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_bottle_beer_for_cans = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    switch_canned_beer_for_kegs = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_general_waste = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_vehicle_travel_miles = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_commuting_miles = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_staff_flights = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    reduce_emissions = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    adopt_sustainable_diposable_items = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    sustainably_procure_equipment = models.IntegerField(default=0, choices=ACTION_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(100)])
-
+    reduce_electricity = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                             validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_electricity = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                             validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_gas = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                     validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_oil = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                     validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_coal = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_wood = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    energy_audit = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                       validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_beef_lamb_for_non_meat = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_beef_lamb_for_other_meat = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                        validators=[MinValueValidator(0), MaxValueValidator(100)])
+    swap_other_meat_for_non_meat = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                       validators=[MinValueValidator(0), MaxValueValidator(100)])
+    replace_fruit_veg = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                            validators=[MinValueValidator(0), MaxValueValidator(100)])
+    detailed_menu = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                        validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_food_waste = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                            validators=[MinValueValidator(0), MaxValueValidator(100)])
+    waste_audit = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_hc_beer_for_lc_beer = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                     validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_bottle_beer_for_kegs = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_bottle_beer_for_cans = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    switch_canned_beer_for_kegs = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_general_waste = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                               validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_vehicle_travel_miles = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                      validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_commuting_miles = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                 validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_staff_flights = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                               validators=[MinValueValidator(0), MaxValueValidator(100)])
+    reduce_emissions = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                           validators=[MinValueValidator(0), MaxValueValidator(100)])
+    adopt_sustainable_diposable_items = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                            validators=[MinValueValidator(0), MaxValueValidator(100)])
+    sustainably_procure_equipment = models.IntegerField(default=0, choices=ACTION_CHOICES,
+                                                        validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     def __str__(self):
         return f"{self.business.company_name}'s Action Plan for {self.year}"
 
     def save(self, *args, **kwargs):
         super(ActionPlan, self).save(*args, **kwargs)
+
+
+class Feedback(models.Model):
+    """
+        Feedback stores a user's Feedback containing their selected Pledges
+
+        Primary Key:
+            id - Unique generated increasing id
+
+        Dependencies:
+            User - Each Feedback 'belongs' to one user.
+
+        Fields:
+            user - ForeignKey
+            feedback - one to many
+    """
+    Rate = ((0, "Strongly Agree"), (10, "Agree"), (20, "Unsure"), (30, "Disagree"), (40, "Strongly Disagree"))
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedback"
+
+    # fields:
+    had_enough_information = models.IntegerField(default=0, choices=Rate,
+                                                 validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_had_enough_information = models.CharField(default="", max_length=150)
+
+    scope_was_useful = models.IntegerField(default=0, choices=Rate,
+                                           validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_scope_was_useful = models.CharField(default="", max_length=150)
+
+    able_to_find_info = models.IntegerField(default=0, choices=Rate,
+                                            validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_able_to_find_info = models.CharField(default="", max_length=150)
+
+    calculator_ware_clear = models.IntegerField(default=0, choices=Rate,
+                                                validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_calculator_ware_clear = models.CharField(default="", max_length=150)
+
+    question_were_relevant = models.IntegerField(default=0, choices=Rate,
+                                                 validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_question_were_relevant = models.CharField(default="", max_length=150)
+
+    graphics_ware_clear = models.IntegerField(default=0, choices=Rate,
+                                              validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_graphics_ware_clear = models.CharField(default="", max_length=150)
+
+    pledge_were_relevant = models.IntegerField(default=0, choices=Rate,
+                                               validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_pledge_were_relevant = models.CharField(default="", max_length=150)
+
+    cut_emissions = models.IntegerField(default=0, choices=Rate,
+                                        validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_cut_emissions = models.CharField(default="", max_length=150)
+
+    action_plan_clear_use = models.IntegerField(default=0, choices=Rate,
+                                                validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_action_plan_clear_use = models.CharField(default="", max_length=150)
+
+    aware_of_carbon_impacts = models.IntegerField(default=0, choices=Rate,
+                                                  validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_aware_of_carbon_impacts = models.CharField(default="", max_length=150)
+
+    confident_able_to_complete = models.IntegerField(default=0, choices=Rate,
+                                                     validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_confident_able_to_complete = models.CharField(default="", max_length=150)
+
+    know_climate_change = models.IntegerField(default=0, choices=Rate,
+                                              validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_know_climate_change = models.CharField(default="", max_length=150)
+
+    actions_improve_business = models.IntegerField(default=0, choices=Rate,
+                                                   validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_actions_improve_business = models.CharField(default="", max_length=150)
+
+    customer_exercise = models.IntegerField(default=0, choices=Rate,
+                                            validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_customer_exercise = models.CharField(default="", max_length=150)
+
+    all_stores_complete_exercise = models.IntegerField(default=0, choices=Rate,
+                                                       validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_all_stores_complete_exercise = models.CharField(default="", max_length=150)
+
+    climate_change_emergency = models.IntegerField(default=0, choices=Rate,
+                                                   validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_climate_change_emergency = models.CharField(default="", max_length=150)
+
+    want_to_find_out_climate_change = models.IntegerField(default=0, choices=Rate,
+                                                          validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_want_to_find_out_climate_change = models.CharField(default="", max_length=150)
+
+    opportunities_to_supplier = models.IntegerField(default=0, choices=Rate,
+                                                    validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_opportunities_to_supplier = models.CharField(default="", max_length=150)
+
+    calculator_too_hard = models.IntegerField(default=0, choices=Rate,
+                                              validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_calculator_too_hard = models.CharField(default="", max_length=150)
+
+    happy_to_talk = models.IntegerField(default=0, choices=Rate,
+                                        validators=[MinValueValidator(0), MaxValueValidator(40)])
+    comment_happy_to_talk = models.CharField(default="", max_length=150)
+
+    def __str__(self):
+        return f"{self.user}'s Feedback"
+
+    def save(self, *args, **kwargs):
+        super(Feedback, self).save(*args, **kwargs)
+
+class ActionPlanDetail(models.Model):
+    """
+        ActionPlanDetail stores a user's ActionPlanDetails/Action Plan containing their selected Pledges
+
+        Primary Key:
+            id - Unique generated increasing id
+
+        Dependencies:
+            Business
+            Year
+
+        Fields:
+
+    """
+    Months = (
+    (1, "January"), (2, "February"), (3, "March"), (4, "April"), (5, "May"), (6, "June"), (7, "July"), (8, "August"),
+    (9, "September"), (10, "October"), (11, "November"), (12, "December"))
+
+    class Meta:
+        verbose_name = "Action Plan Detail"
+        verbose_name_plural = "Action Plan Details"
+
+    business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    year = models.IntegerField()
+
+    ownership = models.CharField(default="", max_length=200)
+    start_date = models.IntegerField(default=0, choices=Months,
+                                    validators=[MinValueValidator(1), MaxValueValidator(12)])
+    end_date = models.IntegerField(default=0, choices=Months,
+                                     validators=[MinValueValidator(1), MaxValueValidator(12)])
+    text = models.CharField(default="", max_length=200)
+
+    def __str__(self):
+        return f"{self.business.company_name}'s Action Plan Detail for {self.year}"
+
+    def save(self, *args, **kwargs):
+        super(ActionPlanDetail, self).save(*args, **kwargs)
