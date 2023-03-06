@@ -14,7 +14,7 @@
         <button class="shine-button year-select">Generate Report For Previous Years:</button>
           <div class="dropdown-years">
           {% for year in conversion_factors.keys %}
-            <button type="submit" class="shine-button" id="generate" type="submit">Generate Report for {{ year }}</button>
+            <a href="{% url 'generate_admin_report' year=year %}">Generate Report for {{ year }}</a>
           {% endfor %}
         </div>
       </div>

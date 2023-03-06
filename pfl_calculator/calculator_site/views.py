@@ -424,6 +424,10 @@ def admin_report(request):
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/admin_report.html', context=context)
 
+def generate_admin_report(request, year):
+    print(year)
+    return render(request, 'calculator_site/how_it_works.html')
+
 
 class PledgeLoaderView:
 
