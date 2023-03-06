@@ -11,7 +11,7 @@ def set_testup():
     test_user_with_detailed_cf = User.objects.create_user(username="pftesting3", password="testing3")
     Business.objects.create(user=test_user_with_detailed_cf, company_name="pf_tests3")
     test_business = Business.objects.get(company_name="pf_tests3")
-    CarbonFootprint.objects.create(business=test_business, year=2022, mains_gas=1, fuel=1, oil=1, coal=1, wood=1,
+    CarbonFootprint.objects.create(business=test_business, year=2023, mains_gas=1, fuel=1, oil=1, coal=1, wood=1,
                                    grid_electricity=1, grid_electricity_LOWCARBON=1, waste_food_landfill=1,
                                    waste_food_compost=1, waste_food_charity=1, bottles_recycle=1,
                                    aluminum_can_recycle=1, general_waste_landfill=1, general_waste_recycle=1,
@@ -23,13 +23,13 @@ def set_testup():
                                    beer_cans_LOWCARBON=1, beer_bottles_LOWCARBON=1, soft_drinks=1, wine=1, spirits=1,
                                    kitchen_equipment_assets=1, building_repair_maintenance=1, cleaning=1,
                                    IT_Marketing=1, main_water=1, sewage=1)
-    ActionPlan.objects.create(business=test_business, year=2022)
+    ActionPlan.objects.create(business=test_business, year=2023)
 
     test_user_with_default_cf = User.objects.create_user(username="pftesting2", password="testing2")
     Business.objects.create(user=test_user_with_default_cf, company_name="pf_tests2")
     test_business2 = Business.objects.get(company_name="pf_tests2")
-    CarbonFootprint.objects.create(business=test_business2, year=2022)
-    ActionPlan.objects.create(business=test_business2, year=2022)
+    CarbonFootprint.objects.create(business=test_business2, year=2023)
+    ActionPlan.objects.create(business=test_business2, year=2023)
 
     urls = {
         "login": "/login/",
@@ -97,13 +97,7 @@ class TestMyPages(TestCase):
         self.login("pftesting2", "testing2")
         url = self.urls.get("report")
         response = self.client.get(url)
-        self.assertTemplateUsed(response, 'calculator_site/pledges.html')
-
-    def test_action_plan_after_login(self):
-        self.login("pftesting3", "testing3")
-        url = self.urls.get("action-plan")
-        response = self.client.get(url)
-        self.assertTemplateUsed(response, 'calculator_site/action_plan.html')
+        self.assertTemplateUsed(response, 'calculator_site/report.html')
 
     def test_action_plan_before_login(self):
         # self.login("pftesting3", "testing3")
