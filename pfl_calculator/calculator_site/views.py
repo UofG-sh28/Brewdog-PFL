@@ -168,7 +168,7 @@ def report(request):
     data, created = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
     data = to_dict(data)
     if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
-        return render(request, 'calculator_site/pledges.html', context={'cal': 0})
+        return render(request, 'calculator_site/report.html', context={'cal': 0})
 
     context = {"id": data["id"], "business_id": data["business"], "year": data["year"]}
     data.pop("year")
