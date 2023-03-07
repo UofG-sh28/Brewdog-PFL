@@ -201,7 +201,7 @@ h2 {
 .login input[type="text"], .login input[type="password"] {
     width: 100%;
     padding: 10px;
-    /* margin-bottom: 20px; */
+    margin-bottom: 5px;
     border-radius: 5px;
     border: 1.5px solid;
 }
@@ -252,6 +252,7 @@ h2 {
 
 .register input[type="text"], .register input[type="email"], .register input[type="password"] {
     padding: 10px;
+    margin-bottom: 5px;
     border-radius: 5px;
     border: none;
     border: 1.5px solid;
@@ -337,6 +338,49 @@ h2 {
 .register_detail label {
     font-family: NewGroteskSquareTHREE;
     font-size: 27px;
+}
+
+.admin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 5%;
+}
+
+
+.admin input{
+    width: 100% !important;
+}
+
+.admin input[type="number"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1.5px solid;
+}
+
+.admin button[type="submit"] {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    width: 35%;
+    padding: 10px;
+    background-color: #94BA73;
+    color: rgb(255, 255, 255);
+}
+
+.generate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    margin-left: 5%;
+    margin-right: 70%;
+    margin-bottom: 5%;
 }
 
 /* Calculator */
