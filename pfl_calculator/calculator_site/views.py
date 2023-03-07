@@ -67,17 +67,25 @@ load_global_data()
 
 # CHECK COOKIE
 def check_login(func):
-    def inner(request, *args, **kwargs):
+    def inner(cls, request=None, *args, **kwargs):
+        if request is None:
+            request = cls
+            cls = None
         # check cookie value
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             # if logged in
-            return func(request, *args, **kwargs)
+            if cls is None:
+                return func(request, *args, **kwargs)
+            else:
+                return func(cls, request, *args, **kwargs)
         else:
             response = redirect("/login/")
             response.delete_cookie('login')
             return response
 
     return inner
+
+
 
 
 # INFO PAGES AND HOMEPAGE
@@ -98,8 +106,9 @@ def scope(request):
     return render(request, 'calculator_site/scope.html', context)
 
 
-class Dashboard:
+class DashboardViewLoader:
 
+    @check_login
     def dash(self, request):
         if request.method == "GET":
             return self.__dashboard_get(request)
@@ -464,7 +473,7 @@ class PledgeLoaderView:
             "adopt_sustainable_diposable_items": [],
             "sustainably_procure_equipment": [],
         }
-
+    @check_login
     def pledges(self, request):
         if request.method == "POST":
             return self.__pledges_post_request(request)
@@ -590,6 +599,7 @@ class CalculatorLoaderView:
         self.category_names = self.verbose["categories"]
         self.tooltips = static_verbose["information"]
 
+    @check_login
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             if request.method == "POST":
@@ -710,6 +720,7 @@ class FeedbackLoaderView:
     def __init__(self):
         self.feedback_verbose = static_feedback_verbose
 
+    @check_login
     def feedback(self, request):
         if request.method == "POST":
             return self.__feedback_post_request(request)
@@ -775,6 +786,7 @@ class ActionPlanDetailLoaderView:
         self.static_action_plan = static_action_plan
         return
 
+    @check_login
     def action_plan_detail(self, request):
         if request.method == "POST":
             return self.__action_plan_detail_post_request(request)
