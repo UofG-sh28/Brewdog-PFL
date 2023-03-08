@@ -72,7 +72,7 @@ def check_login(func):
             request = cls
             cls = None
         # check cookie value
-        if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
+        if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes' or request.user.is_authenticated:
             # if logged in
             if cls is None:
                 return func(request, *args, **kwargs)
@@ -91,8 +91,6 @@ def check_login(func):
 # INFO PAGES AND HOMEPAGE
 def index(request):
     context = {}
-    if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
-        context = {'login': 'yes'}
     return render(request, 'calculator_site/index.html', context)
 
 
