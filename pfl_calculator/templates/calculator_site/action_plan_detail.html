@@ -20,6 +20,8 @@
                   <th style="width:15%">Ownership</th>
                     <th style="width:15%">Start Date</th>
                     <th style="width:15%">End Date</th>
+                    <th style="width:15%">Plan</th>
+
                 </tr>
               {% for item in action_plan_detail_forms %}
                   <td style="background-color: #ffc000" >{{item.seq}}</td>
@@ -41,6 +43,7 @@
                           </svg>
                       </label>
                   </td>
+                <td style="background-color: #ffc000" >{{item.plan_detail}}</td>
                 </tr>
               {% endfor %}
             </table>

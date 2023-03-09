@@ -459,6 +459,8 @@ class ActionPlanDetail(models.Model):
                                      validators=[MinValueValidator(1), MaxValueValidator(12)])
     text = models.CharField(default="", max_length=200)
 
+    plan_detail = models.CharField(default="", max_length=200)
+
     def __str__(self):
         return f"{self.business.company_name}'s Action Plan Detail for {self.year}"
 

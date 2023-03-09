@@ -86,8 +86,6 @@ def check_login(func):
     return inner
 
 
-
-
 # INFO PAGES AND HOMEPAGE
 def index(request):
     context = {}
@@ -431,6 +429,7 @@ def admin_report(request):
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/admin_report.html', context=context)
 
+
 def generate_admin_report(request, year):
     print(year)
     return render(request, 'calculator_site/how_it_works.html')
@@ -471,6 +470,7 @@ class PledgeLoaderView:
             "adopt_sustainable_diposable_items": [],
             "sustainably_procure_equipment": [],
         }
+
     @check_login
     def pledges(self, request):
         if request.method == "POST":
@@ -504,6 +504,8 @@ class PledgeLoaderView:
 
         ap.save()
 
+        # change action plan
+        apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck).delete()
         # redirect to remove pledge page
         repsonse = redirect('/my/pledge-report')
         return repsonse
@@ -770,13 +772,14 @@ class FeedbackLoaderView:
 
 
 class ActionPlanDetailDataWrapper:
-    def __init__(self, seq, name, form, ownership, start_date, end_date):
+    def __init__(self, seq, name, form, ownership, start_date, end_date, plan_detail):
         self.seq = seq
         self.name = name
         self.form = form
         self.ownership = ownership
         self.start_date = start_date
         self.end_date = end_date
+        self.plan_detail = plan_detail
 
 
 class ActionPlanDetailLoaderView:
@@ -804,10 +807,12 @@ class ActionPlanDetailLoaderView:
         apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
         for index, apd in enumerate(apd_list):
             if data["start_date"][index] > data["end_date"][index]:
-                return render(request, 'calculator_site/action_plan_detail.html', context={'error':"start date must before end date!"})
+                return render(request, 'calculator_site/action_plan_detail.html',
+                              context={'error': "start date must before end date!"})
             setattr(apd, "ownership", data["ownership"][index])
             setattr(apd, "start_date", data["start_date"][index])
             setattr(apd, "end_date", data["end_date"][index])
+            setattr(apd, "plan_detail", data["plan_detail"][index])
             apd.save()
         response = redirect('/my/dashboard/')
         return response
@@ -844,5 +849,6 @@ class ActionPlanDetailLoaderView:
             acion_plan_detail_form = ActionPlanDetailForm()
             data.append(ActionPlanDetailDataWrapper(index + 1, name, None, acion_plan_detail_form["ownership"],
                                                     acion_plan_detail_form["start_date"],
-                                                    acion_plan_detail_form["end_date"]))
+                                                    acion_plan_detail_form["end_date"],
+                                                    acion_plan_detail_form["plan_detail"]))
         return render(request, 'calculator_site/action_plan_detail.html', context=context)

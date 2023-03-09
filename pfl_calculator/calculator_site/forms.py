@@ -281,8 +281,8 @@ class ActionPlanDetailUtil:
         fields = ActionPlanUtil.retrieve_meta_fields()
         widgets = {}
         for field in fields:
-            if field == "ownership":
-                attrs = {'type': 'text', 'class': 'input-style', 'id': field + 'Input', 'placeholder': ' ',
+            if field == "ownership" or field == "plan_detail":
+                attrs = {'type': 'text', 'class': 'input-style', 'id': field + 'PlanInput', 'placeholder': ' ',
                          "value": " ", "required": "false"}
                 widgets[field] = TextInput(attrs=attrs)
             else:
