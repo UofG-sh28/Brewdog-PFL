@@ -29,6 +29,9 @@
                         <a href="{% url 'calculator' %}">Calculator</a>
                         <a href="{% url 'report' %}">Reports</a>
                         <a href="{% url 'pledges' %}">Pledges</a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'staff_dash' %}">Staff Dashboard</a>
+                        {% endif %}
                         <a href="{% url 'logout' %}">Logout</a>
                     {% else %}
                         <a href="{% url 'outline' %}">Outline</a>
