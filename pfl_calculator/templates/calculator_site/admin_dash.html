@@ -10,6 +10,7 @@
     {{ error }}
   {% else %}
   <div class="admin">
+    <a href="{% url 'admin_report' %}"><button class="shine-button year-select" style="margin: 10px;">Generate Report For Previous Years</button></a>
     <h2>Change Conversion Factor</h2>
     <form method="post">
       {% csrf_token %}
@@ -18,10 +19,7 @@
       {% endfor %}
       <button type="submit" name="update">Update</button>
     </form>
-    
-    <a href="{% url 'admin_report' %}"><button class="shine-button year-select">Generate Report For Previous Years:</button></a>
+
   {% endif %}
 {% endblock %}
   </div>
-
-  
