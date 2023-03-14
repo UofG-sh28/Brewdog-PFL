@@ -293,11 +293,13 @@ def pledge_report(request):
 
     # total_emissions = sum([value for value in ap_values if value != -1])
 
+    # Baseline being the dependent fields summed
     pledge_baseline = {k: sum([getattr(footprint, key) for key in v]) for k, v in pledge_dependencies.items()}
 
+    # Residual = baseline - pledge calculation
     residual = {k: pledge_baseline[k] - pf_mappings[k] for k in pledge_baseline.keys() if type(pf_mappings[k]) != str}
 
-
+    # Grouped based on how they are calculated
     normal_percent_pledges = ["reduce_electricity", "reduce_gas", "reduce_coal", "reduce_wood",
                               "swap_beef_lamb_for_non_meat", "swap_beef_lamb_for_other_meat",
                               "swap_other_meat_for_non_meat", "replace_fruit_veg", "reduce_food_waste"]
@@ -312,12 +314,12 @@ def pledge_report(request):
                            "reduce_staff_flights",
                            "reduce_emissions"]
 
-    #  Percentage savings: ratio of
-
+    #  Percentage savings: ratio of pledge calculation / baseline
     normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges}
     str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if getattr(ap, k) != 0}
     sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges}
 
+    # Merge dictionaries and convert into .2f percentage
     percent_savings = {k: round(v*100, 2) for k, v in {**normal_percent_savings, **str_percent_savings,
                                                        **sub_percent_savings}.items()}
 
