@@ -241,13 +241,43 @@ def report(request):
 
 
 @check_login
-def action_plan(request):
+def pledge_report(request):
+    pledge_dependencies = {
+        "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
+        "switch_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
+        "reduce_gas": ["mains_gas"],
+        "reduce_oil": ["oil"],
+        "reduce_coal": ["coal"],
+        "reduce_wood": ["wood"],
+        "energy_audit": [],
+        "swap_beef_lamb_for_non_meat": ["beef_lamb"],
+        "swap_beef_lamb_for_other_meat": ["beef_lamb"],
+        "swap_other_meat_for_non_meat": ["other_meat"],
+        "replace_fruit_veg": ["fruit_veg_other"],
+        "detailed_menu": [],
+        "reduce_food_waste": ["waste_food_landfill", "waste_food_compost", "waste_food_charity"],
+        "waste_audit": [],
+        "switch_hc_beer_for_lc_beer": ["beer_kegs", "beer_cans", "beer_bottles"],
+        "switch_bottle_beer_for_kegs": ["beer_bottles", "beer_bottles_LOWCARBON"],
+        "switch_bottle_beer_for_cans": ["beer_bottles", "beer_bottles_LOWCARBON"],
+        "switch_canned_beer_for_kegs": ["beer_cans", "beer_cans_LOWCARBON"],
+        "reduce_general_waste": ["general_waste_landfill", "general_waste_recycle", "special_waste"],
+        "reduce_vehicle_travel_miles": ["goods_delivered_company_owned", "goods_delivered_contracted",
+                                        "travel_company_business"],
+        "reduce_commuting_miles": ["staff_commuting"],
+        "reduce_staff_flights": ["flights_domestic", "flights_international"],
+        "reduce_emissions": ["kitchen_equipment_assets", "building_repair_maintenance", "cleaning", "IT_Marketing",
+                             "main_water"],
+        "adopt_sustainable_diposable_items": [],
+        "sustainably_procure_equipment": [],
+    }
+
     year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business, year=year_ck).first()
 
-    conversion_factors = static_conversion_factors.get(year_ck, None)  # USING STATIC YEAR MUST BE CHANGED
+    conversion_factors = static_conversion_factors.get(str(year_ck), None)  # USING STATIC YEAR MUST BE CHANGED
 
     pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -257,15 +287,43 @@ def action_plan(request):
     pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
     ap_values = [getattr(ap, field) for field in ActionPlanUtil.retrieve_meta_fields()]
 
-    print(pf_mappings)
+    # print(pf_mappings)
 
-    pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
+    # pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
 
-    total_emissions = sum([value for value in ap_values if value != -1])
+    # total_emissions = sum([value for value in ap_values if value != -1])
 
-    #                           Cal percentage
+    pledge_baseline = {k: sum([getattr(footprint, key) for key in v]) for k, v in pledge_dependencies.items()}
 
-    actual_percent_savings = sum([])
+    residual = {k: pledge_baseline[k] - pf_mappings[k] for k in pledge_baseline.keys() if type(pf_mappings[k]) != str}
+
+
+    normal_percent_pledges = ["reduce_electricity", "reduce_gas", "reduce_coal", "reduce_wood",
+                              "swap_beef_lamb_for_non_meat", "swap_beef_lamb_for_other_meat",
+                              "swap_other_meat_for_non_meat", "replace_fruit_veg", "reduce_food_waste"]
+    str_percent_pledges = ["switch_electricity", "reduce_oil", ]
+    sub_percent_pledges = ["switch_hc_beer_for_lc_beer",
+                           "switch_bottle_beer_for_kegs",
+                           "switch_bottle_beer_for_cans",
+                           "switch_canned_beer_for_kegs",
+                           "reduce_general_waste",
+                           "reduce_vehicle_travel_miles",
+                           "reduce_commuting_miles",
+                           "reduce_staff_flights",
+                           "reduce_emissions"]
+
+    #  Percentage savings: ratio of
+
+    normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges}
+    str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if getattr(ap, k) != 0}
+    sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges}
+
+    percent_savings = {k: round(v*100, 2) for k, v in {**normal_percent_savings, **str_percent_savings,
+                                                       **sub_percent_savings}.items()}
+
+    print()
+    print()
+    print(percent_savings)
 
     json_data = json.dumps(pf_mappings)
 
@@ -440,7 +498,7 @@ def generate_admin_report(request, year):
         year_data = CarbonFootprint.objects.filter(year=year)
 
         report_file = xw.Workbook(f'pfl_calc_report_{year}.xlsx')
-        highlight = report_file.add_format({'bold' : True})
+        highlight = report_file.add_format({'bold': True})
 
         # WRITE CARBON DATA FOR GIVEN YEAR
         year_sheet = report_file.add_worksheet(f"Carbon Data for Year - {year}")
@@ -456,7 +514,7 @@ def generate_admin_report(request, year):
 
         row = 0
         col += 1
-        year_sheet.write(row,col, "Total Carbon (kg CO2e)", highlight)
+        year_sheet.write(row, col, "Total Carbon (kg CO2e)", highlight)
         for cat in static_categories:
             row += 1
             for field in static_categories[cat]:
@@ -465,7 +523,6 @@ def generate_admin_report(request, year):
                     total_carbon += getattr(footprint, field)
                 year_sheet.write(row, col, total_carbon)
                 row += 1
-
 
         # FINISH AND EXPORT
         report_file.close()
@@ -544,14 +601,14 @@ class PledgeLoaderView:
         # save to database
         # TODO
         #  Ensure that all data is within the limits/range
+        print(data)
         for k, v in data.items():
-            setattr(ap, k, 0 if v[0] == "" else int(v[0]))
+            value = 0 if v[0] == "" else int(v[0])
+            setattr(ap, k, 100 if value == 1 else value)
 
         ap.save()
 
-        # change action plan
-        apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck).delete()
-        # redirect to remove pledge page
+        # redirect to report pledge page
         repsonse = redirect('/my/pledge-report')
         return repsonse
 
