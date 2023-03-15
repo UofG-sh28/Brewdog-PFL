@@ -285,16 +285,20 @@ def pledge_report(request):
     ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
     pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
-    ap_values = [getattr(ap, field) for field in ActionPlanUtil.retrieve_meta_fields()]
 
-    # print(pf_mappings)
-
-    # pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
-
-    # total_emissions = sum([value for value in ap_values if value != -1])
+    # Pledged total
+    pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
 
     # Baseline being the dependent fields summed
     pledge_baseline = {k: sum([getattr(footprint, key) for key in v]) for k, v in pledge_dependencies.items()}
+
+
+    # Sums and totals
+    pledge_baseline_sum = sum(pledge_baseline.values())
+    pledged_co2_sum = sum([value for value in pf_mappings.values() if type(value) != str])
+    action_percentage_total = round((pledged_co2_sum / pledge_baseline_sum)*100, 2)
+    carbon_sum = sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
+
 
     # Residual = baseline - pledge calculation
     residual = {k: pledge_baseline[k] - pf_mappings[k] for k in pledge_baseline.keys() if type(pf_mappings[k]) != str}
@@ -323,9 +327,18 @@ def pledge_report(request):
     percent_savings = {k: round(v*100, 2) for k, v in {**normal_percent_savings, **str_percent_savings,
                                                        **sub_percent_savings}.items()}
 
-    print()
-    print()
-    print(percent_savings)
+    # Percentage calculations
+    total_pledge_percentage = {k: pf_mappings[k] / carbon_sum for k in pf_mappings.keys()}
+
+    total_percentage = sum(total_pledge_percentage.values())
+
+    # Variables in summary table:
+    baseline_2019 = carbon_sum / 1000
+    target_savings_2023 = 0.2  # constant in excel
+    emissions_reduction_target = baseline_2019 * target_savings_2023
+    pledges_savings_t = pledge_savings / 1000
+    actual_co2_percent_saving = total_percentage
+    residual = carbon_sum - pledge_savings
 
     json_data = json.dumps(pf_mappings)
 
