@@ -18,21 +18,6 @@
                 <a href="{% url 'account' %}"><button class="dashboard_buttons">Change Account Password</button></a><br>
             </div>
         </div>
-        <div>
-            <form action="/my/dashboard/" enctype="multipart/form-data"  method="post">
-                {% csrf_token %}
-                <select name="year_switch" id="year_switch" onchange="this.form.submit()">
-                    {% for y in years %}
-                        {% if y == year %}
-                            <option value="{{ y }}" selected>{{ y }}</option>
-                        {% else %}
-                            <option value="{{ y }}">{{ y }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-
-            </form>
-        </div>
         <div id="dashboard_div"></div>
         <div id="dashboard_div"> 
             <div id="dashboard_info">
@@ -41,6 +26,21 @@
                     <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">
                     {% if carbon_sum == "-500.00" %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
                     CO</h4><h6 style="display: inline;">2</h6> {% endif %}
+                    
+                    <div id = "dashboardyearmenu">
+                        <form action="/my/dashboard/" enctype="multipart/form-data"  method="post">
+                        {% csrf_token %}
+                        <select name="year_switch" id="year_switch" onchange="this.form.submit()">
+                        {% for y in years %}
+                            {% if y == year %}
+                                <option value="{{ y }}" selected>{{ y }}</option>
+                            {% else %}
+                                <option value="{{ y }}">{{ y }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
