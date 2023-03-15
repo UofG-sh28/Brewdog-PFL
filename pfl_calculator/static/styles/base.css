@@ -547,8 +547,6 @@ tr:hover{
     float:left;
 }
 
-
-
 #dashboard_welcome {
     margin-bottom: 2%;
 }
@@ -559,15 +557,14 @@ tr:hover{
 }
 
 #dashboard_info #dashboardyearmenu {
-    position: absolute;
-    background-color: #F5F5F5;
-    min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    right: 0;
-    text-align: center;
-    font-size: 20px;
-  }
-  
+  position: absolute;
+  background-color: lightblue;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  right: 0;
+  text-align: center;
+  font-size: 20px;
+}
 
 #dashboard_info #dashboardyearmenu a {
   color: black;
@@ -581,7 +578,7 @@ tr:hover{
   color: black;
 }
 
-#dashboard_info #dashboardyearmenu a:active
+#dashboard_info #dashboardyearmenu a:active {
   background-color: #F5F5F5;
   color: black;
 }
