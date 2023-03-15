@@ -548,8 +548,6 @@ tr:hover{
     float:left;
 }
 
-
-
 #dashboard_welcome {
     margin-bottom: 2%;
 }
@@ -561,7 +559,7 @@ tr:hover{
 
 #dashboard_info #dashboardyearmenu {
   position: absolute;
-  background-color: #F5F5F5;
+  background-color: lightblue;
   min-width: 200px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   right: 0;
@@ -581,7 +579,7 @@ tr:hover{
   color: black;
 }
 
-#dashboard_info #dashboardyearmenu a:active
+#dashboard_info #dashboardyearmenu a:active {
   background-color: #F5F5F5;
   color: black;
 }

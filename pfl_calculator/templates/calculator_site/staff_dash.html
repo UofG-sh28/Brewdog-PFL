@@ -1,0 +1,25 @@
+{% extends 'calculator_site/base.html' %}
+{% load static %}
+
+{% block title %}
+  My Dashboard
+{% endblock %}
+
+<!--{% block css %}{% endblock %}-->
+
+{% block body_block %}
+    <div id="container">
+        <h2>Staff Dashboard</h2>
+        <div id="dashboard_div">    
+            <div id="dashboard_options" style="text-align: center;">
+                <a href="{% url 'staff_factors' %}"><button class="dashboard_buttons" style="margin-top: 5%;">Change Conversion Factors</button></a><br>
+            </div>
+        </div>
+        <div id="dashboard_div"></div>
+        <div id="dashboard_div">
+            <div id="dashboard_options" style="text-align: center;">
+                <a href="{% url 'staff_report' %}"><button class="dashboard_buttons" style="margin-top: 5%;">Generate Previous Years Reports</button></a><br>
+            </div>
+        </div>
+    </div>
+{% endblock %}

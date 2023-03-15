@@ -424,7 +424,7 @@ def account(request):
     return render(request, 'calculator_site/account.html', {'form': form})
 
 
-def staff_dash(request):
+def staff_factors(request):
     context = {
         "error": None,
         "conversion_factors": static_conversion_factors,
@@ -478,10 +478,10 @@ def staff_dash(request):
         context["error"] = "You do not have access to this page."
 
     print("render")
-    return render(request, 'calculator_site/admin_dash.html', context=context)
+    return render(request, 'calculator_site/staff_factors.html', context=context)
 
 
-def admin_report(request):
+def staff_dash(request):
     context = {
         "conversion_factors": static_conversion_factors,
     }
@@ -489,7 +489,17 @@ def admin_report(request):
         print("user")
     else:
         context["error"] = "You do not have access to this page."
-    return render(request, 'calculator_site/admin_report.html', context=context)
+    return render(request, 'calculator_site/staff_dash.html', context=context)
+
+def staff_report(request):
+    context = {
+        "conversion_factors": static_conversion_factors,
+    }
+    if (request.user.is_staff):
+        print("user")
+    else:
+        context["error"] = "You do not have access to this page."
+    return render(request, 'calculator_site/staff_report.html', context=context)
 
 
 def generate_admin_report(request, year):
@@ -536,7 +546,7 @@ def generate_admin_report(request, year):
         return response
     else:
         context["error"] = "You do not have access to this page."
-    return render(request, 'calculator_site/admin_report.html', context=context)
+    return render(request, 'calculator_site/staff_report.html', context=context)
 
 
 class PledgeLoaderView:

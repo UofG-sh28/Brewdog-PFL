@@ -10,7 +10,7 @@
     { error }
   {% else %}
   <div class="admin">
-        <button class="shine-button" style="margin:10px;">Generate Report For Previous Years:</button>
+        <h2>Generate Reports for Previous Years</h2>
           <div class="dropdown-years" style="justify-content: center;">
           {% for year in conversion_factors.keys %}
             <a href="{% url 'generate_admin_report' year=year %}"><button class="shine-button" style="margin:10px;">Download Report for {{ year }}</button></a><br>
