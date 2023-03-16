@@ -149,6 +149,7 @@ h2 {
 .container h2, p {
     text-align: center;
     width: 80%;
+    margin-left: 10%;
 }
 
 .container p {
