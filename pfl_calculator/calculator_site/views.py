@@ -239,6 +239,7 @@ def report(request):
     context["category_json"] = mark_safe(json.dumps(json.dumps(static_categories)))
     context["scope_json"] = mark_safe(json.dumps(json.dumps(static_scope)))
     context["verbose_json"] = mark_safe(json.dumps(json.dumps(static_verbose)))
+    context["year"] = year_ck
     return render(request, 'calculator_site/report.html', context=context)
 
 
@@ -344,7 +345,7 @@ def pledge_report(request):
 
     json_data = json.dumps(pf_mappings)
 
-    return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data})
+    return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data, "year": year_ck})
 
 
 @check_login
@@ -690,6 +691,7 @@ class PledgeLoaderView:
         context = {
             "act_plan": tables,
             "cal": 1}
+        context["year"] = year_ck
         return render(request, 'calculator_site/pledges.html', context=context)
 
 
@@ -813,6 +815,7 @@ class CalculatorLoaderView:
         context["progress_complete_range"] = range(progress)
         context["progress_incomplete_range"] = range(len(category_list) - progress - 1)
         context["progress_back"] = progress - 1
+        context["year"] = year_ck
 
         return render(request, 'calculator_site/calculator.html', context=context)
 

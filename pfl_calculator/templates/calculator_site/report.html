@@ -1,7 +1,7 @@
 {% extends 'calculator_site/base.html' %}
 {% load static %}
 {% block title %}
-Homepage
+Report
 {% endblock %}
 
 <!--{% block css %}{% endblock %}-->
@@ -9,7 +9,7 @@ Homepage
 
 {% block body_block %}
 {% if cal %}
-    <h2>Report Page</h2>
+    <h2>Report Page {{ year }}</h2>
     <div id="summary-table-category" class="results-summary" style="float: left; display: inline; width: 40%">
         <table>
             <tr>
