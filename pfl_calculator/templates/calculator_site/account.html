@@ -8,11 +8,6 @@
 
 {% block body_block %}
     <h1>My Account</h1>
-    <!--<form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Change password">
-    </form>-->
 
     <div class="password_change">
         <h2>Change Password</h2>
@@ -26,4 +21,10 @@
           <small style="color:red">{{ error }}</small> <br>
         {% endif %}
     </div>
+
+    <style>
+        p {
+            margin-left: 0;
+        }
+    </style>
 {% endblock %}

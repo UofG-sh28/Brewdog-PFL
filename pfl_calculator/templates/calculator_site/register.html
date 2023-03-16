@@ -14,3 +14,88 @@
   </form>
 </div>
 {% endblock %}
+
+{% block script %}
+<script>
+  // Get the form element
+  const form = document.querySelector('form');
+
+  // Get the input fields
+  const usernameInput = form.querySelector('#id_username');
+  const emailInput = form.querySelector('#id_email');
+  const password1Input = form.querySelector('#id_password1');
+  const password2Input = form.querySelector('#id_password2');
+
+  // Add event listener for form submission
+  form.addEventListener('submit', (event) => {
+    // Prevent form submission
+    event.preventDefault();
+
+    // Validate the input fields
+    let isValid = true;
+
+    if (usernameInput.value.trim().length === 0) {
+      alert('Please enter a username');
+      isValid = false;
+    }
+      
+    if (usernameInput.value.trim().length < 8) {
+      alert('Username must be 8 characters or more');
+      isValid = false;
+    }
+
+
+    if (emailInput.value.trim().length === 0) {
+      alert('Please enter an email');
+      isValid = false;
+    } else if (!isValidEmail(emailInput.value.trim())) {
+      alert('Please enter a valid email');
+      isValid = false;
+    }
+
+    if (password1Input.value.trim().length === 0) {
+      alert('Please enter a password');
+      isValid = false;
+    } else if (password1Input.value.trim().length < 8) {
+      alert('Password must contain at least 8 characters');
+      isValid = false;
+    } else if (!isValidPassword(password1Input.value.trim())) {
+      alert('Password is not valid');
+      isValid = false;
+    } else if (password1Input.value.trim() !== password2Input.value.trim()) {
+      alert('Passwords do not match');
+      isValid = false;
+    }
+      
+    const similarityThreshold = usernameInput.length / 3; // at least a third of the username should not be contained within the password
+    let similarityCount = 0;
+  
+    for (let i = 0; i < usernameInput.length; i++) {
+        if (password1Input.includes(usernameInput[i])) {
+            similarityCount++;
+            if (similarityCount >= similarityThreshold) {
+                alert('Password is too similar to username');
+                isValid = false;
+                break;
+            }
+        }
+    }
+
+    // Submit the form if it's valid
+    if (isValid) {
+      form.submit();
+    }
+  });
+
+  // Helper functions for validation
+  function isValidEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+
+  function isValidPassword(password) {
+    const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    return regex.test(password);
+  }
+</script>
+{% endblock %}
