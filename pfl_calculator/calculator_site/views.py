@@ -134,7 +134,9 @@ class DashboardViewLoader:
             carbon_sum = -500
         carbon_sum = format(carbon_sum, ".2f")
 
-        context["years"] = ["2023", "2022", "2021", "2020"]
+
+        context["years"] = static_conversion_factors.keys()
+        print(context["years"])
 
         context['carbon_sum'] = carbon_sum
         response = render(request, 'calculator_site/dashboard.html', context)
