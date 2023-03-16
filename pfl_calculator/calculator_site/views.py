@@ -331,7 +331,7 @@ def pledge_report(request):
                                                        **sub_percent_savings}.items()}
 
     # Percentage calculations
-    total_pledge_percentage = {k: pf_mappings[k] / carbon_sum for k in pf_mappings.keys()}
+    total_pledge_percentage = {k: pf_mappings[k] / carbon_sum for k in pf_mappings.keys() if type(pf_mappings[k]) != str}
 
     total_percentage = sum(total_pledge_percentage.values())
 
