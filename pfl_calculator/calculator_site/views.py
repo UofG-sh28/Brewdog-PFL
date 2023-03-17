@@ -689,6 +689,7 @@ class PledgeLoaderView:
 
         ap.save()
 
+
         # change action plan， This one is important for change ActionPlan! Dont delete it please.
         apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck).delete()
 
@@ -701,7 +702,7 @@ class PledgeLoaderView:
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
-
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
         if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
             return render(request, 'calculator_site/pledges.html', context={'cal': 0})
 
@@ -735,6 +736,8 @@ class PledgeLoaderView:
                                     colours[self.action_plan_verbose[field]["type"]])
 
             group_fields.append(pdw)
+            pledge_value = getattr(ap, field)
+            pdw.form.field.initial = pledge_value
             if field in choices:
                 pdw.form.field.widget.choices = choices.get(field)
             if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]]) \
