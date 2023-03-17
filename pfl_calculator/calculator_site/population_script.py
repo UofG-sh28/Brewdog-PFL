@@ -26,5 +26,4 @@ class PledgeSaver:
             else:
                 pledges.category = 'M'
             pledges.text = key
-            # TODO: save values
             pledges.save()

@@ -1,6 +1,5 @@
 import json
 import math
-import decimal
 from itertools import chain
 import xlsxwriter as xw
 import os
@@ -9,7 +8,6 @@ from django.shortcuts import render
 from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, AdminForm, ChangePasswordForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
-from django.core import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
 from django.contrib.auth import logout as lo
@@ -147,7 +145,6 @@ class DashboardViewLoader:
         #Get USER INFORMATION BASED ON SELECTED YEAR
         user = User.objects.get(username=request.user)
         business = Business.objects.get(user=user)
-        business_id = business.id
         footprints = CarbonFootprint.objects.filter(business=business, year=context["year"])
 
         #GET USER'S TOTAL CARBON EMISSINONS FOR THE YEAR
@@ -226,7 +223,6 @@ def report(request):
             "percent": 0
         }
         for field in static_categories[cat]:
-            # carbon_dict[cat]["total"] += getattr(data[0], field)
             carbon_dict[cat]["total"] += data[field]
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
 
@@ -511,7 +507,6 @@ def register(request):
             user = form.save()
             lg(request, user)
             return redirect('register2')
-        print("Registration Failed")
     form = RegistrationForm()
     return render(request, 'calculator_site/register.html', context={"reg_form": form})
 
@@ -522,11 +517,9 @@ def register2(request):
         if form.is_valid():
             form.user = request.user
             form.save()
-            print("Registration Completed")
             response = render(request, 'calculator_site/register_success.html')
             response.set_signed_cookie('login', 'yes', salt="sh28", max_age=60 * 60 * 12)
             return response
-        print("Registration Failed")
     form = RegistrationFormStage2(user=request.user)
     return render(request, 'calculator_site/register2.html', context={"reg_form": form})
 
@@ -556,7 +549,6 @@ def staff_factors(request):
         "form": None
     }
     if (request.user.is_staff):
-        #print("user")
         if request.method == 'POST':
             form = AdminForm(request.POST)
             if form.is_valid():
@@ -568,11 +560,8 @@ def staff_factors(request):
                 for key in form.cleaned_data:
                     new_data[key] = float(form.cleaned_data[key])
 
-                #print(new_data)
-
                 if str(year) in static_conversion_factors.keys():
                     # Update
-                    print("trying to update")
                     with open('static/conversion_factors.json', "r+", encoding='utf8') as cf:
                         cfs = json.load(cf)
 
@@ -584,7 +573,6 @@ def staff_factors(request):
 
                 else:
                     # Create
-                    print("Trying to insert")
                     with open('static/conversion_factors.json', "r+", encoding='utf8') as cf:
                         cfs = json.load(cf)
 
@@ -598,7 +586,6 @@ def staff_factors(request):
         else:
             form = AdminForm()
             context["form"] = form
-            print("set form")
     else:
         context["error"] = "You do not have access to this page."
 
@@ -609,19 +596,13 @@ def staff_dash(request):
     context = {
         "conversion_factors": static_conversion_factors,
     }
-    if (request.user.is_staff):
-        print("user")
-    else:
+    if not request.user.is_staff:
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/staff_dash.html', context=context)
 
 def staff_report(request):
-    context = {
-        "conversion_factors": static_conversion_factors,
-    }
-    if (request.user.is_staff):
-        print("user")
-    else:
+    context = {"conversion_factors": static_conversion_factors,}
+    if not request.user.is_staff:
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/staff_report.html', context=context)
 
@@ -633,9 +614,7 @@ def staff_feedback(request):
         "feedbacks": feedback,
         "fields": feedback_field,
     }
-    if (request.user.is_staff):
-        print("user")
-    else:
+    if not request.user.is_staff:
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/staff_feedback.html', context=context)
 
@@ -690,7 +669,6 @@ def user_report(request):
     business = Business.objects.get(user=request.user)
     footprints = CarbonFootprint.objects.filter(business=business)
     years = [getattr(footprint, "year") for footprint in footprints]
-    print(years)
     context = {
         "years": years,
     }
@@ -843,9 +821,6 @@ class PledgeLoaderView:
         ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
         # save to database
-        # TODO
-        #  Ensure that all data is within the limits/range
-        print(data)
         for k, v in data.items():
             value = 0 if v[0] == "" else int(v[0])
             if value == 1:
@@ -909,7 +884,6 @@ class PledgeLoaderView:
             pledge_value = getattr(ap, field)
             pdw.form.field.initial = pledge_value
             if field in choices:
-                print(pledge_value)
                 pdw.form.field.widget.choices = choices.get(field)
             if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]]) \
                     and len(self.action_plan_field_dependencies[field]) != 0:
@@ -987,8 +961,7 @@ class CalculatorLoaderView:
         business, _ = Business.objects.get_or_create(user=user)
         footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
 
-        # TODO
-        #  Ensure that all data is within the limits/range
+
         for k, v in data.items():
             setattr(footprint, k, v)
 
@@ -1009,7 +982,6 @@ class CalculatorLoaderView:
         category_list = []
         conversion_factors = static_conversion_factors.get(year_ck)
         if conversion_factors is None:
-            print("Failed to load conversions factors.")
             return HttpResponse("<h1>Failed to load conversions factors.</h1>")
         for key, value in self.categories.items():
             field_list = []
@@ -1098,7 +1070,6 @@ class FeedbackLoaderView:
         data = request.POST
         data = dict(data)
         del data["csrfmiddlewaretoken"]
-        print(data)
         fb, _ = Feedback.objects.get_or_create(user=user)
         for k, v in data.items():
             setattr(fb, k, v[0])
