@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from django.forms import TextInput, Select
+from django.forms import TextInput, Select, Textarea, DateField, DateInput
 from calculator_site import models
 
 # Choices for business forms
@@ -66,8 +66,8 @@ class RegistrationFormStage2(forms.Form):
 
     class Meta:
         fields = (
-        "user", "company_name", "business_address", "area_type", "part_of_world", "business_type", "contact_number",
-                                                            "contact_email", "business_size")
+            "user", "company_name", "business_address", "area_type", "part_of_world", "business_type", "contact_number",
+            "contact_email", "business_size")
 
     def save(self, commit=True):
         business = models.Business(user=self.user, company_name=self.cleaned_data['company_name'],
@@ -80,6 +80,7 @@ class RegistrationFormStage2(forms.Form):
                                    business_size=self.cleaned_data['business_size'])
         business.save()
 
+
 class AdminUtil:
 
     @staticmethod
@@ -91,6 +92,7 @@ class AdminUtil:
         # List to preserve order
         calculator_fields = [field for field in fields if field not in non_cal_fields]
         return tuple(calculator_fields)
+
 
 class AdminForm(forms.Form):
     class Meta:
@@ -213,7 +215,6 @@ class ActionPlanForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
 
 
-
 class ChangePasswordForm(PasswordChangeForm):
     def clean_new_pass(self):
         new_password = self.cleaned_data.get('new_password')
@@ -221,6 +222,7 @@ class ChangePasswordForm(PasswordChangeForm):
         if new_password and new_password_confirm and new_password != new_password_confirm:
             raise forms.ValidationError('Passwords do not match')
         return new_password_confirm
+
 
 class FeedbackUtil:
 
@@ -263,6 +265,7 @@ class FeedbackForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
 
+
 class ActionPlanDetailUtil:
 
     @staticmethod
@@ -278,17 +281,23 @@ class ActionPlanDetailUtil:
 
     @staticmethod
     def retrieve_meta_widgets():
-        fields = ActionPlanUtil.retrieve_meta_fields()
+        fields = ActionPlanDetailUtil.retrieve_meta_fields()
         widgets = {}
         for field in fields:
-            if field == "ownership" or field == "plan_detail":
+            if field == "ownership":
                 attrs = {'type': 'text', 'class': 'input-style', 'id': field + 'PlanInput', 'placeholder': ' ',
                          "value": " ", "required": "false"}
                 widgets[field] = TextInput(attrs=attrs)
+            elif field == "plan_detail":
+                attrs = {'type': 'text', 'id': field + 'PlanTextarea', 'placeholder': ' ',
+                         "value": " ", "required": "false"}
+                widgets[field] = Textarea(attrs)
+            elif field == "start_date":
+                attrs_ = {'type': 'date'}
+                widgets[field] = DateInput(attrs=attrs_)
             else:
-                attrs = {'type': 'text', 'class': 'pledge-input', 'id': field + '-feedback-input',
-                         "value": ""}
-                widgets[field] = Select(attrs=attrs)
+                attrs = {'type': 'date'}
+                widgets[field] = DateInput(attrs=attrs)
 
         return widgets
 
