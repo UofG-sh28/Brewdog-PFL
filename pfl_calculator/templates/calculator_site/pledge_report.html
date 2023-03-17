@@ -40,57 +40,22 @@
 
 {% endblock %}
 {% block script %}
-    <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
-    <script src = "{% static 'JS/pledge_report.js' %}"></script>
-    <script>
-        const pf_mappings_json = JSON.parse("{{pf_mappings_json|escapejs}}");
-        const total_percentage_saving = {{total_percentage_saving}};
-        console.log("carbon_sum: " + {{carbon_sum}});
-        //generatePledgeTable();
-        const pledge_savings = {{pledge_savings}};
-        const residual = {{residual}};
-        console.log("pledge " + pledge_savings);
-        console.log("residual " + residual);
-        console.log("total percent saving " + total_percentage_saving);
-        //plot summary pie chart
-        plot_total_pie();
-        
 
+<script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
+<script src="{% static 'JS/pledge_report.js' %}"></script>
+<script>
+    const verbose_json = JSON.parse("{{verbose_json|escapejs}}");
+    const pf_mappings_json = JSON.parse("{{pf_mappings_json|escapejs}}");
+    const total_percentage_saving = {{total_percentage_saving}};
+    //generatePledgeTable();
+    const pledge_savings = {{pledge_savings}};
+    const residual = {{residual}};
+    const cat_emissions = JSON.parse("{{cat_emissions|escapejs}}");
+    const cat_reductions = JSON.parse("{{cat_reductions|escapejs}}");
+    //plot summary pie chart
+    plot_total_pie();
 
-        var trace1 = {
-          x: [580.7, 2337.86, 6099.56],
-          y: ['Operations & Maintenance', 'Transport & Travel', 'Food & Drink'],
-          name: 'Pledged',
-          orientation: 'h',
-          marker: {
-            color: 'rgba(55,128,191,0.6)',
-            width: 1
-          },
-          type: 'bar'
-        };
-
-        var trace2 = {
-          x: [543.05, 3206.79, 2818.77],
-          y: ['Operations & Maintenance', 'Transport & Travel', 'Food & Drink'],
-          name: 'Residual',
-          orientation: 'h',
-          type: 'bar',
-          marker: {
-            color: 'rgba(255,153,51,0.6)',
-            width: 1
-          }
-        };
-
-        var data = [trace1, trace2];
-
-        var layout = {
-          title: 'Pledged Reduction Breakdown',
-          barmode: 'stack',
-          margin: {
-            l: 200
-          }
-        };
-
-        Plotly.newPlot('plot', data, layout);
-    </script>
+    //plot category bar chart
+    plot_category_bar();
+</script>
 {% endblock %}

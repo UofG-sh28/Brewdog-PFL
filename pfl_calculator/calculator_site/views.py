@@ -288,13 +288,16 @@ def pledge_report(request):
     ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
     pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
-    print([pf_mappings[key] for key in pf_mappings])
+
+    for key in pf_mappings:
+        if not isinstance(pf_mappings[key], str):
+            pf_mappings[key] = abs(pf_mappings[key])
+            
     # Pledged total
-    pledge_savings = sum([abs(value) for value in pf_mappings.values() if type(value) != str])
+    pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
 
     # Baseline being the dependent fields summed
     pledge_baseline = {k: sum([getattr(footprint, key) for key in v]) for k, v in pledge_dependencies.items()}
-
 
     # Sums and totals
     pledge_baseline_sum = sum(pledge_baseline.values())
@@ -324,16 +327,44 @@ def pledge_report(request):
     #  Percentage savings: ratio of pledge calculation / baseline
     normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges if pledge_baseline[k] != 0}
     str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if getattr(ap, k) != 0}
-    sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges}
+    sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges if pledge_baseline[k] != 0}
 
     # Merge dictionaries and convert into .2f percentage
     percent_savings = {k: round(v*100, 2) for k, v in {**normal_percent_savings, **str_percent_savings,
                                                        **sub_percent_savings}.items()}
 
     # Percentage calculations
-    total_pledge_percentage = {k: abs(pf_mappings[k] / carbon_sum)for k in pf_mappings.keys() if type(pf_mappings[k]) != str}
+    total_pledge_percentage = {k: pf_mappings[k] / carbon_sum for k in pf_mappings.keys() if type(pf_mappings[k]) != str}
 
     total_percentage = sum(total_pledge_percentage.values())
+
+    """
+    Calculate pledge reductions by category
+    """
+
+    #grouping pledges by category into categorised_pledges
+    pledge_categories = {}
+    for pledge in pledge_dependencies:
+        pledge_categories[pledge] = ""
+        for dependency in pledge_dependencies[pledge]:
+            for cat in static_categories:
+                if cat not in pledge_categories[pledge]:
+                    if dependency in static_categories[cat]:
+                        pledge_categories[pledge] = str(cat)
+
+
+    cat_reductions = {cat: 0 for cat in static_categories}
+
+    for field in pf_mappings:
+        if not isinstance(pf_mappings[field], str):
+            cat_reductions[pledge_categories[field]] += pf_mappings[field]
+    #re-calculate emissions by category
+    data = {field: getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()}
+    cat_emissions = {}
+    for cat in static_categories:
+        cat_emissions[str(cat)] = 0
+        for field in static_categories[cat]:
+            cat_emissions[cat] += data[field]
 
     # Variables in summary table:
     baseline_2019 = carbon_sum / 1000
@@ -343,6 +374,7 @@ def pledge_report(request):
     actual_co2_percent_saving = total_percentage
     residual = carbon_sum - pledge_savings
 
+    #add data to context_dict
     json_data = json.dumps(pf_mappings)
     context_dict['pf_mappings_json'] = json_data
     context_dict['year'] = year_ck
@@ -350,8 +382,9 @@ def pledge_report(request):
     context_dict['residual'] = residual
     context_dict['pledge_savings'] = pledge_savings
     context_dict['carbon_sum'] = carbon_sum
-
-    print("total pledge percentages \n\n\n\n", total_pledge_percentage)
+    context_dict['cat_emissions'] = json.dumps(cat_emissions)
+    context_dict['cat_reductions'] = json.dumps(cat_reductions)
+    context_dict['verbose_json'] = json.dumps(static_verbose)
     return render(request, 'calculator_site/pledge_report.html', context=context_dict)
 
 
