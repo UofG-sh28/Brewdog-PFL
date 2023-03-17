@@ -30,7 +30,7 @@ CSRF_TRUSTED_ORIGINS = ['https://sh28.lukeog.com']
 SECRET_KEY = 'django-insecure-0xv&*t3wgqxtb*$9%yb+ob0jjty2-)-f%u3f5e&^vj++g*@7q7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
