@@ -70,6 +70,7 @@ load_global_data()
 #CHECK IF USER IS LOGGED IN, USING COOKIES
 def check_login(func):
     def inner(cls, request=None, *args, **kwargs):
+        print("Login")
         if request is None:
             request = cls
             cls = None
@@ -83,6 +84,26 @@ def check_login(func):
             response = redirect("/login/")
             response.delete_cookie('login')
             return response
+
+    return inner
+
+
+
+def check_register(func):
+    def inner(cls, request=None, *args, **kwargs):
+        print("register")
+        if request is None:
+            request = cls
+            cls = None
+        user = User.objects.get(username=request.user)
+        length = len(Business.objects.filter(user=user))
+        if length == 0:
+            return redirect('register2')
+        else:
+            if cls is None: #IF LOGGED IN
+                return func(request, *args, **kwargs)
+            else:
+                return func(cls, request, *args, **kwargs)
 
     return inner
 
@@ -106,6 +127,7 @@ def scope(request):
 class DashboardViewLoader:
 
     @check_login
+    @check_register
     def dash(self, request):
         if request.method == "GET":
             return self.__dashboard_get(request)
@@ -153,6 +175,7 @@ class DashboardViewLoader:
 
 
 @check_login
+@check_register
 def dash_redirect(request):
     return redirect("/my/dashboard/")
 
@@ -171,6 +194,7 @@ def to_dict(instance):
     return data
 
 @check_login
+@check_register
 def report(request):
 
     #GET USER'S INFORMATION BASED ON THE SELECTED YEAR
@@ -254,6 +278,7 @@ def report(request):
 
 
 @check_login
+@check_register
 def pledge_report(request):
     context_dict = {}
 
@@ -432,6 +457,7 @@ def pledge_report(request):
 
 
 @check_login
+@check_register
 def profile(request):
     return render(request, 'calculator_site/profile.html')
 
@@ -441,6 +467,7 @@ def how_it_works(request):
 
 
 # LOGIN AND REGISTER PAGES
+@check_register
 def login(request):
     context = {}
     context["error"] = ""
@@ -793,6 +820,7 @@ class PledgeLoaderView:
         }
 
     @check_login
+    @check_register
     def pledges(self, request):
         if request.method == "POST":
             return self.__pledges_post_request(request)
@@ -936,6 +964,7 @@ class CalculatorLoaderView:
         self.tooltips = static_verbose["information"]
 
     @check_login
+    @check_register
     def calculator(self, request):
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes':
             if request.method == "POST":
@@ -1058,6 +1087,7 @@ class FeedbackLoaderView:
         self.feedback_verbose = static_feedback_verbose
 
     @check_login
+    @check_register
     def feedback(self, request):
         if request.method == "POST":
             return self.__feedback_post_request(request)
@@ -1125,6 +1155,7 @@ class ActionPlanDetailLoaderView:
         return
 
     @check_login
+    @check_register
     def action_plan_detail(self, request):
         if request.method == "POST":
             return self.__action_plan_detail_post_request(request)
