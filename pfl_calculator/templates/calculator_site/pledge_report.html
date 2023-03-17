@@ -41,7 +41,7 @@
 {% endblock %}
 {% block script %}
     <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
-    <script src = "{% static 'JS/action_plan.js' %}"></script>
+    <script src = "{% static 'JS/pledge_report.js' %}"></script>
     <script>
         const json_data = JSON.parse("{{json_data|escapejs}}");
         console.log(json_data);

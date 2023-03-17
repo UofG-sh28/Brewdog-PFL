@@ -344,7 +344,7 @@ def pledge_report(request):
 
     json_data = json.dumps(pf_mappings)
 
-    return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data, "year": year_ck})
+    return render(request, 'calculator_site/pledge_report.html', context={"json_data": json_data, "year": year_ck})
 
 
 @check_login
