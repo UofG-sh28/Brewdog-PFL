@@ -10,12 +10,12 @@ When first logging into the website using an administrator account, you should b
 
 3. "Generate Previous Years Report" presents a button for each previous year of values available in the calculator (each year set in "Change Conversion Factors"), which allows for administrators to download an excel document combining all carbon calculator inputs by customers for easy viewing and manipulation externally, as well as comparison with previous years usage.
 
-Administrators also have access to all features customers have via the 'dashboard' in the menu dropdown from the top right, whcich they can use in exactly the same way as customers would.
+Administrators also have access to all features customers have via the 'dashboard' in the menu dropdown from the top right, which they can use in exactly the same way as customers would.
 
 ## Administrator Setup Guide
 The project is based on Django, a website building platform using the programming language Python. The implication of this is that this code can be run on any server alongside other software, allowing for easy setup and hosting. The guide below will assume a Linux based operating system, though this is what almost all web hosting servers run on, so should be compatible in many cases.
 
-1. Move the applciation files onto the server which hosts the website. This can be achieved via either physical access, or a command line interface (CLI) using a command such as "scp" (https://en.wikipedia.org/wiki/Secure_copy_protocol).
+1. Move the application files onto the server which hosts the website. This can be achieved via either physical access, or a command line interface (CLI) using a command such as "scp" (https://en.wikipedia.org/wiki/Secure_copy_protocol).
 
 2. Navigate to the folder named "pfl-calculator" inside the files, and install required packages using "pip" (https://www.knowledgehut.com/blog/programming/what-is-pip-in-python) with the command "pip install -r requirements.txt".
 
