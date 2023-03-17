@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from django.forms import TextInput, Select, Textarea, DateField, DateInput
+from django.forms import TextInput, Select, Textarea, DateInput
 from calculator_site import models
 
 # Choices for business forms
@@ -69,7 +69,7 @@ class RegistrationFormStage2(forms.Form):
             "user", "company_name", "business_address", "area_type", "part_of_world", "business_type", "contact_number",
             "contact_email", "business_size")
 
-    def save(self, commit=True):
+    def save(self):
         business = models.Business(user=self.user, company_name=self.cleaned_data['company_name'],
                                    business_address=self.cleaned_data['business_address'],
                                    area_type=self.cleaned_data['area_type'],
@@ -233,7 +233,6 @@ class FeedbackUtil:
         del fb
         non_act_fields = ['_state', 'id', 'user_id']
         # List to preserve order
-        feedback_fields = []
         feedback_fields = [field for field in fields if field not in non_act_fields]
 
         return tuple(feedback_fields)

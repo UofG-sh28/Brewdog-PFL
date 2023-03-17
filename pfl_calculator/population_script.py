@@ -5,7 +5,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pfl_calculator.settings')
 import django
 django.setup()
 from calculator_site.models import *
-from django.contrib.auth.models import User
 
 def add_pledge(cat, text):
     p = Pledge.objects.get_or_create(category=cat, text=text)[0]

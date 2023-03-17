@@ -171,7 +171,7 @@ class DashboardViewLoader:
 
 @check_login
 @check_register
-def dash_redirect(request):
+def dash_redirect():
     return redirect("/my/dashboard/")
 
 

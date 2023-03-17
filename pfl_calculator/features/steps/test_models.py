@@ -7,7 +7,8 @@ user = User.objects.create_user(username="test", password="testpass")
 
 @given('we have some user')
 def step_impl(context):
-    assert user != None
+    assert user is not None
+
 
 @when('we check that users username with a matching string')
 def step_impl(context):
@@ -22,7 +23,8 @@ business, _ = Business.objects.get_or_create(user=user)
 
 @given('we have a business object belonging to a user')
 def step_impl(context):
-    assert business != None and business.user != None
+    assert business is not None and business.user is not None
+
 
 @when('we check what user owns that business')
 def step_impl(context):
@@ -37,13 +39,15 @@ cf, _ = CarbonFootprint.objects.get_or_create(id=999, year=2023, business=busine
 
 @given('a Carbon-Footprint object')
 def step_impl(context):
-    assert cf != None
+    assert cf is not None
+
 
 @when('we check that it is owned by a business for a particular year')
 def step_impl(context):
-    assert cf.business != None and cf.year != None
+    assert cf.business is not None and cf.year is not None
+
 
 @then('there will be no NULL fields')
 def step_impl(context):
     for field in CarbonFootprint._meta.get_fields():
-        assert (getattr(cf, field.name) != None)
+        assert (getattr(cf, field.name) is not None)

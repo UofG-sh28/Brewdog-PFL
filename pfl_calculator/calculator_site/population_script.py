@@ -1,5 +1,5 @@
 from .models import *
-from django.contrib.auth.models import User
+
 
 class PledgeSaver:
     def __init__(self, pledge_functions_results):

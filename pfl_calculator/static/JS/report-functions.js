@@ -150,7 +150,7 @@ function generateSubTable(subcat){
   }
   const head = document.getElementById("subCatHead");
   var verbose_fields = verbose_json["fields"];
-  head.innerHTML = verbose_json["categories"][subcat];;
+  head.innerHTML = verbose_json["categories"][subcat];
   let total_emissions = 0;
   for(let i=0; i <dict.length; i++){
     total_emissions += json_data[dict[i]];
