@@ -1,8 +1,5 @@
-from django.contrib.auth.forms import AuthenticationForm
 from django.test import TestCase
-import unittest
 from django.test import Client
-from .forms import *
 from .models import *
 from django.contrib.auth.models import User
 
@@ -62,11 +59,6 @@ class TestMyPages(TestCase):
         form = {"username": username, "password": password}
         response = self.client.post(url, form)
 
-    # def test_dashboard_visit_before_login(self):
-    #     url = self.urls.get("dashboard")
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, self.urls.get("login"))
 
     def test_dashboard_visit_after_login(self):
         self.login("pftesting3", "testing3")
@@ -99,19 +91,10 @@ class TestMyPages(TestCase):
         self.assertTemplateUsed(response, 'calculator_site/report.html')
 
     def test_action_plan_before_login(self):
-        # self.login("pftesting3", "testing3")
         url = self.urls.get("action-plan")
         response = self.client.get(url)
         self.assertRedirects(response, self.urls.get("login"))
 
-    #def test_my_profile_before_login(self):
-    #    response = self.client.get(self.urls.get("profile"))
-    #    self.assertRedirects(response, self.urls.get("login"))
-
-    #def test_my_profile_after_login(self):
-    #    self.login("pftesting3", "testing3")
-    #    response = self.client.get(self.urls.get("profile"))
-    #    self.assertTemplateUsed(response, 'calculator_site/profile.html')
 
     def test_how_it_works(self):
         self.login("pftesting3", "testing3")
