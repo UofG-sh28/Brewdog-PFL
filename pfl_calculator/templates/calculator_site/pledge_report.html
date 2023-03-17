@@ -9,7 +9,35 @@
 
 {% block body_block %}
     <h2>Pledge Report {{ year }}</h2>
-    <div id = "pledgeTable" style="width: 40%; float: left;"></div>
+    <table id = "summaryTable" style="width: 40%; float: left;">
+      <tr>
+      <th> Target Emissions Summary Table</th>
+      <th> Values</th>
+      <tr>
+        <td>2019 Baseline (tCO2e)</td>
+        <td>{{baseline_2019}}</td>
+      </tr>
+      <tr>
+        <td>2023 Target Savings</td>
+        <td>{{target_savings_2023}}</td>
+      </tr>
+      <tr>
+        <td>Emissions Reductions Target (tCO2e)</td>
+        <td>{{emissions_reduction_target}}</td>
+      </tr>
+      <tr>
+        <td>Pledges Savings (tCO2e)</td>
+        <td>{{pledges_savings_tons}}</td>
+      </tr>
+      <tr>
+        <td>Actual CO2e % Savings</td>
+        <td>{{actual_co2_percent_saving}}</td>
+      </tr>
+      <tr>
+        <td>Residual (tCO2e)</td>
+        <td>{{residual}}</td>
+      </tr>
+    </table>
     <div id = "pie" style="height: 50%; float: left; "></div>
     <div id = "plot" style="height: 70%; float: right; "></div>
 </br>
@@ -44,14 +72,19 @@
 <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
 <script src="{% static 'JS/pledge_report.js' %}"></script>
 <script>
+    //load in data
+    
+    const actual_co2_percent_saving = {{actual_co2_percent_saving}};
+    const residual = {{residual}};
+
     const verbose_json = JSON.parse("{{verbose_json|escapejs}}");
     const pf_mappings_json = JSON.parse("{{pf_mappings_json|escapejs}}");
-    const total_percentage_saving = {{total_percentage_saving}};
-    //generatePledgeTable();
+
     const pledge_savings = {{pledge_savings}};
-    const residual = {{residual}};
     const cat_emissions = JSON.parse("{{cat_emissions|escapejs}}");
     const cat_reductions = JSON.parse("{{cat_reductions|escapejs}}");
+
+
     //plot summary pie chart
     plot_total_pie();
 

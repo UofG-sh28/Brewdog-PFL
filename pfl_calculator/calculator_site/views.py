@@ -389,11 +389,20 @@ def pledge_report(request):
     residual = carbon_sum - pledge_savings
 
     #add data to context_dict
+
+    #summary table
+    context_dict['baseline_2019'] = baseline_2019
+    context_dict['target_savings_2023'] = target_savings_2023
+    context_dict['emissions_reduction_target'] = emissions_reduction_target
+    context_dict['pledges_savings_tons'] = pledges_savings_tons
+    context_dict['actual_co2_percent_saving'] = actual_co2_percent_saving
+    context_dict['residual'] = residual
+    print("stuff here \n\n\n\n\n\n")
+    print(pledges_savings_tons, actual_co2_percent_saving)
     json_data = json.dumps(pf_mappings)
     context_dict['pf_mappings_json'] = json_data
     context_dict['year'] = year_ck
-    context_dict['total_percentage_saving'] = actual_co2_percent_saving
-    context_dict['residual'] = residual
+
     context_dict['pledge_savings'] = pledge_savings
     context_dict['carbon_sum'] = carbon_sum
     context_dict['cat_emissions'] = json.dumps(cat_emissions)
