@@ -580,7 +580,7 @@ def generate_user_report(request, year):
     context = {
         "conversion_factors": static_conversion_factors,
     }
-    if (request.user.is_staff):
+    if (request.user.is_authenticated):
         report_file = xw.Workbook(f'pfl_calc_report_{year}.xlsx')
         highlight = report_file.add_format({'bold': True})
 
