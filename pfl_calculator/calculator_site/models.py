@@ -456,8 +456,8 @@ class ActionPlanDetail(models.Model):
     year = models.IntegerField()
 
     ownership = models.CharField(default="", max_length=200)
-    start_date = models.DateField(default=date.today())
-    end_date = models.DateField(default=date.today())
+    start_date = models.DateField(default=timezone.now)
+    end_date = models.DateField(default=timezone.now)
     text = models.CharField(default="", max_length=200)
 
     plan_detail = models.TextField(default="", max_length=200)
