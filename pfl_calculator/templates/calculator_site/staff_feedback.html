@@ -1,0 +1,100 @@
+{% extends 'calculator_site/base.html' %}
+{% load static %}
+
+{% block title %}
+    Admin Feedback
+{% endblock %}
+
+{% block body_block %}
+    {% if error %}
+        { error }
+    {% else %}
+        <div class="admin">
+            <h2>User Feedback</h2>
+            {% for feedback in feedbacks %}
+                <div class="feedback-instance" style="background-color: #c4c4c4; margin-top: 10px; padding: 10px;">
+                    <h4>Feedback</h4>
+                        <h5>"I had enough information about how to complete the calculator"</h5>
+                        User Rating: {{feedback.get_had_enough_information_display }}<br>
+                        User Comment: {{feedback.comment_had_enough_information}}<br>
+
+                        <h5>"The information on "Scope" was useful"</h5>
+                        User Rating: {{feedback.get_scope_was_useful_display }}<br>
+                        User Comment: {{feedback.comment_scope_was_useful}}<br>
+                        
+                        <h5>"I was able to find the information I needed for completing the Footprint Calculator"</h5>
+                        User Rating: {{feedback.get_able_to_find_info_display }}<br>
+                        User Comment: {{feedback.comment_able_to_find_info}}<br>
+                        
+                        <h5>"The questions on the Footpring Calculator were clear"</h5>
+                        User Rating: {{feedback.get_calculator_ware_clear_display }}<br>
+                        User Comment: {{feedback.comment_calculator_ware_clear}}<br>
+
+                        <h5>"The Footprint Calculator questions were relevant to my business"</h5>
+                        User Rating: {{feedback.get_question_were_relevant_display }}<br>
+                        User Comment: {{feedback.comment_question_were_relevant}}<br>
+
+                        <h5>"The graphics on the "Your Results" page were clear"</h5>
+                        User Rating: {{feedback.get_graphics_ware_clear_display }}<br>
+                        User Comment: {{feedback.comment_graphics_ware_clear}}<br>
+
+                        <h5>"The Pledges were relevant to my business"</h5>
+                        User Rating: {{feedback.get_pledge_were_relevant_display }}<br>
+                        User Comment: {{feedback.comment_pledge_were_relevant}}<br>
+
+                        <h5>"I was able to cut emissions by my target amount with the Pledges available"</h5>
+                        User Rating: {{feedback.get_cut_emissions_display }}<br>
+                        User Comment: {{feedback.comment_cut_emissions}}<br>
+
+                        <h5>"It was clear how to use the Action Plan"</h5>
+                        User Rating: {{feedback.get_action_plan_clear_use_display }}<br>
+                        User Comment: {{feedback.comment_action_plan_clear_use}}<br>
+
+                        <h5>"I am more aware of the carbon impacts of my business"</h5>
+                        User Rating: {{feedback.get_aware_of_carbon_impacts_display }}<br>
+                        User Comment: {{feedback.comment_aware_of_carbon_impacts}}<br>
+
+                        <h5>"I am confident that we will be able to complete the actions within the year"</h5>
+                        User Rating: {{feedback.get_confident_able_to_complete_display }}<br>
+                        User Comment: {{feedback.comment_confident_able_to_complete}}<br>
+
+                        <h5>"I knew a lot about climate change before the survey"</h5>
+                        User Rating: {{feedback.get_know_climate_change_display }}<br>
+                        User Comment: {{feedback.comment_know_climate_change}}<br>
+
+                        <h5>"I think the Actions pledged will improve the way we do business"</h5>
+                        User Rating: {{feedback.get_actions_improve_business_display }}<br>
+                        User Comment: {{feedback.comment_actions_improve_business}}<br>
+
+                        <h5>"I think our customers will think this is a worthwhile exercise"</h5>
+                        User Rating: {{feedback.get_customer_exercise_display }}<br>
+                        User Comment: {{feedback.comment_customer_exercise}}<br>
+
+                        <h5>"I think all bars and restaurants should complete the exercise"</h5>
+                        User Rating: {{feedback.get_all_stores_complete_exercise_display }}<br>
+                        User Comment: {{feedback.comment_all_stores_complete_exercise}}<br>
+
+                        <h5>"I think climate change is an emergency"</h5>
+                        User Rating: {{feedback.get_climate_change_emergency_display }}<br>
+                        User Comment: {{feedback.comment_climate_change_emergency}}<br>
+
+                        <h5>"I am likely to find out more about climate change as a result of this exercise"</h5>
+                        User Rating: {{feedback.get_want_to_find_out_climate_change_display }}<br>
+                        User Comment: {{feedback.comment_want_to_find_out_climate_change}}<br>
+
+                        <h5>"I think there are opportunities to work with our suppliers to reduce our carbon footprint"</h5>
+                        User Rating: {{feedback.get_opportunities_to_supplier_display }}<br>
+                        User Comment: {{feedback.comment_opportunities_to_supplier}}<br>
+
+                        <h5>"I thought the Carbon Calculator was too hard"</h5>
+                        User Rating: {{feedback.get_calculator_too_hard_display }}<br>
+                        User Comment: {{feedback.comment_calculator_too_hard}}<br>
+
+                        <h5>"I would be happy to be contacted to talk about our experience"</h5>
+                        User Rating: {{feedback.get_happy_to_talk_display }}<br>
+                        User Comment: {{feedback.comment_happy_to_talk}}<br>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
