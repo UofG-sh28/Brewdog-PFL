@@ -17,6 +17,7 @@ urlpatterns = [
     path('staff/factors/', views.staff_factors, name='staff_factors'),
     path('staff/report/', views.staff_report, name='staff_report'),
     path('staff/dashboard/', views.staff_dash, name='staff_dash'),
+    path('staff/feedback/', views.staff_feedback, name='staff_feedback'),
     re_path(r'^staff/report/(?P<year>\d+)/', views.generate_admin_report, name='generate_admin_report'),
     #
     # # REGISTER PAGE

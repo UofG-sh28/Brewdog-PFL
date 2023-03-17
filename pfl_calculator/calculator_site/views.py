@@ -524,6 +524,20 @@ def staff_report(request):
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/staff_report.html', context=context)
 
+def staff_feedback(request):
+    feedback = Feedback.objects.all()
+    feedback_field = [field.name for field in Feedback._meta.get_fields()]
+    context = {
+        "conversion_factors": static_conversion_factors,
+        "feedbacks": feedback,
+        "fields": feedback_field,
+    }
+    if (request.user.is_staff):
+        print("user")
+    else:
+        context["error"] = "You do not have access to this page."
+    return render(request, 'calculator_site/staff_feedback.html', context=context)
+
 
 def generate_admin_report(request, year):
     context = {

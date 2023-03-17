@@ -1,6 +1,9 @@
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
 
 class Business(models.Model):
@@ -453,13 +456,11 @@ class ActionPlanDetail(models.Model):
     year = models.IntegerField()
 
     ownership = models.CharField(default="", max_length=200)
-    start_date = models.IntegerField(default=0, choices=Months,
-                                    validators=[MinValueValidator(1), MaxValueValidator(12)])
-    end_date = models.IntegerField(default=0, choices=Months,
-                                     validators=[MinValueValidator(1), MaxValueValidator(12)])
+    start_date = models.DateField(default=timezone.now)
+    end_date = models.DateField(default=timezone.now)
     text = models.CharField(default="", max_length=200)
 
-    plan_detail = models.CharField(default="", max_length=200)
+    plan_detail = models.TextField(default="", max_length=200)
 
     def __str__(self):
         return f"{self.business.company_name}'s Action Plan Detail for {self.year}"
