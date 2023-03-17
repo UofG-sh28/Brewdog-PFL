@@ -94,7 +94,8 @@
   }
 
   function isValidPassword(password) {
-    const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    const regex = /^(?=.*\d).{8,}$/
+    const regex2 = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     return regex.test(password);
   }
 </script>
