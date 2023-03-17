@@ -16,7 +16,7 @@ function plot_total_pie(){
     paper_bgcolor:"#f6f6f6"
   };
 
-  Plotly.newPlot(myDiv, data, layout);
+  Plotly.newPlot(myDiv, data, layout, {displaylogo:false});
 }
 
 function plot_category_bar(){
@@ -70,5 +70,5 @@ var layout = {
   paper_bgcolor:"#f6f6f6"
 };
 
-Plotly.newPlot(myDiv, data, layout);
+Plotly.newPlot(myDiv, data, layout, {displaylogo: false});
 }
