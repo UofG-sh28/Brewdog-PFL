@@ -351,7 +351,6 @@ def pledge_report(request):
     context_dict['pledge_savings'] = pledge_savings
     context_dict['carbon_sum'] = carbon_sum
 
-    print("total pledge percentages \n\n\n\n", total_pledge_percentage)
     return render(request, 'calculator_site/pledge_report.html', context=context_dict)
 
 
