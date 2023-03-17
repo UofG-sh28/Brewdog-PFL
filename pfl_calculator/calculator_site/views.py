@@ -296,6 +296,10 @@ def pledge_report(request):
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business, year=year_ck).first()
 
+    if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+        return render(request, 'calculator_site/pledge_report.html', context={'cal': 0})
+
+    context_dict["cal"] = 1
     conversion_factors = static_conversion_factors.get(str(year_ck), None)
 
     pf = PledgeFunctions(footprint, conversion_factors)
@@ -1138,6 +1142,7 @@ class ActionPlanDetailLoaderView:
 
         business, _ = Business.objects.get_or_create(user=user)
         apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
+
         for index, apd in enumerate(apd_list):
             if data["start_date"][index] > data["end_date"][index]:
                 return render(request, 'calculator_site/action_plan_detail.html',
@@ -1155,11 +1160,14 @@ class ActionPlanDetailLoaderView:
         # get pledge options
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
+
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
+        if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+            return render(request, 'calculator_site/action_plan_detail.html', context={'cal': 0})
+
+
         # check if is ok
-        try:
-            ap = ActionPlan.objects.get(business=business, year=year_ck)
-        except:
-            return render(request, 'calculator_site/action_plan_detail.html', context={"pledges": 0})
         if ap is None:
             return redirect('/my/pledges')
         # create ActionPlanDetail item
@@ -1175,7 +1183,7 @@ class ActionPlanDetailLoaderView:
                     apd = ActionPlanDetail(business=business, year=year_ck, text=field)
                     apd.save()
         # return form
-        context = {}
+        context = {"cal": 1}
         data = []
         context['action_plan_detail_forms'] = data
         ap_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
@@ -1187,4 +1195,6 @@ class ActionPlanDetailLoaderView:
                                                     acion_plan_detail_form["start_date"],
                                                     acion_plan_detail_form["end_date"],
                                                     acion_plan_detail_form["plan_detail"]))
+
+
         return render(request, 'calculator_site/action_plan_detail.html', context=context)

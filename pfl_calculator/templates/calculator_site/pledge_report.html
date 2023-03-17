@@ -9,6 +9,7 @@
 
 {% block body_block %}
     <h2>Pledge Report {{ year }}</h2>
+    {% if cal %}
     <table id = "summaryTable" style="width: 40%; float: left;">
       <tr>
       <th> Target Emissions Summary Table</th>
@@ -63,7 +64,10 @@
 </br>
 </br>
 
-
+    {% else %}
+        <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+        <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
+    {% endif %}
 {% endblock %}
 {% block script %}
 
@@ -89,4 +93,6 @@
     //plot category bar chart
     plot_category_bar();
 </script>
+
+
 {% endblock %}
