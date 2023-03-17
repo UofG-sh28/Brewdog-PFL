@@ -1,5 +1,5 @@
 ## Planet First Locals Carbon Calculator
-This is a website application designed for Brewdog's carbon reduction devision, namely Planet First Locals as part of Planet Brewdog. It contains functionality for creation of accounts, storing and displaying of carbon emissions in multiple formats, pledging functionality to allow customers to reduce their overall carbon footprint, as well as general administration features to extract general customer data into an Excel spreadsheet, and to change the carbon emission calculation factors year on year.
+This is a website application designed for Brewdog's carbon reduction division, namely Planet First Locals as part of Planet Brewdog. It contains functionality for creation of accounts, storing and displaying of carbon emissions in multiple formats, pledging functionality to allow customers to reduce their overall carbon footprint, as well as general administration features to extract general customer data into an Excel spreadsheet, and to change the carbon emission calculation factors year on year.
 
 ## User Guide
 When first logging into the website using an administrator account, you should be greeted with the "Staff Dashboard" (INSERT IMAGE OF STAFF DASHBOARD), which presents three options: 
