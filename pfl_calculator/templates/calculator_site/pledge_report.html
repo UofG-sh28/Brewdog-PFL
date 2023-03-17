@@ -5,12 +5,10 @@
   Pledge Report
 {% endblock %}
 
-<!--{% block css %}{% endblock %}-->
-
 {% block body_block %}
     <h2>Pledge Report {{ year }}</h2>
     {% if cal %}
-    <table id = "summaryTable" style="width: 40%; float: left;">
+    <table id = "summaryTable" style="width: 40%; float: left; margin-bottom: 50%;">
       <tr>
       <th> Target Emissions Summary Table</th>
       <th> Values</th>
@@ -39,38 +37,28 @@
         <td>{{residual}}</td>
       </tr>
     </table>
-    <div id = "pie" style="height: 50%; float: left; "></div>
-    <div id = "plot" style="height: 70%; float: right; "></div>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-
+    <div>
+        <div id = "pie" style="height: 50%; width: 50%; float: right;"></div>
+        <div id = "plot" style="height: 70%; width: 50%; float: right;"></div>
+    </div>
     {% else %}
         <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
         <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
     {% endif %}
-{% endblock %}
-{% block script %}
 
+<style>
+    #pie, #plot {
+        height: 50%;
+        display: inline-block;
+        float: right;
+    }
+    #pie {
+        margin-top: 0;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
 <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
 <script src="{% static 'JS/pledge_report.js' %}"></script>
 <script>
