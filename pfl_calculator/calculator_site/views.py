@@ -1,6 +1,5 @@
 import json
 import math
-import decimal
 from itertools import chain
 import xlsxwriter as xw
 import os
@@ -9,7 +8,6 @@ from django.shortcuts import render
 from calculator_site.forms import CalculatorForm, ActionPlanForm, ActionPlanUtil, AdminForm, ChangePasswordForm
 from calculator_site.models import Business, CarbonFootprint
 from django.http import HttpResponse
-from django.core import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as lg
 from django.contrib.auth import logout as lo
@@ -147,7 +145,6 @@ class DashboardViewLoader:
         #Get USER INFORMATION BASED ON SELECTED YEAR
         user = User.objects.get(username=request.user)
         business = Business.objects.get(user=user)
-        business_id = business.id
         footprints = CarbonFootprint.objects.filter(business=business, year=context["year"])
 
         #GET USER'S TOTAL CARBON EMISSINONS FOR THE YEAR
@@ -226,7 +223,6 @@ def report(request):
             "percent": 0
         }
         for field in static_categories[cat]:
-            # carbon_dict[cat]["total"] += getattr(data[0], field)
             carbon_dict[cat]["total"] += data[field]
         carbon_dict[cat]["percent"] = (carbon_dict[cat]["total"] / carbon_sum) * 100
 
