@@ -327,7 +327,7 @@ def pledge_report(request):
     #  Percentage savings: ratio of pledge calculation / baseline
     normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges if pledge_baseline[k] != 0}
     str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if getattr(ap, k) != 0}
-    sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges}
+    sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges if pledge_baseline[k] != 0}
 
     # Merge dictionaries and convert into .2f percentage
     percent_savings = {k: round(v*100, 2) for k, v in {**normal_percent_savings, **str_percent_savings,
