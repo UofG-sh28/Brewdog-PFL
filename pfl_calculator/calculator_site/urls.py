@@ -31,7 +31,7 @@ urlpatterns = [
     path('my/report', views.report, name='report'),
     path('my/pledges', views.PledgeLoaderView().pledges, name='pledges'),
     path('my/pledge-report', views.pledge_report, name='action_plan'),
-    path('my/profile', views.profile, name='profile'),
+    #path('my/profile', views.profile, name='profile'),
     path('my/account', views.account, name='account'),
     path('my/feedback', views.FeedbackLoaderView().feedback, name='feedback'),
 

@@ -41,7 +41,6 @@ def set_testup():
         "register": "/register/",
         "outline": "/outline/",
         "how-it-works": "/how-it-works",
-        "profile": "/my/profile",
         "mytest": "/my/test"
     }
     return urls
@@ -105,14 +104,14 @@ class TestMyPages(TestCase):
         response = self.client.get(url)
         self.assertRedirects(response, self.urls.get("login"))
 
-    def test_my_profile_before_login(self):
-        response = self.client.get(self.urls.get("profile"))
-        self.assertRedirects(response, self.urls.get("login"))
+    #def test_my_profile_before_login(self):
+    #    response = self.client.get(self.urls.get("profile"))
+    #    self.assertRedirects(response, self.urls.get("login"))
 
-    def test_my_profile_after_login(self):
-        self.login("pftesting3", "testing3")
-        response = self.client.get(self.urls.get("profile"))
-        self.assertTemplateUsed(response, 'calculator_site/profile.html')
+    #def test_my_profile_after_login(self):
+    #    self.login("pftesting3", "testing3")
+    #    response = self.client.get(self.urls.get("profile"))
+    #    self.assertTemplateUsed(response, 'calculator_site/profile.html')
 
     def test_how_it_works(self):
         self.login("pftesting3", "testing3")
