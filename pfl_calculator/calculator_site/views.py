@@ -67,16 +67,15 @@ def load_global_data():
 load_global_data()
 
 
-# CHECK COOKIE
+#CHECK IF USER IS LOGGED IN, USING COOKIES
 def check_login(func):
     def inner(cls, request=None, *args, **kwargs):
         if request is None:
             request = cls
             cls = None
-        # check cookie value
+        #CHECK THE COOKIE VALUE
         if request.get_signed_cookie("login", salt="sh28", default=None) == 'yes' or request.user.is_authenticated:
-            # if logged in
-            if cls is None:
+            if cls is None: #IF LOGGED IN
                 return func(request, *args, **kwargs)
             else:
                 return func(cls, request, *args, **kwargs)
@@ -103,7 +102,7 @@ def scope(request):
     context = {'business': data}
     return render(request, 'calculator_site/scope.html', context)
 
-
+#LOADS THE DASHBOARD, RELOADS WHEN USER CHANGES YEAR
 class DashboardViewLoader:
 
     @check_login
@@ -117,16 +116,21 @@ class DashboardViewLoader:
 
     def __dashboard_get(self, request, year=None):
         context = {'login': 'yes'}
+
+        #READ WHAT YEAR THE USER HAS SELECTED
         year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
         if year is not None:
             context["year"] = year
         else:
             context["year"] = year_ck
 
+        #Get USER INFORMATION BASED ON SELECTED YEAR
         user = User.objects.get(username=request.user)
         business = Business.objects.get(user=user)
         business_id = business.id
         footprints = CarbonFootprint.objects.filter(business=business, year=context["year"])
+
+        #GET USER'S TOTAL CARBON EMISSINONS FOR THE YEAR
         carbon_sum = 0
         for footprint in footprints:
             carbon_sum += sum([getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()])
@@ -156,7 +160,7 @@ def dash_redirect(request):
 def metrics(request):
     return render(request, 'calculator_site/metrics.html')
 
-
+#Helper method to read in user's data for the report view function below
 def to_dict(instance):
     opts = instance._meta
     data = {}
@@ -166,9 +170,10 @@ def to_dict(instance):
         data[f.name] = [i.id for i in f.value_from_object(instance)]
     return data
 
-
 @check_login
 def report(request):
+
+    #GET USER'S INFORMATION BASED ON THE SELECTED YEAR
     year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
@@ -185,9 +190,12 @@ def report(request):
     context["json_data"] = mark_safe(json.dumps(str(data)))
     context["cal"] = 1
 
-    # CALCULATE VALUES BY CATEGORY
+    """
+    CALCULATE VALUES BY CATEGORY
+    GET TOTAL CARBON EMISSIONS
+    """
+
     carbon_sum = 0
-    # GET TOTAL CARBON EMISSIONS
     carbon_sum += sum([data[field] for field in CalculatorUtil.retrieve_meta_fields()])
     carbon_dict = {}
     for cat in static_categories:
@@ -210,9 +218,12 @@ def report(request):
     context["carbon_sum"] = format(carbon_sum, ".2f")
     context["carbon_dict"] = carbon_dict
 
-    # CALCULATE VALUES BY SCOPE
+    """
+    CALCULATE VALUES BY SCOPE
+    GET TOTAL CARBON EMISSIONS
+    """
+
     carbon_sum_scope = 0
-    # GET TOTAL CARBON EMISSIONS
     carbon_sum_scope += sum([data[field] for field in CalculatorUtil.retrieve_meta_fields()])
     carbon_dict_scope = {}
     for scope in static_scope:
@@ -245,6 +256,9 @@ def report(request):
 @check_login
 def pledge_report(request):
     context_dict = {}
+
+    #DEFINE WHAT FIELD EACH PLEDGE DEPENDS ON
+
     pledge_dependencies = {
         "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
         "switch_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
@@ -275,12 +289,18 @@ def pledge_report(request):
         "sustainably_procure_equipment": [],
     }
 
+    #GET USER INFO AND CONVERSION FACTORS BY YEAR
+
     year_ck = request.get_signed_cookie("year", salt="sh28", default=date.today().year)
     user = User.objects.get(username=request.user)
     business = Business.objects.get(user=user)
     footprint = CarbonFootprint.objects.filter(business=business, year=year_ck).first()
 
-    conversion_factors = static_conversion_factors.get(str(year_ck), None)  # USING STATIC YEAR MUST BE CHANGED
+    if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+        return render(request, 'calculator_site/pledge_report.html', context={'cal': 0})
+
+    context_dict["cal"] = 1
+    conversion_factors = static_conversion_factors.get(str(year_ck), None)
 
     pf = PledgeFunctions(footprint, conversion_factors)
     conversion_map = pf.get_func_map()
@@ -288,7 +308,9 @@ def pledge_report(request):
     ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
 
-    # Filter set yes but later to zero (used to loading back in data correctly
+    # Filter sets inputs to yes but later to zero
+    # Used to load data back into pledges page
+
     non_percentages = ["switch_electricity", "detailed_menu", "waste_audit", "adopt_sustainable_diposable_items",
                             "sustainably_procure_equipment","energy_audit"]
 
@@ -300,7 +322,7 @@ def pledge_report(request):
         ap_values[k] = value
 
 
-
+    #MAP EACH PLEDGE TO THEIR EMISSIONS REDUCTION VALUE
     pf_mappings = {k: v(ap_values[k]) for k, v in conversion_map.items()}
 
     for key in pf_mappings:
@@ -353,10 +375,10 @@ def pledge_report(request):
     total_percentage = sum(total_pledge_percentage.values())
 
     """
-    Calculate pledge reductions by category
+    Calculate pledged reductions by category into cat_reductions
+    Calculate group user's carbon emissions by category into cat_emissions
     """
 
-    #grouping pledges by category into categorised_pledges
     pledge_categories = {}
     for pledge in pledge_dependencies:
         pledge_categories[pledge] = ""
@@ -366,13 +388,12 @@ def pledge_report(request):
                     if dependency in static_categories[cat]:
                         pledge_categories[pledge] = str(cat)
 
-
     cat_reductions = {cat: 0 for cat in static_categories}
-
     for field in pf_mappings:
         if not isinstance(pf_mappings[field], str):
             cat_reductions[pledge_categories[field]] += pf_mappings[field]
-    #re-calculate emissions by category
+
+    #Calculate group user's carbon emissions by category into cat_emissions
     data = {field: getattr(footprint, field) for field in CalculatorUtil.retrieve_meta_fields()}
     cat_emissions = {}
     for cat in static_categories:
@@ -390,19 +411,18 @@ def pledge_report(request):
 
     #add data to context_dict
 
-    #summary table
+    #summary table values
     context_dict['baseline_2019'] = baseline_2019
     context_dict['target_savings_2023'] = target_savings_2023
     context_dict['emissions_reduction_target'] = emissions_reduction_target
     context_dict['pledges_savings_tons'] = pledges_savings_tons
     context_dict['actual_co2_percent_saving'] = actual_co2_percent_saving
     context_dict['residual'] = residual
-    print("stuff here \n\n\n\n\n\n")
-    print(pledges_savings_tons, actual_co2_percent_saving)
+    
+
     json_data = json.dumps(pf_mappings)
     context_dict['pf_mappings_json'] = json_data
     context_dict['year'] = year_ck
-
     context_dict['pledge_savings'] = pledge_savings
     context_dict['carbon_sum'] = carbon_sum
     context_dict['cat_emissions'] = json.dumps(cat_emissions)
@@ -1122,6 +1142,7 @@ class ActionPlanDetailLoaderView:
 
         business, _ = Business.objects.get_or_create(user=user)
         apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
+
         for index, apd in enumerate(apd_list):
             if data["start_date"][index] > data["end_date"][index]:
                 return render(request, 'calculator_site/action_plan_detail.html',
@@ -1139,11 +1160,14 @@ class ActionPlanDetailLoaderView:
         # get pledge options
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
+
+        footprint, _ = CarbonFootprint.objects.get_or_create(business=business, year=year_ck)
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
+        if any([getattr(footprint, field) == -1 for field in CalculatorUtil.retrieve_meta_fields()]):
+            return render(request, 'calculator_site/action_plan_detail.html', context={'cal': 0})
+
+
         # check if is ok
-        try:
-            ap = ActionPlan.objects.get(business=business, year=year_ck)
-        except:
-            return render(request, 'calculator_site/action_plan_detail.html', context={"pledges": 0})
         if ap is None:
             return redirect('/my/pledges')
         # create ActionPlanDetail item
@@ -1159,7 +1183,7 @@ class ActionPlanDetailLoaderView:
                     apd = ActionPlanDetail(business=business, year=year_ck, text=field)
                     apd.save()
         # return form
-        context = {}
+        context = {"cal": 1}
         data = []
         context['action_plan_detail_forms'] = data
         ap_list = ActionPlanDetail.objects.filter(business=business, year=year_ck)
@@ -1171,4 +1195,6 @@ class ActionPlanDetailLoaderView:
                                                     acion_plan_detail_form["start_date"],
                                                     acion_plan_detail_form["end_date"],
                                                     acion_plan_detail_form["plan_detail"]))
+
+
         return render(request, 'calculator_site/action_plan_detail.html', context=context)

@@ -7,8 +7,9 @@
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-  <div class="feedback" style="margin-bottom:3%">
+  <div class="feedback" style="margin-bottom: 3%;">
     <h2>Action Plan</h2>
+      {% if cal %}
     <form id="action_plan_detail_forms" method="post">
       {% csrf_token %}
       <div class="table-feedback-row">
@@ -55,6 +56,11 @@
     {% if error != "" %}
       <small style="color:red">{{ error }}</small> <br>
     {% endif %}
-
+      {% else %}
+          <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+          <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
+      {% endif %}
   </div>
+
+
 {% endblock %}
