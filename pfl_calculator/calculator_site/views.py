@@ -287,7 +287,21 @@ def pledge_report(request):
 
     ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
-    pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
+
+    # Filter set yes but later to zero (used to loading back in data correctly
+    non_percentages = ["switch_electricity", "detailed_menu", "waste_audit", "adopt_sustainable_diposable_items",
+                            "sustainably_procure_equipment","energy_audit"]
+
+    ap_values = {}
+    for k in conversion_map.keys():
+        value = getattr(ap, k)
+        if k in non_percentages and value <= 50:
+            value = 0
+        ap_values[k] = value
+
+
+
+    pf_mappings = {k: v(ap_values[k]) for k, v in conversion_map.items()}
 
     for key in pf_mappings:
         if not isinstance(pf_mappings[key], str):
@@ -326,7 +340,7 @@ def pledge_report(request):
 
     #  Percentage savings: ratio of pledge calculation / baseline
     normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges if pledge_baseline[k] != 0}
-    str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if getattr(ap, k) != 0}
+    str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if ap_values[k] != 0}
     sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges if pledge_baseline[k] != 0}
 
     # Merge dictionaries and convert into .2f percentage
@@ -671,7 +685,17 @@ def generate_user_report(request, year):
 
         ap, _ = ActionPlan.objects.get_or_create(business=business, year=year)
 
-        pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
+        # Filter set yes but later to zero (used to loading back in data correctly
+        non_percentages = ["switch_electricity", "detailed_menu", "waste_audit", "adopt_sustainable_diposable_items",
+                           "sustainably_procure_equipment","energy_audit"]
+        ap_values = {}
+        for k in conversion_map.keys():
+            value = getattr(ap, k)
+            if k in non_percentages and value <= 50:
+                value = 0
+            ap_values[k] = value
+
+        pf_mappings = {k: v(ap_values[k]) for k, v in conversion_map.items()}
 
         # Pledged total
         pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
@@ -770,7 +794,14 @@ class PledgeLoaderView:
         print(data)
         for k, v in data.items():
             value = 0 if v[0] == "" else int(v[0])
-            setattr(ap, k, 100 if value == 1 else value)
+            if value == 1:
+                value = 100
+            elif value == 0:
+                value = 50
+            else:
+                value = 0
+
+            setattr(ap, k, value)
 
         ap.save()
 
@@ -800,7 +831,7 @@ class PledgeLoaderView:
         tables = []
         group_fields = []
         table = False
-        default_choice = ((1, "Yes"), (0, "Yes but later"), (0, "Not possible"))
+        default_choice = ((1, "Yes"), (0, "Yes but later"), (-1, "Not possible"))
         choices = {
             "switch_electricity": default_choice,
             "detailed_menu": default_choice,
@@ -824,6 +855,7 @@ class PledgeLoaderView:
             pledge_value = getattr(ap, field)
             pdw.form.field.initial = pledge_value
             if field in choices:
+                print(pledge_value)
                 pdw.form.field.widget.choices = choices.get(field)
             if all([getattr(footprint, dependency) == 0 for dependency in self.action_plan_field_dependencies[field]]) \
                     and len(self.action_plan_field_dependencies[field]) != 0:
