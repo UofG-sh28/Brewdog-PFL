@@ -285,7 +285,7 @@ class ActionPlanDetailUtil:
         widgets = {}
         for field in fields:
             if field == "ownership":
-                attrs = {'type': 'text', 'class': 'input-style', 'id': field + 'PlanInput', 'placeholder': ' ',
+                attrs = {'type': 'text', 'class': 'action-plan-input-style', 'id': field + 'PlanInput', 'placeholder': ' ',
                          "value": " ", "required": "false"}
                 widgets[field] = TextInput(attrs=attrs)
             elif field == "plan_detail":

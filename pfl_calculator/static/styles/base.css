@@ -670,6 +670,28 @@ input[type="checkbox"]:checked::before {
     border-color: var(--form-control-color);
 }
 
+.action-plan-input-style{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    margin: auto;
+    width: auto;
+    max-width: 280px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.15em solid black;
+    font-family: inherit;
+    height: 25px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+}
+
+.input-style:focus {
+    outline: none;
+    border-color: var(--form-control-color);
+}
 
 
 .parallelogram {
