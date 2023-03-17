@@ -10,7 +10,7 @@ function plot_total_pie(){
   }];
 
   var layout = {
-    title: "Overall Pledged Reductions",
+    title: "<b>Overall Pledged Reductions</b>",
     height: 400,
     width: 500,
     paper_bgcolor:"#f6f6f6"
@@ -62,7 +62,7 @@ var pledged = {
 var data = [residual, pledged];
 
 var layout = {
-  title: 'Pledged Reduction Breakdown',
+  title: '<b>Pledged Reduction Breakdown</b>',
   barmode: 'stack',
   margin: {
     l: 200

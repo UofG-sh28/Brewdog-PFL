@@ -8,39 +8,48 @@
 {% block body_block %}
     <h2>Pledge Report {{ year }}</h2>
     {% if cal %}
-    <table id = "summaryTable" style="width: 40%; float: left; margin-bottom: 50%;">
+    <center><table id = "summaryTable" style="width: 50%; margin-bottom: 2%;">
       <tr>
-      <th> Target Emissions Summary Table</th>
-      <th> Values</th>
+      <th><center>Target Emissions Summary Table</center></th>
+      <th><center>Values</center></th>
+      <th><center>Units</center></th>
       <tr>
-        <td>2019 Baseline (tCO2e)</td>
-        <td>{{baseline_2019}}</td>
+        <td>2019 Baseline</td>
+        <td><b>{{baseline_2019}}</b></td>
+        <td> tCO2e</td>
       </tr>
       <tr>
         <td>2023 Target Savings</td>
-        <td>{{target_savings_2023}}</td>
+        <td><b>{{target_savings_2023}}</b></td>
+        <td>tCO2e</td>
       </tr>
       <tr>
         <td>Emissions Reductions Target (tCO2e)</td>
-        <td>{{emissions_reduction_target}}</td>
+        <td><b>{{emissions_reduction_target}}</b></td>
+        <td> tCO2e</td>
       </tr>
       <tr>
         <td>Pledges Savings (tCO2e)</td>
-        <td>{{pledges_savings_tons}}</td>
+        <td><b>{{pledges_savings_tons}}</b></td>
+        <td> tCO2e</td>
       </tr>
       <tr>
         <td>Actual CO2e % Savings</td>
-        <td>{{actual_co2_percent_saving}}</td>
+        <td><b>{{actual_co2_percent_saving}}</b></td>
+        <td> %</td>
       </tr>
       <tr>
         <td>Residual (tCO2e)</td>
-        <td>{{residual}}</td>
+        <td><b>{{residual}}</b></td>
+        <td> tCO2e</td>
       </tr>
     </table>
+    </center>
     <div>
-        <div id = "pie" style="height: 50%; width: 50%; float: right;"></div>
-        <div id = "plot" style="height: 70%; width: 50%; float: right;"></div>
+        <div id = "pie" style="height: 50%; width: 50%; float: left;margin-top:0;"></div>
+        <div id = "plot" style="height: 70%; width: 50%; float: right; margin-top:0"></div>
     </div>
+
     {% else %}
         <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
         <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
@@ -50,10 +59,6 @@
     #pie, #plot {
         height: 50%;
         display: inline-block;
-        float: right;
-    }
-    #pie {
-        margin-top: 0;
     }
 </style>
 {% endblock %}
