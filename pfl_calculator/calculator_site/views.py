@@ -70,7 +70,6 @@ load_global_data()
 #CHECK IF USER IS LOGGED IN, USING COOKIES
 def check_login(func):
     def inner(cls, request=None, *args, **kwargs):
-        print("Login")
         if request is None:
             request = cls
             cls = None
@@ -91,7 +90,6 @@ def check_login(func):
 
 def check_register(func):
     def inner(cls, request=None, *args, **kwargs):
-        print("register")
         if request is None:
             request = cls
             cls = None
