@@ -26,6 +26,7 @@
                 <img style="height: 75px" id="menu" src="{% static 'images/menu.png' %}">
                 <div class="dropdown-content">
                     {% if user.is_authenticated %}
+                        <a href="{% url 'dash' %}">Dashboard</a>
                         <a href="{% url 'calculator' %}">Calculator</a>
                         <a href="{% url 'report' %}">Reports</a>
                         <a href="{% url 'pledges' %}">Pledges</a>

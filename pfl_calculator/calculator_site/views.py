@@ -1014,7 +1014,7 @@ class ActionPlanDetailLoaderView:
         try:
             ap = ActionPlan.objects.get(business=business, year=year_ck)
         except:
-            return redirect('/my/pledges')
+            return render(request, 'calculator_site/action_plan_detail.html', context={"pledges": 0})
         if ap is None:
             return redirect('/my/pledges')
         # create ActionPlanDetail item
