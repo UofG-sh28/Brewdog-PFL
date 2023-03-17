@@ -9,7 +9,7 @@
 
 {% block body_block %}
     <div id="container">
-        <div id="dashboard_div">
+        <div id="dashboard_div" style="margin-bottom: 5%;">
             <h2 id="dashboard_welcome"> Welcome {{ user.username }}</h2>
             <div id="dashboard_options" style="text-align: center;">
                 <a href="{% url 'calculator' %}"><button class="dashboard_buttons">Submit Carbon Emission Values</button></a><br>
