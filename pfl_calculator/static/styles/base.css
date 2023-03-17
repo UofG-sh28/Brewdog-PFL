@@ -24,6 +24,7 @@ body {
     width: 100%;
     -ms-overflow-style: none; /* IE 11 */
     scrollbar-width: none; /* Firefox 64 */
+    margin-bottom: 5%;
 }
 
 #fadein {
@@ -32,7 +33,7 @@ body {
     animation-fill-mode: forwards;
     overflow: scroll;
     max-height: calc(100% - 120px) !important;
-    scrollbar-width: none;F
+    scrollbar-width: none;
 }
 
 #fadein::-webkit-scrollbar {

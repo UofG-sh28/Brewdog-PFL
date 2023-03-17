@@ -20,6 +20,7 @@
         <div class="parallelogram child"></div>
     {% endfor %}
 </div>
+<div style="margin-bottom: 5%;">
 <form action="/my/calculator/?progress={{progress}}" enctype="multipart/form-data"  method="post">
     {% csrf_token %}
         <table id="{{category.id}}Table" class="table">
@@ -58,5 +59,6 @@
         {% csrf_token %}
         <input class="calc-shine-button" id="calc" type="submit" value="Back">
     </form>
+</div>
 {% endif %}
 {% endblock %}
