@@ -7,7 +7,7 @@
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-<h2>Pledges</h2>
+<h2>Pledges {{ year }}</h2>
 
 {% if cal %}
     <form action="/my/pledges" enctype="application/x-www-form-urlencoded" method="post">

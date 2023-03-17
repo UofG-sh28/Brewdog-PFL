@@ -7,7 +7,7 @@
 <!--{% block css %}{% endblock %}-->
 
 {% block body_block %}
-<h2>Carbon Calculator</h2>
+<h2>Carbon Calculator {{ year }}</h2>
 <div>
     <p>Page {{progress}} of {{progress_total}}</p>
 </div>
@@ -20,6 +20,7 @@
         <div class="parallelogram child"></div>
     {% endfor %}
 </div>
+<div style="margin-bottom: 5%;">
 <form action="/my/calculator/?progress={{progress}}" enctype="multipart/form-data"  method="post">
     {% csrf_token %}
         <table id="{{category.id}}Table" class="table">
@@ -48,15 +49,16 @@
                 {% endfor %}
         </table>
     {%if progress == progress_total%}
-        <input class="shine-button" type="submit" value="Finish">
+        <input class="calc-shine-button" type="submit" value="Finish">
     {% else %}
-        <input class="shine-button" type="submit" value="Save & Next">
+        <input class="calc-shine-button" type="submit" value="Save & Next">
     {% endif %}
 </form>
 {% if progress_back|add:1 %}
     <form action="/my/calculator/?progress={{progress_back}}" enctype="multipart/form-data"  method="post">
         {% csrf_token %}
-        <input class="shine-button" id="calc" type="submit" value="Back">
+        <input class="calc-shine-button" id="calc" type="submit" value="Back">
     </form>
+</div>
 {% endif %}
 {% endblock %}

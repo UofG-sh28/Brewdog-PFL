@@ -1,0 +1,30 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Account Information
+{% endblock %}
+
+<!--{% block css %}{% endblock %}-->
+
+{% block body_block %}
+    <h1>My Account</h1>
+
+    <div class="password_change">
+        <h2>Change Password</h2>
+        <form id="password_change_form" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <button type="submit" name="password">Submit</button>
+        </form>
+
+        {% if error != "" %}
+          <small style="color:red">{{ error }}</small> <br>
+        {% endif %}
+    </div>
+
+    <style>
+        p {
+            margin-left: 0;
+        }
+    </style>
+{% endblock %}

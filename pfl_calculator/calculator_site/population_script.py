@@ -1,5 +1,5 @@
 from .models import *
-from django.contrib.auth.models import User
+
 
 class PledgeSaver:
     def __init__(self, pledge_functions_results):
@@ -26,5 +26,4 @@ class PledgeSaver:
             else:
                 pledges.category = 'M'
             pledges.text = key
-            # TODO: save values
             pledges.save()

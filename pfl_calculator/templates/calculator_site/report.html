@@ -1,7 +1,7 @@
 {% extends 'calculator_site/base.html' %}
 {% load static %}
 {% block title %}
-Homepage
+Report
 {% endblock %}
 
 <!--{% block css %}{% endblock %}-->
@@ -9,7 +9,7 @@ Homepage
 
 {% block body_block %}
 {% if cal %}
-    <h2>Report Page</h2>
+    <h2>Report Page {{ year }}</h2>
     <div id="summary-table-category" class="results-summary" style="float: left; display: inline; width: 40%">
         <table>
             <tr>
@@ -113,35 +113,15 @@ Homepage
         </table>
     </div>
 
-    <div id = "plot" style="width: 40%; float: right; aspect-ratio:1/1; "></div>
+    <div id = "plot" style="width: 40%; float: right; aspect-ratio:1/1; display: inline-block;"></div>
     <div>
         <select id="cat_switch"onchange="switchGrouping()">
             <option value="category" selected="selected">Category</option>
             <option value="scope">Scope</option>
         </select>
     </div>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
 
-
-    <div class = "results-summary" style="float:left; display: inline; width = 40%; margin-bottom:5%">
+    <div id="results-summary" style="float:left; display: inline-block; margin-bottom:5%; width:40%">
         <table id = "subcategories">
             <tr>
                 <th id = "subCatHead">Heating and Fuel</th>
@@ -150,6 +130,7 @@ Homepage
             </tr>
         </table>
     </div>
+
 {% block script %}
 <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
 <script src = "{% static 'JS/report-functions.js' %}"></script>

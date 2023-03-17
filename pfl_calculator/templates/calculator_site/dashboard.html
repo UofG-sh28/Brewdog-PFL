@@ -9,25 +9,41 @@
 
 {% block body_block %}
     <div id="container">
-        <div id="dashboard_div">    
+        <div id="dashboard_div" style="margin-bottom: 5%;">
             <h2 id="dashboard_welcome"> Welcome {{ user.username }}</h2>
             <div id="dashboard_options" style="text-align: center;">
                 <a href="{% url 'calculator' %}"><button class="dashboard_buttons">Submit Carbon Emission Values</button></a><br>
                 <a href="{% url 'report' %}"><button class="dashboard_buttons">Carbon Output Report</button></a><br>
-                 <a href="{% url 'pledges' %}"><button class="dashboard_buttons">View and Alter Your Pledges</button></a><br>
+                <a href="{% url 'pledges' %}"><button class="dashboard_buttons">View and Alter Your Pledges</button></a><br>
+                <a href="{% url 'action_plan_detail' %}"><button class="dashboard_buttons">View and Change Your Action Plans</button></a><br>
+                <a href="{% url 'feedback' %}"><button class="dashboard_buttons">Submit Your Feedback</button></a><br>
+                <a href="{% url 'account' %}"><button class="dashboard_buttons">Change Account Password</button></a><br>
+                <a href="{% url 'user_report' %}"><button class="dashboard_buttons">Generate your Carbon Reports</button></a><br>
             </div>
         </div>
-      
         <div id="dashboard_div"></div>
-        <div id="dashboard_div"> 
+        <div id="dashboard_div">
             <div id="dashboard_info">
                 <div style="background-color: lightblue; padding: 20px; text-align: center;">
                     <h2>Customer Information:</h2>
                     <h3>Total Carbon Footprint</h3> <h4 style="display: inline;">
-                    {% if carbon_sum == -500 %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
+                    {% if carbon_sum == "-500.00" %} Please Complete Carbon Calculator To See Summary {% else %}{{ carbon_sum }}
                     CO</h4><h6 style="display: inline;">2</h6> {% endif %}
-                    <h3>Total Pledged</h3>
-                    <h4>Fergus can figure out how to display this bit</h4>
+
+                    <div id = "dashboardyearmenu">
+                        <form action="/my/dashboard/" enctype="multipart/form-data"  method="post">
+                        {% csrf_token %}
+                        <select name="year_switch" id="year_switch" onchange="this.form.submit()">
+                        {% for y in years %}
+                            {% if y == year %}
+                                <option value="{{ y }}" selected>{{ y }}</option>
+                            {% else %}
+                                <option value="{{ y }}">{{ y }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
