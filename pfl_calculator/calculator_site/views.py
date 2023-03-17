@@ -381,12 +381,12 @@ def pledge_report(request):
             cat_emissions[cat] += data[field]
 
     # Variables in summary table:
-    baseline_2019 = carbon_sum / 1000
+    baseline_2019 = round(carbon_sum / 1000, 2)
     target_savings_2023 = 0.2  # constant in excel
-    emissions_reduction_target = baseline_2019 * target_savings_2023
-    pledges_savings_tons = pledge_savings / 1000
-    actual_co2_percent_saving = total_percentage
-    residual = carbon_sum - pledge_savings
+    emissions_reduction_target = round(baseline_2019 * target_savings_2023, 2)
+    pledges_savings_tons = round(pledge_savings / 1000, 2)
+    actual_co2_percent_saving = round(total_percentage, 4)
+    residual = round(carbon_sum - pledge_savings, 2)
 
     #add data to context_dict
 
