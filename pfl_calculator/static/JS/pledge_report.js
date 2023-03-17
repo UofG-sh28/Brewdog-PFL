@@ -26,7 +26,8 @@ function plot_total_pie(){
   var layout = {
     title: "Overall Pledged Reductions",
     height: 400,
-    width: 500
+    width: 500,
+    paper_bgcolor:"#f6f6f6"
   };
 
   Plotly.newPlot(myDiv, data, layout);
@@ -82,7 +83,8 @@ var layout = {
   barmode: 'stack',
   margin: {
     l: 200
-  }
+  },
+  paper_bgcolor:"#f6f6f6"
 };
 
 Plotly.newPlot(myDiv, data, layout);
