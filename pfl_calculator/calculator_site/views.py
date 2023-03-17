@@ -136,7 +136,6 @@ class DashboardViewLoader:
 
 
         context["years"] = static_conversion_factors.keys()
-        print(context["years"])
 
         context['carbon_sum'] = carbon_sum
         response = render(request, 'calculator_site/dashboard.html', context)
@@ -322,7 +321,7 @@ def pledge_report(request):
                            "reduce_emissions"]
 
     #  Percentage savings: ratio of pledge calculation / baseline
-    normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges}
+    normal_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in normal_percent_pledges if pledge_baseline[k] != 0}
     str_percent_savings = {k: pf_mappings[k] / pledge_baseline[k] for k in str_percent_pledges if getattr(ap, k) != 0}
     sub_percent_savings = {k: (pledge_baseline[k] - residual[k]) / pledge_baseline[k] for k in sub_percent_pledges}
 
@@ -418,7 +417,6 @@ def register2(request):
             return response
         print("Registration Failed")
     form = RegistrationFormStage2(user=request.user)
-    print(request.user.username)
     return render(request, 'calculator_site/register2.html', context={"reg_form": form})
 
 
@@ -447,7 +445,7 @@ def staff_factors(request):
         "form": None
     }
     if (request.user.is_staff):
-        print("user")
+        #print("user")
         if request.method == 'POST':
             form = AdminForm(request.POST)
             if form.is_valid():
@@ -459,7 +457,7 @@ def staff_factors(request):
                 for key in form.cleaned_data:
                     new_data[key] = float(form.cleaned_data[key])
 
-                print(new_data)
+                #print(new_data)
 
                 if str(year) in static_conversion_factors.keys():
                     # Update
@@ -493,7 +491,6 @@ def staff_factors(request):
     else:
         context["error"] = "You do not have access to this page."
 
-    print("render")
     return render(request, 'calculator_site/staff_factors.html', context=context)
 
 
