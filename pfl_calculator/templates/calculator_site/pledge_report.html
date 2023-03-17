@@ -43,23 +43,17 @@
     <script src="https://cdn.plot.ly/plotly-2.18.0.min.js"></script>
     <script src = "{% static 'JS/pledge_report.js' %}"></script>
     <script>
-        const json_data = JSON.parse("{{json_data|escapejs}}");
-        console.log(json_data);
+        const pf_mappings_json = JSON.parse("{{pf_mappings_json|escapejs}}");
+        const total_percentage_saving = {{total_percentage_saving}};
+        console.log("carbon_sum: " + {{carbon_sum}});
         //generatePledgeTable();
-
-        var data = [{
-          values: [4818.12, 14868.61],
-          labels: ['Pledged', 'Residual'],
-          type: 'pie'
-        }];
-
-        var layout = {
-          title: "Overall Pledged Reductions",
-          height: 400,
-          width: 500
-        };
-
-        Plotly.newPlot('pie', data, layout);
+        const pledge_savings = {{pledge_savings}};
+        const residual = {{residual}};
+        console.log("pledge " + pledge_savings);
+        console.log("residual " + residual);
+        //plot summary pie chart
+        plot_total_pie();
+        
 
 
         var trace1 = {

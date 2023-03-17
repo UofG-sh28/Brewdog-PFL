@@ -14,10 +14,20 @@ function generatePledgeTable(){
 
 
 
-function plot_pie(){
-    const plot = this.document.getElementById("plot");
+function plot_total_pie(){
+  const myDiv = this.document.getElementById("pie");
 
-    var data = [{
+  var data = [{
+    values: [pledge_savings, residual],
+    labels: ['Pledged', 'Residual'],
+    type: 'pie'
+  }];
 
-    }]
+  var layout = {
+    title: "Overall Pledged Reductions",
+    height: 400,
+    width: 500
+  };
+
+  Plotly.newPlot(myDiv, data, layout);
 }

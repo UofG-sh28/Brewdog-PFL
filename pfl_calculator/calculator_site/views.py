@@ -244,6 +244,7 @@ def report(request):
 
 @check_login
 def pledge_report(request):
+    context_dict = {}
     pledge_dependencies = {
         "reduce_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
         "switch_electricity": ["grid_electricity", "grid_electricity_LOWCARBON"],
@@ -287,9 +288,9 @@ def pledge_report(request):
     ap, _ = ActionPlan.objects.get_or_create(business=business, year=year_ck)
 
     pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
-
+    print([pf_mappings[key] for key in pf_mappings])
     # Pledged total
-    pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
+    pledge_savings = sum([abs(value) for value in pf_mappings.values() if type(value) != str])
 
     # Baseline being the dependent fields summed
     pledge_baseline = {k: sum([getattr(footprint, key) for key in v]) for k, v in pledge_dependencies.items()}
@@ -338,13 +339,19 @@ def pledge_report(request):
     baseline_2019 = carbon_sum / 1000
     target_savings_2023 = 0.2  # constant in excel
     emissions_reduction_target = baseline_2019 * target_savings_2023
-    pledges_savings_t = pledge_savings / 1000
+    pledges_savings_tons = pledge_savings / 1000
     actual_co2_percent_saving = total_percentage
     residual = carbon_sum - pledge_savings
 
     json_data = json.dumps(pf_mappings)
+    context_dict['pf_mappings_json'] = json_data
+    context_dict['year'] = year_ck
+    context_dict['total_percentage_saving'] = actual_co2_percent_saving
+    context_dict['residual'] = residual
+    context_dict['pledge_savings'] = pledge_savings
+    context_dict['carbon_sum'] = carbon_sum
 
-    return render(request, 'calculator_site/pledge_report.html', context={"json_data": json_data, "year": year_ck})
+    return render(request, 'calculator_site/pledge_report.html', context=context_dict)
 
 
 @check_login
