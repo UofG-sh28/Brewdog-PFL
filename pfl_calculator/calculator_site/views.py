@@ -599,12 +599,42 @@ def generate_user_report(request, year):
         row = 0
         col += 1
         year_sheet.write(row, col, "Total Carbon (kg CO2e)", highlight)
+        total_carbon = 0
         for cat in static_categories:
             row += 1
             for field in static_categories[cat]:
-                total_carbon = getattr(footprint, field)
-                year_sheet.write(row, col, total_carbon)
+                field_carbon = getattr(footprint, field)
+                total_carbon += field_carbon
+                year_sheet.write(row, col, field_carbon)
                 row += 1
+
+        # GET PLEDGE DATA AND WRITE
+        conversion_factors = static_conversion_factors.get(str(year), None)  # USING STATIC YEAR MUST BE CHANGED
+
+        pf = PledgeFunctions(footprint, conversion_factors)
+        conversion_map = pf.get_func_map()
+
+        ap, _ = ActionPlan.objects.get_or_create(business=business, year=year)
+
+        pf_mappings = {k: v(getattr(ap, k)) for k, v in conversion_map.items()}
+
+        # Pledged total
+        pledge_savings = sum([value for value in pf_mappings.values() if type(value) != str])
+
+        pledge_sheet = report_file.add_worksheet(f"Pledged data for Year - {year}")
+
+        pledge_sheet.write(0, 0, "Total Carbon (kg CO2e)", highlight)
+        pledge_sheet.write(1, 0, "Pledged Carbon (kg CO2e)", highlight)
+        pledge_sheet.write(2, 0, "Percentage Reduction", highlight)
+        pledge_sheet.write(3, 0, "Target Reduction", highlight)
+
+        pledge_sheet.write(0, 1, total_carbon)
+        pledge_sheet.write(1, 1, pledge_savings)
+        try:
+            pledge_sheet.write(2, 1, f"{(pledge_savings/total_carbon) * 100}%")
+        except:
+            pledge_sheet.write(2, 1, f"0.0%")
+        pledge_sheet.write(3, 1, "15.0%")
 
         # FINISH AND EXPORT
         report_file.close()
