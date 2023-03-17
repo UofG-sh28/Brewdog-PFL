@@ -19,5 +19,4 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('calculator_site.urls')),
-    path('api/cal-submit/', api_views.api_cal_submit, name='api_cal_submit'),
 ]
