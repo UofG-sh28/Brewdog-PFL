@@ -2,7 +2,7 @@
 This is a website application designed for Brewdog's carbon reduction division, namely Planet First Locals as part of Planet Brewdog. It contains functionality for creation of accounts, storing and displaying of carbon emissions in multiple formats, pledging functionality to allow customers to reduce their overall carbon footprint, as well as general administration features to extract general customer data into an Excel spreadsheet, and to change the carbon emission calculation factors year on year.
 
 ## User Guide
-When first logging into the website using an administrator account, you should be greeted with the "Staff Dashboard" (INSERT IMAGE OF STAFF DASHBOARD), which presents three options: 
+When first logging into the website using an administrator account, you should be greeted with the "Staff Dashboard" ![Staff Dashboard](adminpage.png), which presents three options: 
 
 1. "Change Conversion Factors" brings you to a page with the list of all calculator fields, which you can update with the latest conversion factors for each calculation. The year can be set at the top, which is stored and made available to users when completed. This is stored in the "static/conversion_factors.json" file, so may be manually amended in case of incorrect inputs.
 
