@@ -465,7 +465,6 @@ def how_it_works(request):
 
 
 # LOGIN AND REGISTER PAGES
-@check_register
 def login(request):
     context = {}
     context["error"] = ""
