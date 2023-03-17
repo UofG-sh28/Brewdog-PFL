@@ -344,7 +344,7 @@ def pledge_report(request):
 
     json_data = json.dumps(pf_mappings)
 
-    return render(request, 'calculator_site/action_plan.html', context={"json_data": json_data, "year": year_ck})
+    return render(request, 'calculator_site/pledge_report.html', context={"json_data": json_data, "year": year_ck})
 
 
 @check_login
@@ -369,7 +369,10 @@ def login(request):
             if user is not None:
                 lg(request, user)
                 # set cookie, expire interval 12 hours
-                response = redirect('dash')
+                if user.is_superuser is False:
+                    response = redirect('dash')
+                else:
+                    response = redirect('staff_dash')
                 response.set_signed_cookie('login', 'yes', salt="sh28", max_age=60 * 60 * 12)
                 return response
             else:
@@ -685,6 +688,9 @@ class PledgeLoaderView:
             setattr(ap, k, 100 if value == 1 else value)
 
         ap.save()
+
+        # change action plan， This one is important for change ActionPlan! Dont delete it please.
+        apd_list = ActionPlanDetail.objects.filter(business=business, year=year_ck).delete()
 
         # redirect to report pledge page
         repsonse = redirect('/my/pledge-report')
@@ -1005,7 +1011,10 @@ class ActionPlanDetailLoaderView:
         user = request.user
         business, _ = Business.objects.get_or_create(user=user)
         # check if is ok
-        ap = ActionPlan.objects.get(business=business, year=year_ck)
+        try:
+            ap = ActionPlan.objects.get(business=business, year=year_ck)
+        except:
+            return redirect('/my/pledges')
         if ap is None:
             return redirect('/my/pledges')
         # create ActionPlanDetail item
