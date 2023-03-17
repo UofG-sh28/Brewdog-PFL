@@ -561,6 +561,59 @@ def generate_admin_report(request, year):
         context["error"] = "You do not have access to this page."
     return render(request, 'calculator_site/staff_report.html', context=context)
 
+def user_report(request):
+    business = Business.objects.get(user=request.user)
+    footprints = CarbonFootprint.objects.filter(business=business)
+    years = [getattr(footprint, "year") for footprint in footprints]
+    print(years)
+    context = {
+        "years": years,
+    }
+    return render(request, 'calculator_site/user_report.html', context=context)
+
+def generate_user_report(request, year):
+    business = Business.objects.get(user=request.user)
+    footprint = CarbonFootprint.objects.get(business=business, year=year)
+    context = {
+        "conversion_factors": static_conversion_factors,
+    }
+    if (request.user.is_staff):
+        report_file = xw.Workbook(f'pfl_calc_report_{year}.xlsx')
+        highlight = report_file.add_format({'bold': True})
+
+        # WRITE CARBON DATA FOR GIVEN YEAR
+        year_sheet = report_file.add_worksheet(f"Carbon Data for Year - {year}")
+        row = 0
+        col = 0
+        for cat in static_categories:
+            year_sheet.write(row, col, static_verbose["categories"][cat], highlight)
+            row += 1
+
+            for field in static_categories[cat]:
+                year_sheet.write(row, col, static_verbose["fields"][field])
+                row += 1
+
+        row = 0
+        col += 1
+        year_sheet.write(row, col, "Total Carbon (kg CO2e)", highlight)
+        for cat in static_categories:
+            row += 1
+            for field in static_categories[cat]:
+                total_carbon = getattr(footprint, field)
+                year_sheet.write(row, col, total_carbon)
+                row += 1
+
+        # FINISH AND EXPORT
+        report_file.close()
+        with open(f"pfl_calc_report_{year}.xlsx", 'rb') as file:
+            response = HttpResponse(file.read(), content_type="application/ms-excel")
+            response['Content-Disposition'] = 'attachment; filename=pfl_calc_report_{}.xlsx'.format(year)
+
+        os.remove(f"pfl_calc_report_{year}.xlsx")
+        return response
+    else:
+        context["error"] = "You do not have access to this page."
+    return render(request, 'calculator_site/user_report.html', context=context)
 
 class PledgeLoaderView:
 
