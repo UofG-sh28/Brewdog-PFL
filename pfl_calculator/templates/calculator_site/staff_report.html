@@ -1,0 +1,22 @@
+{% extends 'calculator_site/base.html' %}
+{% load static %}
+
+{% block title %}
+  Admin Page
+{% endblock %}
+
+{% block body_block %}
+  {% if error %}
+    { error }
+  {% else %}
+  <div class="admin">
+        <h2>Generate Reports for Previous Years</h2>
+          <div class="dropdown-years" style="justify-content: center;">
+          {% for year in conversion_factors.keys %}
+            <a href="{% url 'generate_admin_report' year=year %}"><button class="shine-button" style="margin:10px;">Download Report for {{ year }}</button></a><br>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+  {% endif %}
+{% endblock %}

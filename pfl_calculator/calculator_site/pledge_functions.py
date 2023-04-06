@@ -46,7 +46,7 @@ class PledgeFunctions:
         self.beef_lamb_counter = 0
         self.other_meat_counter = 0
         self.beer_cans_counter = 0
-        self.grid_electricity_offset = 1
+        self.reduced_grid_kwh = 0
 
 
     def get_func_map(self) -> dict:
@@ -54,8 +54,8 @@ class PledgeFunctions:
 
     def reduce_electricity(self, amount):
         """ Reduce electricity consumption """
-        self.grid_electricity_offset -= amount
         grid_electricity = getattr(self.cf, "grid_electricity")
+        self.reduced_grid_kwh += (grid_electricity / self.conversion_factor["grid_electricity"])
         grid_electricity_LOWCARBON = getattr(self.cf, "grid_electricity_LOWCARBON")
         carbon_saved = (grid_electricity + grid_electricity_LOWCARBON) * (amount / 100)
         return carbon_saved
@@ -65,7 +65,7 @@ class PledgeFunctions:
         carbon_saved = 0
         if amount > 0:
             grid_electricity_kwh = (getattr(self.cf, "grid_electricity")) / self.conversion_factor["grid_electricity"]
-            replaced_kwh = (grid_electricity_kwh) * (self.grid_electricity_offset)
+            replaced_kwh = (grid_electricity_kwh) - self.reduced_grid_kwh
 
             grid_co2 = (replaced_kwh) * self.conversion_factor["grid_electricity"]
             renewable_co2 = (replaced_kwh) * self.conversion_factor["grid_electricity_LOWCARBON"]

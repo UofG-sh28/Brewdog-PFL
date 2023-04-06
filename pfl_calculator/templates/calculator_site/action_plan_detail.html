@@ -1,0 +1,66 @@
+{% extends 'calculator_site/base.html' %}
+
+{% block title %}
+  Action Plan
+{% endblock %}
+
+<!--{% block css %}{% endblock %}-->
+
+{% block body_block %}
+  <div class="feedback" style="margin-bottom: 3%;">
+    <h2>Action Plan</h2>
+      {% if cal %}
+    <form id="action_plan_detail_forms" method="post">
+      {% csrf_token %}
+      <div class="table-feedback-row">
+            <div class="table-pledge-column">
+            <table id="ActionPlanTable" class="table">
+                <tr id="headers">
+                  <th>Number</th>
+                  <th style="width:40%">Pledge Detail</th>
+                  <th style="width:15%">Ownership</th>
+                    <th style="width:15%">Start Date</th>
+                    <th style="width:15%">End Date</th>
+                    <th style="width:15%">Plan</th>
+
+                </tr>
+              {% for item in action_plan_detail_forms %}
+                  <td style="background-color: #ffc000" >{{item.seq}}</td>
+                  <td>{{item.name}}</td>
+                <td style="background-color: #ffc000" >{{item.ownership}}</td>
+                  <td>
+                      <label class="pledge-select-label">
+                          {{item.start_date}}
+                          <svg>
+                              <use xlink:href="#select-arrow-down"></use>
+                          </svg>
+                      </label>
+                  </td>
+                <td>
+                      <label class="pledge-select-label">
+                          {{item.end_date}}
+                          <svg>
+                              <use xlink:href="#select-arrow-down"></use>
+                          </svg>
+                      </label>
+                  </td>
+                <td style="background-color: #ffc000" >{{item.plan_detail}}</td>
+                </tr>
+              {% endfor %}
+            </table>
+            </div>
+    </div>
+        <button type="submit" name="feedback"  class="shine-button" style="background-color: #F9A825">Submit</button>
+    </form>
+
+    {% if error != "" %}
+      <small style="color:red">{{ error }}</small> <br>
+    {% endif %}
+      {% else %}
+          <p>Please ensure that you have finished filling in the calculator or unchecked the non-applicable fields</p>
+          <a href="{% url 'calculator'%}"><button class="shine-button" style="float:left;" id="sign-up">Go To Calculator</button></a>
+      {% endif %}
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{
+  "had_enough_information":{
+    "name": "I had enough information about how to complete the calculator"
+  },
+  "scope_was_useful": {
+    "name": "The information on Scopes was useful"
+  },
+  "able_to_find_info": {
+    "name": "I was able to find the information I needed for completing the Footprint Calculator"
+  },
+  "calculator_ware_clear": {
+    "name": "The questions on the Footprint Calculator were clear"
+  },
+  "question_were_relevant": {
+    "name": "The Footprint Calculator questions were relevant to my business"
+  },
+  "graphics_ware_clear": {
+    "name":"The graphics on the Your Results page were clear"
+  },
+  "pledge_were_relevant": {
+    "name":"The Pledges were relevant to my business"
+  },
+  "cut_emissions": {
+    "name":"I was able to cut emissions by my target amount with the Pledges available"
+  },
+  "action_plan_clear_use": {
+    "name":"The Action Plan was clear to use"
+  },
+  "aware_of_carbon_impacts": {
+    "name": "I am more aware of the carbon impacts of my business"
+  },
+  "confident_able_to_complete": {
+    "name": "I am confident that we will be able to complete the actions within the year"
+  },
+  "know_climate_change": {
+    "name": "I knew a lot about climate change before the survey"
+  },
+  "actions_improve_business": {
+    "name": "I think the Actions will improve the way we do business"
+  },
+  "customer_exercise": {
+    "name": "I think our customers will think this is a worthwhile exercise"
+  },
+  "all_stores_complete_exercise": {
+    "name": "I think all bars and restaurants should complete the exercise"
+  },
+  "climate_change_emergency": {
+    "name": "I think climate change is an emergency"
+  },
+  "want_to_find_out_climate_change": {
+    "name": "I am likely to want to find out more about climate change as a result of this exercise"
+  },
+  "opportunities_to_supplier": {
+    "name": "I think there are opportunities to work with our suppliers to reduce our carbon footprint"
+  },
+  "calculator_too_hard": {
+    "name": "I thought the Footprint Calculator was too hard"
+  },
+  "happy_to_talk": {
+    "name": "I would be happy to be contacted to talk about our experience"
+  }
+
+}
